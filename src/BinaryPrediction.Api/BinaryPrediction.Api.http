@@ -1,0 +1,6 @@
+@BinaryPrediction.Api_HostAddress = http://localhost:5001
+
+GET {{BinaryPrediction.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

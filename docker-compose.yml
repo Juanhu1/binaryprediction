@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: binaryprediction_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: binaryprediction
+    ports:
+      - "5432:5432"
+    volumes:
+      - binaryprediction_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - binaryprediction_network
+
+  api:
+    build:
+      context: .
+      dockerfile: src/BinaryPrediction.Api/Dockerfile
+    container_name: binaryprediction_api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=binaryprediction;Username=postgres;Password=postgres
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - binaryprediction_network
+
+  worker:
+    build:
+      context: .
+      dockerfile: src/BinaryPrediction.Worker/Dockerfile
+    container_name: binaryprediction_worker
+    environment:
+      - DOTNET_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=binaryprediction;Username=postgres;Password=postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - binaryprediction_network
+
+volumes:
+  binaryprediction_postgres_data:
+
+networks:
+  binaryprediction_network:

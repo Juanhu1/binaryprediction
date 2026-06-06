@@ -1,0 +1,20 @@
+# Visual Studio
+.vs/
+
+# User-specific
+*.user
+*.suo
+
+# Build outputs
+bin/
+obj/
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+.env
+appsettings.Development.json
+appsettings.json

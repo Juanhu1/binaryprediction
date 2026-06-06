@@ -1,0 +1,56 @@
+2026-05-23 20:39:40.668 -07:00 [INF] Now listening on: https://localhost:7209
+2026-05-23 20:39:40.703 -07:00 [INF] Now listening on: http://localhost:5001
+2026-05-23 20:39:40.753 -07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-05-23 20:39:40.755 -07:00 [INF] Hosting environment: Development
+2026-05-23 20:39:40.756 -07:00 [INF] Content root path: E:\work\BinaryPrediction\src\BinaryPrediction.Api
+2026-05-23 20:44:28.631 -07:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-05-23 20:44:28.840 -07:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    "MigrationId" character varying(150) NOT NULL,
+    "ProductVersion" character varying(32) NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+2026-05-23 20:44:28.856 -07:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-05-23 20:44:28.861 -07:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-05-23 20:44:28.868 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-05-23 20:44:28.878 -07:00 [INF] Applying migration '20260524030508_Day4_AiAnalysisPipeline'.
+2026-05-23 20:44:28.891 -07:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE markets ADD "EndDate" timestamp with time zone;
+2026-05-23 20:44:28.899 -07:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE markets ADD "Probability" numeric NOT NULL DEFAULT 0.0;
+2026-05-23 20:44:28.909 -07:00 [INF] Executed DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE ai_analyses ADD "Edge" numeric NOT NULL DEFAULT 0.0;
+2026-05-23 20:44:28.915 -07:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE ai_analyses ADD "KeyReasonsJson" text NOT NULL DEFAULT '';
+2026-05-23 20:44:28.920 -07:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE ai_analyses ADD "MarketProbability" numeric NOT NULL DEFAULT 0.0;
+2026-05-23 20:44:28.924 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE ai_analyses ADD "ModelName" text NOT NULL DEFAULT '';
+2026-05-23 20:44:28.930 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE ai_analyses ADD "PromptVersion" text NOT NULL DEFAULT '';
+2026-05-23 20:44:28.935 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE ai_analyses ADD "RiskFactorsJson" text NOT NULL DEFAULT '';
+2026-05-23 20:44:28.940 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE ai_analyses ADD "Summary" text NOT NULL DEFAULT '';
+2026-05-23 20:44:28.945 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20260524030508_Day4_AiAnalysisPipeline', '9.0.0');
+2026-05-23 20:54:06.970 -07:00 [ERR] Failed executing DbCommand (20ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT "MigrationId", "ProductVersion"
+FROM "__EFMigrationsHistory"
+ORDER BY "MigrationId";
+2026-05-23 20:54:07.166 -07:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-05-23 20:54:07.182 -07:00 [INF] Applying migration '20260524035334_InitialCreate'.
+2026-05-23 21:40:38.913 -07:00 [ERR] Failed executing DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-05-23 21:40:39.104 -07:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-05-23 21:40:39.120 -07:00 [INF] Applying migration '20260524043705_InitialCreate'.

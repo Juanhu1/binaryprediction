@@ -1,0 +1,7 @@
+dotnet ef migrations add InitialCreate `--project src/BinaryPrediction.Infrastructure `--startup-project src/BinaryPrediction.Api
+
+dotnet ef database update `--project src/BinaryPrediction.Infrastructure ` --startup-project src/BinaryPrediction.Api
+
+docker exec -it binaryprediction_postgres psql -U postgres -d binaryprediction
+
+SELECT     m.question, m.slug, m.active, m.closed, m.liquidity, m.volume, s.probability, s.created_at_utc FROM markets m JOIN market_snapshots s ON s.market_id = m.id ORDER BY s.created_at_utc DESC LIMIT 5;
