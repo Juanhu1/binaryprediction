@@ -73,8 +73,8 @@ public class PredictionConfiguration : IEntityTypeConfiguration<Prediction>
         builder.HasIndex(p => p.EvaluatedAtUtc);
         builder.HasIndex(p => p.ConfidencePercentage);
 
-        // Map to Market (no navigation property in Prediction, but mapping foreign key constraint)
-        builder.HasOne<Market>()
+        // Map to Market
+        builder.HasOne(p => p.Market)
             .WithMany()
             .HasForeignKey(p => p.MarketId)
             .OnDelete(DeleteBehavior.Cascade);

@@ -68,8 +68,13 @@ public static class DependencyInjection
         services.AddScoped<IMarketResolutionService, MarketResolutionService>();
         services.AddScoped<IPredictionEvaluationService, PredictionEvaluationService>();
         services.AddScoped<IPredictionStatisticsService, PredictionStatisticsService>();
+        services.AddScoped<IPredictionBenchmarkService, PredictionBenchmarkService>();
+        services.AddScoped<IPredictionDashboardService, PredictionDashboardService>();
 
-        // Mock Generators;
+        // Repositories
+        services.AddScoped<IPredictionRepository, PredictionRepository>();
+        services.AddScoped<IPredictionPerformanceRepository, PredictionPerformanceRepository>();
+
         return services;
     }
 }

@@ -17,6 +17,7 @@ public class BinaryPredictionDbContext : DbContext
     public DbSet<MarketAnalysisQueueItem> MarketAnalysisQueueItems { get; set; }
 
     public DbSet<AiAnalysis> AiAnalyses => Set<AiAnalysis>();
+    public DbSet<PredictionBenchmarkResult> PredictionBenchmarkResults => Set<PredictionBenchmarkResult>();
     
     public DbSet<Prediction> Predictions => Set<Prediction>();
 

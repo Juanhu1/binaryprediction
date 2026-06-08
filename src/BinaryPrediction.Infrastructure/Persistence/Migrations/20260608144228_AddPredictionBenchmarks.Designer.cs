@@ -3,17 +3,20 @@ using System;
 using BinaryPrediction.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace BinaryPrediction.Infrastructure.Migrations
+namespace BinaryPrediction.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BinaryPredictionDbContext))]
-    partial class BinaryPredictionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260608144228_AddPredictionBenchmarks")]
+    partial class AddPredictionBenchmarks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -549,14 +552,12 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_predictions_ai_analyses_analysis_id");
 
-                    b.HasOne("BinaryPrediction.Core.Entities.Market", "Market")
+                    b.HasOne("BinaryPrediction.Core.Entities.Market", null)
                         .WithMany()
                         .HasForeignKey("MarketId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_predictions_markets_market_id");
-
-                    b.Navigation("Market");
                 });
 #pragma warning restore 612, 618
         }

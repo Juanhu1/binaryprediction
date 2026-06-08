@@ -15,4 +15,6 @@ public class Prediction : BaseEntity
     public bool? WasCorrect { get; set; }
     public DateTimeOffset? EvaluatedAtUtc { get; set; }
     public decimal? BrierScore { get; set; }
+
+    public Market? Market { get; set; }
 }

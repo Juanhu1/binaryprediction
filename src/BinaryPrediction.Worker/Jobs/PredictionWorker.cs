@@ -12,6 +12,7 @@ public class PredictionWorker : BackgroundService
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<PredictionWorker> _logger;
+    private readonly HashSet<Guid> _failedAnalyses = new();
 
     public PredictionWorker(IServiceProvider serviceProvider, ILogger<PredictionWorker> logger)
     {
@@ -19,62 +20,69 @@ public class PredictionWorker : BackgroundService
         _logger = logger;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
         _logger.LogInformation("PredictionWorker starting.");
 
-        while (!stoppingToken.IsCancellationRequested)
+        while (!cancellationToken.IsCancellationRequested)
         {
             try
             {
                 using var scope = _serviceProvider.CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<BinaryPredictionDbContext>();
                 var predictionService = scope.ServiceProvider.GetRequiredService<IPredictionService>();
-                var predictionRepo = scope.ServiceProvider.GetRequiredService<IPredictionRepository>();
 
-                // Find top 10 analyses that don't have a prediction yet
-                // To do this, we need to query analyses and check if their ID doesn't exist in Predictions table
+                // Find top 10 analyses for markets that don't have a prediction yet
                 var analysesWithoutPredictions = await dbContext.AiAnalyses
-                    .Where(a => !dbContext.Predictions.Any(p => p.AnalysisId == a.Id))
+                    .Where(a => !dbContext.Predictions.Any(p => p.MarketId == a.MarketId))
                     .OrderBy(a => a.CreatedAtUtc)
-                    .Take(10)
-                    .ToListAsync(stoppingToken);
+                    .Take(50)
+                    .ToListAsync(cancellationToken);
 
-                if (analysesWithoutPredictions.Any())
+                var toProcess = analysesWithoutPredictions.Where(a => !_failedAnalyses.Contains(a.Id)).Take(10).ToList();
+
+                if (toProcess.Any())
                 {
-                    _logger.LogInformation("Found {Count} analyses without predictions. Starting prediction generation.", analysesWithoutPredictions.Count);
+                    _logger.LogInformation("Found {Count} analyses without predictions. Starting prediction generation.", toProcess.Count);
 
-                    foreach (var analysis in analysesWithoutPredictions)
+                    foreach (var analysis in toProcess)
                     {
-                        if (stoppingToken.IsCancellationRequested) break;
+                        if (cancellationToken.IsCancellationRequested) break;
 
-                        var market = await dbContext.Markets.FindAsync(new object[] { analysis.MarketId }, stoppingToken);
+                        var market = await dbContext.Markets.FindAsync(new object[] { analysis.MarketId }, cancellationToken);
                         if (market == null)
                         {
                             _logger.LogWarning("Market {MarketId} not found for analysis {AnalysisId}. Skipping prediction.", analysis.MarketId, analysis.Id);
+                            _failedAnalyses.Add(analysis.Id);
                             continue;
                         }
 
                         try
                         {
-                            await predictionService.CreatePredictionAsync(analysis, market, stoppingToken);
+                            var prediction = await predictionService.CreatePredictionAsync(analysis, market, cancellationToken);
+                            if (prediction == null)
+                            {
+                                // CreatePredictionAsync skipped it or failed confidence check.
+                                _failedAnalyses.Add(analysis.Id);
+                            }
                         }
                         catch (Exception ex)
                         {
                             _logger.LogError(ex, "Failed to generate prediction for market {MarketId} (Analysis: {AnalysisId})", market.Id, analysis.Id);
+                            _failedAnalyses.Add(analysis.Id);
                         }
                     }
                 }
                 else
                 {
                     // If no items were processed, wait a bit before polling again
-                    await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+                    await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in PredictionWorker.");
-                await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+                await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken);
             }
         }
     }
