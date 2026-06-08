@@ -30,7 +30,7 @@ public class MockPredictionGenerator : IMockPredictionGenerator
         return new AiPredictionResultDto
         {
             PredictedOutcome = outcome,
-            ConfidenceScore = confidence,
+            ConfidencePercentage = confidence,
             ReasoningSummary = reasoning
         };
     }

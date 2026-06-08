@@ -1,6 +1,8 @@
+using BinaryPrediction.Core.Entities;
+
 namespace BinaryPrediction.Core.Interfaces;
 
 public interface IPredictionEvaluationService
 {
-    Task EvaluateMarketPredictionsAsync(Guid marketId, string actualOutcome, CancellationToken cancellationToken);
+    Task EvaluateMarketPredictionsAsync(Market market, string actualOutcome, CancellationToken cancellationToken);
 }

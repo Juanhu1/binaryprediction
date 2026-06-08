@@ -57,7 +57,7 @@ public class PredictionServiceIntegrationTests
             .ReturnsAsync(new AiPredictionResultDto
             {
                 PredictedOutcome = "Yes",
-                ConfidenceScore = 95m,
+                ConfidencePercentage = 95m,
                 ReasoningSummary = "Strong edge detected."
             });
 
@@ -67,7 +67,7 @@ public class PredictionServiceIntegrationTests
         // Assert
         Assert.NotNull(result);
         Assert.Equal("Yes", result.PredictedOutcome);
-        Assert.Equal(95m, result.ConfidenceScore);
+        Assert.Equal(95m, result.ConfidencePercentage);
         Assert.True(result.IsActive);
         
         var savedPredictions = await _dbContext.Predictions.ToListAsync();
@@ -76,16 +76,15 @@ public class PredictionServiceIntegrationTests
     }
 
     [Fact]
-    public async Task CreatePredictionAsync_DeactivatesPreviousPredictions()
+    public async Task CreatePredictionAsync_SkipsIfPredictionExists()
     {
         // Arrange
         var marketId = Guid.NewGuid();
         var market = new Market { Id = marketId, Question = "Test", Probability = 50m, EndDate = DateTime.UtcNow.AddDays(1) };
-        var oldAnalysis = new AiAnalysis { Id = Guid.NewGuid(), MarketId = marketId, EstimatedProbability = 50m, Confidence = 50m, Summary = "Old" };
         var newAnalysis = new AiAnalysis { Id = Guid.NewGuid(), MarketId = marketId, EstimatedProbability = 90m, Confidence = 90m, Summary = "New" };
 
         _dbContext.Markets.Add(market);
-        _dbContext.AiAnalyses.AddRange(oldAnalysis, newAnalysis);
+        _dbContext.AiAnalyses.Add(newAnalysis);
         await _dbContext.SaveChangesAsync();
 
         // Add old prediction manually
@@ -93,37 +92,22 @@ public class PredictionServiceIntegrationTests
         {
             Id = Guid.NewGuid(),
             MarketId = marketId,
-            AnalysisId = oldAnalysis.Id,
+            AnalysisId = Guid.NewGuid(),
             PredictedOutcome = "No",
-            ConfidenceScore = 50m,
+            ConfidencePercentage = 50m,
             IsActive = true
         };
         _dbContext.Predictions.Add(oldPrediction);
         await _dbContext.SaveChangesAsync();
 
-        // Setup mock for new prediction
-        _mockOpenAiService.Setup(s => s.GeneratePredictionAsync(It.IsAny<Market>(), It.IsAny<AiAnalysis>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new AiPredictionResultDto
-            {
-                PredictedOutcome = "Yes",
-                ConfidenceScore = 90m,
-                ReasoningSummary = "New reasoning."
-            });
-
         // Act
         var result = await _predictionService.CreatePredictionAsync(newAnalysis, market);
 
         // Assert
+        Assert.Null(result); // Skipped
+
         var allPredictions = await _dbContext.Predictions.Where(p => p.MarketId == marketId).ToListAsync();
-        Assert.Equal(2, allPredictions.Count);
-
-        var dbOldPrediction = allPredictions.First(p => p.Id == oldPrediction.Id);
-        var dbNewPrediction = allPredictions.First(p => p.Id == result.Id);
-
-        Assert.False(dbOldPrediction.IsActive);
-        Assert.NotNull(dbOldPrediction.ExpiresAtUtc);
-
-        Assert.True(dbNewPrediction.IsActive);
-        Assert.Null(dbNewPrediction.ExpiresAtUtc);
+        Assert.Single(allPredictions);
+        Assert.Equal(oldPrediction.Id, allPredictions[0].Id);
     }
 }

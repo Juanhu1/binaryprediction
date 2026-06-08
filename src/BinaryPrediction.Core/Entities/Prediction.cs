@@ -7,7 +7,7 @@ public class Prediction : BaseEntity
     public Guid MarketId { get; set; }
     public Guid AnalysisId { get; set; }
     public string PredictedOutcome { get; set; } = string.Empty;
-    public decimal ConfidenceScore { get; set; }
+    public decimal ConfidencePercentage { get; set; }
     public string ReasoningSummary { get; set; } = string.Empty;
     public DateTimeOffset? ExpiresAtUtc { get; set; }
     public bool IsActive { get; set; }

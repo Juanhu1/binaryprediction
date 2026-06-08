@@ -31,7 +31,7 @@ public class PredictionEvaluationIntegrationTests
         _evaluationService = new PredictionEvaluationService(predictionRepository, logger);
     }
 
-    private async Task<Prediction> CreateTestPredictionAsync(string predictedOutcome, decimal confidence)
+    private async Task<(Prediction, Market)> CreateTestPredictionAsync(string predictedOutcome, decimal confidence)
     {
         var market = new Market { Id = Guid.NewGuid(), Question = "Test Market", Slug = "test" };
         var analysis = new AiAnalysis { Id = Guid.NewGuid(), MarketId = market.Id };
@@ -42,7 +42,7 @@ public class PredictionEvaluationIntegrationTests
             MarketId = market.Id,
             AnalysisId = analysis.Id,
             PredictedOutcome = predictedOutcome,
-            ConfidenceScore = confidence,
+            ConfidencePercentage = confidence,
             ReasoningSummary = "Test",
             CreatedAtUtc = DateTimeOffset.UtcNow,
             IsActive = true
@@ -53,15 +53,15 @@ public class PredictionEvaluationIntegrationTests
         _dbContext.Predictions.Add(prediction);
         await _dbContext.SaveChangesAsync();
 
-        return prediction;
+        return (prediction, market);
     }
 
     [Fact]
     public async Task Scenario1_PredictedYes_ActualYes_CalculatesCorrectly()
     {
-        var prediction = await CreateTestPredictionAsync("Yes", 80m); // P = 0.8
+        var (prediction, market) = await CreateTestPredictionAsync("Yes", 80m); // P = 0.8
         
-        await _evaluationService.EvaluateMarketPredictionsAsync(prediction.MarketId, "Yes", CancellationToken.None);
+        await _evaluationService.EvaluateMarketPredictionsAsync(market, "Yes", CancellationToken.None);
 
         var evaluated = await _dbContext.Predictions.FindAsync(prediction.Id);
         Assert.NotNull(evaluated);
@@ -75,9 +75,9 @@ public class PredictionEvaluationIntegrationTests
     [Fact]
     public async Task Scenario2_PredictedYes_ActualNo_CalculatesCorrectly()
     {
-        var prediction = await CreateTestPredictionAsync("Yes", 80m); // P = 0.8
+        var (prediction, market) = await CreateTestPredictionAsync("Yes", 80m); // P = 0.8
         
-        await _evaluationService.EvaluateMarketPredictionsAsync(prediction.MarketId, "No", CancellationToken.None);
+        await _evaluationService.EvaluateMarketPredictionsAsync(market, "No", CancellationToken.None);
 
         var evaluated = await _dbContext.Predictions.FindAsync(prediction.Id);
         Assert.NotNull(evaluated);
@@ -91,9 +91,9 @@ public class PredictionEvaluationIntegrationTests
     [Fact]
     public async Task Scenario3_PredictedNo_ActualNo_CalculatesCorrectly()
     {
-        var prediction = await CreateTestPredictionAsync("No", 70m); // P(No)=0.7 => P(Yes)=0.3
+        var (prediction, market) = await CreateTestPredictionAsync("No", 70m); // P(No)=0.7 => P(Yes)=0.3
         
-        await _evaluationService.EvaluateMarketPredictionsAsync(prediction.MarketId, "No", CancellationToken.None);
+        await _evaluationService.EvaluateMarketPredictionsAsync(market, "No", CancellationToken.None);
 
         var evaluated = await _dbContext.Predictions.FindAsync(prediction.Id);
         Assert.NotNull(evaluated);
@@ -107,16 +107,16 @@ public class PredictionEvaluationIntegrationTests
     [Fact]
     public async Task Scenario4_DuplicateResolution_DoesNotOverwrite()
     {
-        var prediction = await CreateTestPredictionAsync("Yes", 80m);
+        var (prediction, market) = await CreateTestPredictionAsync("Yes", 80m);
         
-        await _evaluationService.EvaluateMarketPredictionsAsync(prediction.MarketId, "Yes", CancellationToken.None);
+        await _evaluationService.EvaluateMarketPredictionsAsync(market, "Yes", CancellationToken.None);
         var evaluatedFirst = await _dbContext.Predictions.AsNoTracking().FirstAsync(p => p.Id == prediction.Id);
         
         // Wait briefly to ensure timestamp would be different
         await Task.Delay(100);
 
         // Attempt duplicate resolution with different outcome
-        await _evaluationService.EvaluateMarketPredictionsAsync(prediction.MarketId, "No", CancellationToken.None);
+        await _evaluationService.EvaluateMarketPredictionsAsync(market, "No", CancellationToken.None);
         var evaluatedSecond = await _dbContext.Predictions.AsNoTracking().FirstAsync(p => p.Id == prediction.Id);
 
         // Should not have overwritten
@@ -129,9 +129,9 @@ public class PredictionEvaluationIntegrationTests
     [Fact]
     public async Task Scenario5_UnknownOutcome_DoesNotEvaluate()
     {
-        var prediction = await CreateTestPredictionAsync("Yes", 80m);
+        var (prediction, market) = await CreateTestPredictionAsync("Yes", 80m);
         
-        await _evaluationService.EvaluateMarketPredictionsAsync(prediction.MarketId, "Maybe", CancellationToken.None);
+        await _evaluationService.EvaluateMarketPredictionsAsync(market, "Maybe", CancellationToken.None);
 
         var evaluated = await _dbContext.Predictions.FindAsync(prediction.Id);
         Assert.NotNull(evaluated);

@@ -62,3 +62,58 @@ CREATE INDEX ix_markets_resolved_at_utc ON markets (resolved_at_utc);
 2026-06-07 16:49:33.499 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
 INSERT INTO "__EFMigrationsHistory" (migration_id, product_version)
 VALUES ('20260607234844_AddMarketResolutionFields', '9.0.0');
+2026-06-07 17:40:36.898 -07:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-06-07 17:40:37.140 -07:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-06-07 17:40:37.147 -07:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-06-07 17:40:37.149 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-06-07 17:40:37.150 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-06-07 17:40:37.158 -07:00 [INF] Applying migration '20260608004020_RenameConfidenceScoreAndAddUniqueMarketIndex'.
+2026-06-07 17:40:37.177 -07:00 [INF] Executed DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX ix_predictions_market_id;
+2026-06-07 17:40:37.179 -07:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE predictions RENAME COLUMN confidence_score TO confidence_percentage;
+2026-06-07 17:40:37.180 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER INDEX ix_predictions_confidence_score RENAME TO ix_predictions_confidence_percentage;
+2026-06-07 17:40:37.188 -07:00 [ERR] Failed executing DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX ix_predictions_market_id ON predictions (market_id);
+2026-06-07 17:47:02.231 -07:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-06-07 17:47:02.764 -07:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE IF NOT EXISTS "__EFMigrationsHistory" (
+    migration_id character varying(150) NOT NULL,
+    product_version character varying(32) NOT NULL,
+    CONSTRAINT pk___ef_migrations_history PRIMARY KEY (migration_id)
+);
+2026-06-07 17:47:02.772 -07:00 [INF] Acquiring an exclusive lock for migration application. See https://aka.ms/efcore-docs-migrations-lock for more information if this takes too long.
+2026-06-07 17:47:02.774 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+LOCK TABLE "__EFMigrationsHistory" IN ACCESS EXCLUSIVE MODE
+2026-06-07 17:47:02.775 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT migration_id, product_version
+FROM "__EFMigrationsHistory"
+ORDER BY migration_id;
+2026-06-07 17:47:02.784 -07:00 [INF] Applying migration '20260608004020_RenameConfidenceScoreAndAddUniqueMarketIndex'.
+2026-06-07 17:47:02.802 -07:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP INDEX ix_predictions_market_id;
+2026-06-07 17:47:02.803 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE predictions RENAME COLUMN confidence_score TO confidence_percentage;
+2026-06-07 17:47:02.804 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER INDEX ix_predictions_confidence_score RENAME TO ix_predictions_confidence_percentage;
+2026-06-07 17:47:02.809 -07:00 [INF] Executed DbCommand (5ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX ix_predictions_market_id ON predictions (market_id);
+2026-06-07 17:47:02.811 -07:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO "__EFMigrationsHistory" (migration_id, product_version)
+VALUES ('20260608004020_RenameConfidenceScoreAndAddUniqueMarketIndex', '9.0.0');

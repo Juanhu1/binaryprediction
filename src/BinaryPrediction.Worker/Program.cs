@@ -25,6 +25,7 @@ builder.Services.AddHostedService<MarketAnalysisProcessorWorker>();
 builder.Services.AddHostedService<MarketMaintenanceWorker>();
 builder.Services.AddHostedService<PredictionWorker>();
 builder.Services.AddHostedService<PredictionResolutionWorker>();
+builder.Services.AddHostedService<PredictionEvaluationWorker>();
 
 var host = builder.Build();
 

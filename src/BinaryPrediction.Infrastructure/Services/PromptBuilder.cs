@@ -42,9 +42,14 @@ Provide your prediction in STRICT JSON format with NO markdown formatting, NO ex
 The JSON must adhere to the following structure:
 {{
   ""predictedOutcome"": ""<Yes or No>"",
-  ""confidenceScore"": <integer between 0 and 100>,
+  ""confidencePercentage"": <integer between 50 and 100>,
   ""reasoningSummary"": ""<concise explanation>""
 }}
+
+Rules:
+- confidencePercentage must be between 50 and 100.
+- 50 = highly uncertain, 100 = near certainty.
+- Never return values below 50.
 ";
     }
 }

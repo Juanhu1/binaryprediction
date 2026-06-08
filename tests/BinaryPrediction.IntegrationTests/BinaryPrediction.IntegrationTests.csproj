@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\BinaryPrediction.Core\BinaryPrediction.Core.csproj" />
     <ProjectReference Include="..\..\src\BinaryPrediction.Infrastructure\BinaryPrediction.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\BinaryPrediction.Worker\BinaryPrediction.Worker.csproj" />
   </ItemGroup>
 
 </Project>

@@ -29,8 +29,8 @@ public class PredictionConfiguration : IEntityTypeConfiguration<Prediction>
             .HasMaxLength(255)
             .IsRequired();
 
-        builder.Property(p => p.ConfidenceScore)
-            .HasColumnName("confidence_score")
+        builder.Property(p => p.ConfidencePercentage)
+            .HasColumnName("confidence_percentage")
             .HasColumnType("numeric(5,2)")
             .IsRequired();
 
@@ -63,7 +63,7 @@ public class PredictionConfiguration : IEntityTypeConfiguration<Prediction>
             .HasColumnName("brier_score")
             .HasColumnType("numeric(10,4)");
 
-        builder.HasIndex(p => p.MarketId);
+        builder.HasIndex(p => p.MarketId).IsUnique();
         builder.HasIndex(p => p.AnalysisId);
         builder.HasIndex(p => p.IsActive);
         builder.HasIndex(p => p.CreatedAtUtc);
@@ -71,7 +71,7 @@ public class PredictionConfiguration : IEntityTypeConfiguration<Prediction>
         // New indexes for resolution queries
         builder.HasIndex(p => p.WasCorrect);
         builder.HasIndex(p => p.EvaluatedAtUtc);
-        builder.HasIndex(p => p.ConfidenceScore);
+        builder.HasIndex(p => p.ConfidencePercentage);
 
         // Map to Market (no navigation property in Prediction, but mapping foreign key constraint)
         builder.HasOne<Market>()

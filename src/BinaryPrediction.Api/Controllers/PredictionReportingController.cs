@@ -16,7 +16,7 @@ public class PredictionReportingController : ControllerBase
     }
 
     [HttpGet("accuracy")]
-    [ProducesResponseType(typeof(PredictionAccuracySummaryDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PredictionAccuracySummary), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAccuracyAsync(CancellationToken cancellationToken)
     {
         var summary = await _statisticsService.GetAccuracySummaryAsync(cancellationToken);
@@ -24,10 +24,10 @@ public class PredictionReportingController : ControllerBase
     }
 
     [HttpGet("confidence-calibration")]
-    [ProducesResponseType(typeof(IReadOnlyList<ConfidenceBucketAccuracyDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<ConfidenceBandResult>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetConfidenceCalibrationAsync(CancellationToken cancellationToken)
     {
-        var buckets = await _statisticsService.GetConfidenceBucketAccuracyAsync(cancellationToken);
-        return Ok(buckets);
+        var bands = await _statisticsService.GetConfidenceBandResultsAsync(cancellationToken);
+        return Ok(bands);
     }
 }

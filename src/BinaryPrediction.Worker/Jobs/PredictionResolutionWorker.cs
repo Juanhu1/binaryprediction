@@ -29,7 +29,6 @@ public class PredictionResolutionWorker : BackgroundService
             {
                 using var scope = _serviceProvider.CreateScope();
                 var resolutionService = scope.ServiceProvider.GetRequiredService<IMarketResolutionService>();
-                var evaluationService = scope.ServiceProvider.GetRequiredService<IPredictionEvaluationService>();
                 var statisticsService = scope.ServiceProvider.GetRequiredService<IPredictionStatisticsService>();
 
                 var dbContext = scope.ServiceProvider.GetRequiredService<BinaryPrediction.Infrastructure.Persistence.BinaryPredictionDbContext>();
@@ -60,7 +59,7 @@ public class PredictionResolutionWorker : BackgroundService
                             market.Closed = true;
                             await dbContext.SaveChangesAsync(stoppingToken);
 
-                            await evaluationService.EvaluateMarketPredictionsAsync(market.Id, outcome, stoppingToken);
+                            // Evaluation is now handled by PredictionEvaluationWorker
                             evaluatedCount++;
                         }
                     }
