@@ -20,6 +20,7 @@ public class BinaryPredictionDbContext : DbContext
     public DbSet<PredictionBenchmarkResult> PredictionBenchmarkResults => Set<PredictionBenchmarkResult>();
     
     public DbSet<Prediction> Predictions => Set<Prediction>();
+    public DbSet<PredictionQualitySnapshot> PredictionQualitySnapshots => Set<PredictionQualitySnapshot>();
 
     public DbSet<Alert> Alerts => Set<Alert>();
 

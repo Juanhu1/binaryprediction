@@ -61,6 +61,22 @@ public static class DependencyInjection
         services.AddSingleton<IMockAnalysisGenerator, MockAnalysisGenerator>();
         services.AddSingleton<IMockPredictionGenerator, MockPredictionGenerator>();
 
+        var openAiSection = configuration.GetSection("OpenAiSettings");
+        var openAiSettings = openAiSection.Get<OpenAiSettings>();
+        
+        if (openAiSettings != null && !openAiSettings.UseMockAnalysis)
+        {
+            if (string.IsNullOrWhiteSpace(openAiSettings.ApiKey) || openAiSettings.ApiKey == "sk-mock-key-for-testing")
+                throw new InvalidOperationException("OpenAI API Key is missing or invalid. System requires a valid API key when UseMockAnalysis is false.");
+                
+            if (string.IsNullOrWhiteSpace(openAiSettings.Model))
+                throw new InvalidOperationException("OpenAI Model Name is missing.");
+                
+            if (openAiSettings.MaxAnalysesPerMinute <= 0 || openAiSettings.DailyAnalysisLimit <= 0)
+                throw new InvalidOperationException("OpenAI Rate Limits must be greater than zero.");
+        }
+
+        services.Configure<OpenAiSettings>(openAiSection);
         services.AddHttpClient<IOpenAiAnalysisService, OpenAiAnalysisService>();
         
         services.AddScoped<IPredictionRepository, PredictionRepository>();
@@ -70,6 +86,10 @@ public static class DependencyInjection
         services.AddScoped<IPredictionStatisticsService, PredictionStatisticsService>();
         services.AddScoped<IPredictionBenchmarkService, PredictionBenchmarkService>();
         services.AddScoped<IPredictionDashboardService, PredictionDashboardService>();
+        services.AddScoped<IConfidenceBandService, ConfidenceBandService>();
+        services.AddScoped<IMarketCategoryPerformanceService, MarketCategoryPerformanceService>();
+        services.AddScoped<IPredictionQualityService, PredictionQualityService>();
+        services.AddScoped<IPredictionsImprovementService, PredictionsImprovementService>();
 
         // Repositories
         services.AddScoped<IPredictionRepository, PredictionRepository>();
