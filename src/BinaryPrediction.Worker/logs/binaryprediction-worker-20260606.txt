@@ -1,0 +1,385 @@
+2026-06-06 00:00:00.264 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:00:22.006 -07:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:00:30.284 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:00:52.014 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:01:00.297 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:01:22.021 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:01:30.301 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:01:52.026 -07:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:02:00.314 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:02:22.042 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:02:30.323 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:02:52.060 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:03:00.328 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:03:22.072 -07:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:03:30.343 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:03:52.099 -07:00 [INF] Executed DbCommand (6ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:04:00.351 -07:00 [INF] Executed DbCommand (4ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:04:22.114 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:04:30.354 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:04:52.116 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:05:00.367 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:05:22.128 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:05:30.384 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:05:52.132 -07:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:06:00.389 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:06:22.144 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:06:30.402 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:06:52.148 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:07:00.408 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:07:22.154 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:07:30.416 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:07:52.171 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:07:57.782 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__cutoff_0='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Processing' AND m.started_at_utc < @__cutoff_0
+2026-06-06 00:07:57.785 -07:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT e.id AS "Id", e.category AS "Category"
+FROM eligible_markets_view AS e
+2026-06-06 00:07:57.786 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT m.market_id
+FROM market_analysis_queue AS m
+WHERE m.status IN ('Pending', 'Processing')
+2026-06-06 00:07:57.788 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__eligibleMarketIds_0='?' (DbType = Object)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.market_id AS "MarketId", max(a.created_at_utc) AS "LastAnalysisUtc"
+FROM ai_analyses AS a
+WHERE a.market_id = ANY (@__eligibleMarketIds_0)
+GROUP BY a.market_id
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "53264c75-0829-4522-8caa-c1d4104bd741". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "9e3d2dd6-4479-41cc-a7bd-9bde43826c20". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "95a6f967-f974-472c-b490-8539a34800de". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "2f0de0a1-bc33-4cd4-afe4-c1d936af2713". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "886c2d69-3407-4b8c-bc10-a3b5193bff57". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "84095eac-9d95-40b0-a4d8-acc74b6b428a". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "ce7e939e-0d44-46b0-96d4-3b36476ef049". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "ff301f35-dd94-462d-8a07-51e6c3ec9113". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "8d681da3-42b4-44dd-9960-a267e83adddd". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "5ae9f446-dc6e-4581-8bd1-94b33cb08eae". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "23651096-ce2c-46ce-8cd6-3aba5e140e20". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "38e604c1-489f-4b03-b8d5-ffa39d6ee7ab". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "95b031bf-6340-4e62-88b5-d2d24c4e8c62". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "d6c2d7fe-3494-4f63-b6af-d68b802b0496". Last analysis age: 0.5 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "f6790e79-bdcf-4f35-b031-f8808d3736f4". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "099294df-94bc-4098-80eb-d0fd5811504d". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "184f922f-afe3-4293-8401-eef44d6e8022". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "fb98971e-155a-4b20-beb2-3cbe4da36657". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "df63a215-1122-4ec1-a8e8-3e8e75790a80". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "a740e7fb-5717-4aec-a0b4-1d64be5fb7df". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "adeef4c4-9151-48c9-9476-6eb5045b9b28". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "f00d84f6-95c2-4e84-9d55-91fb9ce03abe". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "fbb36350-ec20-4166-b6f1-0fcc423b47be". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "2ab20a60-9a08-41df-b9c9-77541bc3473b". Last analysis age: 0.5 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "6a2f0259-af96-45bd-a173-67cfe067bcfb". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "3ed0d459-b980-414e-abcc-700eaa81910c". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "01729a34-1735-4e5e-9682-a8ddbae99481". Last analysis age: 0.5 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "4ba772d5-ad8d-486c-bad9-72f9da37a54a". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "6d3f05ad-8771-42f1-bca6-ef5fc67d9106". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "5de5db2f-a7a2-4ab8-b732-7b4fef932382". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "20576dc0-695b-4438-b228-d0ed1199ec42". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "e75da45a-6a2e-497f-b595-5a8d5db61dfc". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "249f315e-b9f2-4fb1-8b8b-f5ebecbc618b". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "d7ffd4c1-8769-4eab-9c2a-c3045f0901fe". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "db99883f-3176-4e4f-8683-c172a3fdc61c". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.788 -07:00 [INF] Skipping analysis for market "bb0ceaa9-d93f-46d5-8538-369513089885". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "ce7a4c16-d8a7-43d2-8b39-c0b8d8e42004". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "923dd5de-5206-4a78-bacb-bf1726716023". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "38b64321-b27f-4db5-bee3-99596cb058f1". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "42fb07e8-19fa-4b53-8a36-65225ed073cb". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "6e548908-ac45-472d-8e4a-08d9e3bf6886". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "a1429bd2-c8ec-4c8f-9ae7-416b7e1878ae". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "35df41df-fc1f-4875-96b3-c554dae03615". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "8ee66e94-6fe1-46c5-b0a1-03b784dcbab9". Last analysis age: 0.5 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "f93149a9-a9ce-4fed-bca7-0281cbaa0c38". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "b886e2d5-267e-4b49-99b5-ff28b5c58825". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "584625ef-ad89-4e7d-89c0-7e574da05f0a". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "85ab278a-5f19-49ce-96d1-2f4d54be4880". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "295ba418-1bcc-4aff-b71c-5d690ae48be8". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "d7b047fe-ecf8-4b27-950c-54fd1fd49759". Last analysis age: 0.5 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "cadaf395-fb63-403e-bd5d-839b673c9004". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "64f428e7-1c86-480e-9ce8-26ba09038034". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "2fa3437d-b589-40ec-96f4-ad4b5e402a11". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "0cd277ef-0aa2-442d-aa48-632969886ca2". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "613536f8-7357-4d39-9477-f7117f73a5cd". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "40deb030-b6af-4f8a-92f1-d6c11ce52f45". Last analysis age: 0.3 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] Skipping analysis for market "862b439a-e36a-44a2-8877-c9a4085ea6f2". Last analysis age: 0.4 hours.
+2026-06-06 00:07:57.789 -07:00 [INF] QueueWorker: Eligible=57, ExistingActive=0, ToQueue=0
+2026-06-06 00:07:57.789 -07:00 [INF] First few eligible IDs: 53264c75-0829-4522-8caa-c1d4104bd741, 9e3d2dd6-4479-41cc-a7bd-9bde43826c20, 95a6f967-f974-472c-b490-8539a34800de
+2026-06-06 00:07:57.791 -07:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT m.status AS "Status", count(*)::int AS "Count"
+FROM market_analysis_queue AS m
+GROUP BY m.status
+2026-06-06 00:07:57.792 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__todayUtc_0='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM ai_analyses AS a
+WHERE a.created_at_utc >= @__todayUtc_0
+2026-06-06 00:07:57.794 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__todayUtc_0='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT count(*)::int
+FROM market_analysis_queue AS m
+WHERE m.status = 'Failed' AND m.completed_at_utc >= @__todayUtc_0
+2026-06-06 00:07:57.794 -07:00 [INF] Queue status:
+Pending=0
+Processing=0
+Completed=57
+Failed=0
+AI analyses created today: 57
+OpenAI calls today: 57
+2026-06-06 00:08:00.424 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:08:22.178 -07:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:08:30.439 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:08:52.187 -07:00 [INF] Executed DbCommand (2ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:09:00.460 -07:00 [INF] Executed DbCommand (5ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:09:22.193 -07:00 [INF] Executed DbCommand (4ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT a.id, a.confidence, a.created_at_utc, a.edge, a.estimated_probability, a.key_reasons_json, a.market_id, a.market_probability, a.model_name, a.prompt_version, a.risk_factors_json, a.summary
+FROM ai_analyses AS a
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM predictions AS p
+    WHERE p.analysis_id = a.id)
+ORDER BY a.created_at_utc
+LIMIT @__p_0
+2026-06-06 00:09:30.474 -07:00 [INF] Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT m.id, m.completed_at_utc, m.created_at_utc, m.last_error, m.market_id, m.priority, m.retry_count, m.started_at_utc, m.status
+FROM market_analysis_queue AS m
+WHERE m.status = 'Pending'
+ORDER BY m.priority DESC, m.created_at_utc
+LIMIT @__p_0

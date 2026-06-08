@@ -7,6 +7,7 @@ using BinaryPrediction.Infrastructure.Persistence;
 using BinaryPrediction.Infrastructure.Repositories;
 using BinaryPrediction.Infrastructure.Services;
 using BinaryPrediction.Infrastructure.Services.Classification;
+using BinaryPrediction.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -57,8 +58,18 @@ public static class DependencyInjection
         services.AddScoped<IMarketQualityScoringService, MarketQualityScoringService>();
         services.AddScoped<IMarketEligibilityService, MarketEligibilityService>();
         
-        services.AddHttpClient<IOpenAiAnalysisService, OpenAiAnalysisService>();
+        services.AddSingleton<IMockAnalysisGenerator, MockAnalysisGenerator>();
+        services.AddSingleton<IMockPredictionGenerator, MockPredictionGenerator>();
 
+        services.AddHttpClient<IOpenAiAnalysisService, OpenAiAnalysisService>();
+        
+        services.AddScoped<IPredictionRepository, PredictionRepository>();
+        services.AddScoped<IPredictionService, PredictionService>();
+        services.AddScoped<IMarketResolutionService, MarketResolutionService>();
+        services.AddScoped<IPredictionEvaluationService, PredictionEvaluationService>();
+        services.AddScoped<IPredictionStatisticsService, PredictionStatisticsService>();
+
+        // Mock Generators;
         return services;
     }
 }

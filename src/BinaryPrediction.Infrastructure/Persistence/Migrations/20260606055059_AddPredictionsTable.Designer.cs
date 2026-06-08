@@ -3,17 +3,20 @@ using System;
 using BinaryPrediction.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace BinaryPrediction.Infrastructure.Migrations
+namespace BinaryPrediction.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BinaryPredictionDbContext))]
-    partial class BinaryPredictionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260606055059_AddPredictionsTable")]
+    partial class AddPredictionsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,11 +185,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("active");
 
-                    b.Property<string>("ActualOutcome")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("actual_outcome");
-
                     b.Property<int>("Category")
                         .HasColumnType("integer")
                         .HasColumnName("category");
@@ -238,10 +236,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("rejection_reason");
 
-                    b.Property<DateTimeOffset?>("ResolvedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("resolved_at_utc");
-
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -255,9 +249,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_markets");
-
-                    b.HasIndex("ResolvedAtUtc")
-                        .HasDatabaseName("ix_markets_resolved_at_utc");
 
                     b.HasIndex("Slug")
                         .IsUnique()
@@ -369,18 +360,9 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("ActualOutcome")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("actual_outcome");
-
                     b.Property<Guid>("AnalysisId")
                         .HasColumnType("uuid")
                         .HasColumnName("analysis_id");
-
-                    b.Property<decimal?>("BrierScore")
-                        .HasColumnType("numeric(10,4)")
-                        .HasColumnName("brier_score");
 
                     b.Property<decimal>("ConfidenceScore")
                         .HasColumnType("numeric(5,2)")
@@ -389,10 +371,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAtUtc")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at_utc");
-
-                    b.Property<DateTimeOffset?>("EvaluatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("evaluated_at_utc");
 
                     b.Property<DateTimeOffset?>("ExpiresAtUtc")
                         .HasColumnType("timestamp with time zone")
@@ -417,33 +395,20 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("reasoning_summary");
 
-                    b.Property<bool?>("WasCorrect")
-                        .HasColumnType("boolean")
-                        .HasColumnName("was_correct");
-
                     b.HasKey("Id")
                         .HasName("pk_predictions");
 
                     b.HasIndex("AnalysisId")
                         .HasDatabaseName("ix_predictions_analysis_id");
 
-                    b.HasIndex("ConfidenceScore")
-                        .HasDatabaseName("ix_predictions_confidence_score");
-
                     b.HasIndex("CreatedAtUtc")
                         .HasDatabaseName("ix_predictions_created_at_utc");
-
-                    b.HasIndex("EvaluatedAtUtc")
-                        .HasDatabaseName("ix_predictions_evaluated_at_utc");
 
                     b.HasIndex("IsActive")
                         .HasDatabaseName("ix_predictions_is_active");
 
                     b.HasIndex("MarketId")
                         .HasDatabaseName("ix_predictions_market_id");
-
-                    b.HasIndex("WasCorrect")
-                        .HasDatabaseName("ix_predictions_was_correct");
 
                     b.ToTable("predictions", (string)null);
                 });

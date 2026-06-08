@@ -24,4 +24,27 @@ The JSON must adhere to the following structure:
 }}
 ";
     }
+
+    public static string BuildPredictionPrompt(Market market, AiAnalysis analysis)
+    {
+        return $@"
+Based on the following market data and AI analysis, generate a final prediction.
+
+Market Question: {market.Question}
+Current Market Probability: {market.Probability}%
+End Date: {market.EndDate:O}
+
+Previous Analysis Summary: {analysis.Summary}
+Calculated Edge: {analysis.Edge}%
+Analysis Confidence: {analysis.Confidence}%
+
+Provide your prediction in STRICT JSON format with NO markdown formatting, NO extra text.
+The JSON must adhere to the following structure:
+{{
+  ""predictedOutcome"": ""<Yes or No>"",
+  ""confidenceScore"": <integer between 0 and 100>,
+  ""reasoningSummary"": ""<concise explanation>""
+}}
+";
+    }
 }

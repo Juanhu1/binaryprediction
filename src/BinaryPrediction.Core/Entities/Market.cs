@@ -31,4 +31,8 @@ public class Market : BaseEntity
     public DateTimeOffset? LastQualityEvaluationUtc { get; set; }
 
     public string? RejectionReason { get; set; }
+
+    public string? ActualOutcome { get; set; }
+
+    public DateTimeOffset? ResolvedAtUtc { get; set; }
 }

@@ -6,4 +6,5 @@ namespace BinaryPrediction.Core.Interfaces;
 public interface IOpenAiAnalysisService
 {
     Task<AiAnalysisResultDto?> AnalyzeMarketAsync(Market market, CancellationToken cancellationToken = default);
+    Task<AiPredictionResultDto?> GeneratePredictionAsync(Market market, AiAnalysis analysis, CancellationToken cancellationToken = default);
 }

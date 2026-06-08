@@ -31,9 +31,13 @@ public class MarketConfiguration : IEntityTypeConfiguration<Market>
         builder.Property(market => market.CreatedAtUtc)
             .IsRequired();
 
+        builder.Property(market => market.ActualOutcome)
+            .HasMaxLength(255);
+
         builder.HasIndex(market => market.Slug)
             .IsUnique();
 
         builder.HasIndex(market => new { market.Active, market.Closed });
+        builder.HasIndex(market => market.ResolvedAtUtc);
     }
 }

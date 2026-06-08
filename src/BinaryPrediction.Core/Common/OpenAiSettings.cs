@@ -8,4 +8,6 @@ public class OpenAiSettings
     public int TimeoutSeconds { get; set; } = 30;
     public int MaxAnalysesPerMinute { get; set; } = 5;
     public int DailyAnalysisLimit { get; set; } = 500;
+    public bool UseMockAnalysis { get; set; }
+    public bool UseMockPrediction { get; set; }
 }

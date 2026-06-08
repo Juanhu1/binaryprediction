@@ -3,17 +3,20 @@ using System;
 using BinaryPrediction.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace BinaryPrediction.Infrastructure.Migrations
+namespace BinaryPrediction.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BinaryPredictionDbContext))]
-    partial class BinaryPredictionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260607225910_AddPredictionEvaluationFields")]
+    partial class AddPredictionEvaluationFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,11 +185,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("active");
 
-                    b.Property<string>("ActualOutcome")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("actual_outcome");
-
                     b.Property<int>("Category")
                         .HasColumnType("integer")
                         .HasColumnName("category");
@@ -238,10 +236,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("rejection_reason");
 
-                    b.Property<DateTimeOffset?>("ResolvedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("resolved_at_utc");
-
                     b.Property<string>("Slug")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -255,9 +249,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_markets");
-
-                    b.HasIndex("ResolvedAtUtc")
-                        .HasDatabaseName("ix_markets_resolved_at_utc");
 
                     b.HasIndex("Slug")
                         .IsUnique()

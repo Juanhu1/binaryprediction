@@ -118,4 +118,63 @@ public class PolymarketClient : IPolymarketClient
     {
         return Task.Delay(TimeSpan.FromSeconds(Math.Pow(2, attempt)), cancellationToken);
     }
+
+    public async Task<PolymarketMarketDto?> GetMarketAsync(string slug, CancellationToken cancellationToken)
+    {
+        const int maxAttempts = 3;
+
+        for (var attempt = 1; attempt <= maxAttempts; attempt++)
+        {
+            try
+            {
+                // The endpoint to fetch a single market by slug might be `/markets/{slug}` or similar.
+                // Assuming `/markets/{slug}` is valid based on standard REST practices.
+                // Alternatively, query `markets?slug={slug}` and return the first match.
+                var requestUri = $"markets?slug={slug}";
+                using var response = await _httpClient.GetAsync(requestUri, cancellationToken);
+
+                if (IsTransient(response.StatusCode) && attempt < maxAttempts)
+                {
+                    _logger.LogWarning(
+                        "Polymarket GetMarketAsync returned transient status {StatusCode}; retrying attempt {Attempt}.",
+                        response.StatusCode,
+                        attempt + 1);
+                    await DelayBeforeRetryAsync(attempt, cancellationToken);
+                    continue;
+                }
+
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+
+                response.EnsureSuccessStatusCode();
+
+                await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+                var markets = await JsonSerializer.DeserializeAsync<IReadOnlyList<PolymarketMarketDto>>(
+                    stream,
+                    JsonSerializerOptions,
+                    cancellationToken);
+
+                return markets?.FirstOrDefault();
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                if (attempt >= maxAttempts)
+                {
+                    _logger.LogError(ex, "Polymarket GetMarketAsync request failed after {MaxAttempts} attempts for slug {Slug}.", maxAttempts, slug);
+                    return null;
+                }
+
+                _logger.LogWarning(ex, "Polymarket GetMarketAsync request failed; retrying attempt {Attempt}.", attempt + 1);
+                await DelayBeforeRetryAsync(attempt, cancellationToken);
+            }
+        }
+
+        return null;
+    }
 }
