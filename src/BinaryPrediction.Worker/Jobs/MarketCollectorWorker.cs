@@ -1,6 +1,10 @@
 using BinaryPrediction.Core.Common;
+using BinaryPrediction.Core.Interfaces;
 using BinaryPrediction.Core.Services;
 using BinaryPrediction.Infrastructure.External.Polymarket;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace BinaryPrediction.Worker.Jobs;
@@ -25,7 +29,6 @@ public class MarketCollectorWorker : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await Task.Yield(); // Ensure we don't block Host startup
-        Console.WriteLine("MARKET WORKER EXECUTE");
         var interval = TimeSpan.FromMinutes(Math.Max(_settings.MarketCollectionMinutes, 1));
         _logger.LogInformation("Market collector worker started with interval {Interval}.", interval);
 
@@ -39,16 +42,25 @@ public class MarketCollectorWorker : BackgroundService
         }
     }
 
+    private async Task LogHeartbeatAsync(string status, string? errorMessage = null)
+    {
+        using var scope = _serviceScopeFactory.CreateScope();
+        var heartbeatService = scope.ServiceProvider.GetRequiredService<IWorkerHeartbeatService>();
+        await heartbeatService.LogHeartbeatAsync(nameof(MarketCollectorWorker), status, errorMessage);
+    }
+
     private async Task RunCollectionAsync(CancellationToken cancellationToken)
     {
         try
         {
+            await LogHeartbeatAsync("Processing");
             using var scope = _serviceScopeFactory.CreateScope();
             var synchronizationService = scope.ServiceProvider.GetRequiredService<IMarketSynchronizationService>();
 
             _logger.LogInformation("Starting Polymarket market collection.");
             await synchronizationService.SynchronizeActiveMarketsAsync(cancellationToken);
             _logger.LogInformation("Finished Polymarket market collection.");
+            await LogHeartbeatAsync("Healthy");
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
@@ -57,6 +69,7 @@ public class MarketCollectorWorker : BackgroundService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Market collection failed.");
+            await LogHeartbeatAsync("Error", ex.Message);
         }
     }
 }

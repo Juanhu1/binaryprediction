@@ -34,9 +34,12 @@ public class MarketAnalysisProcessorWorker : BackgroundService
                 using var scope = _serviceProvider.CreateScope();
                 var queueService = scope.ServiceProvider.GetRequiredService<IMarketAnalysisQueueService>();
                 var aiAnalysisService = scope.ServiceProvider.GetRequiredService<IAiAnalysisService>();
+                var heartbeatService = scope.ServiceProvider.GetRequiredService<IWorkerHeartbeatService>();
                 var settings = scope.ServiceProvider.GetRequiredService<IOptions<QueueProcessingSettings>>().Value;
                 var openAiSettings = scope.ServiceProvider.GetRequiredService<IOptions<OpenAiSettings>>().Value;
                 var dbContext = scope.ServiceProvider.GetRequiredService<BinaryPrediction.Infrastructure.Persistence.BinaryPredictionDbContext>();
+
+                await heartbeatService.LogHeartbeatAsync(nameof(MarketAnalysisProcessorWorker), "Processing", null, stoppingToken);
 
                 var pendingItems = await queueService.GetPendingItemsAsync(settings.BatchSize, stoppingToken);
 
@@ -51,6 +54,7 @@ public class MarketAnalysisProcessorWorker : BackgroundService
                     if (analysesToday >= openAiSettings.DailyAnalysisLimit)
                     {
                         _logger.LogWarning("Daily AI budget reached. Queue processing paused.");
+                        await heartbeatService.LogHeartbeatAsync(nameof(MarketAnalysisProcessorWorker), "Paused - Budget Reached", null, stoppingToken);
                         await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
                         break;
                     }
@@ -64,6 +68,7 @@ public class MarketAnalysisProcessorWorker : BackgroundService
                     if (_analysesThisMinute >= openAiSettings.MaxAnalysesPerMinute)
                     {
                         _logger.LogWarning("OpenAI rate limit reached. Deferring remaining queue items.");
+                        await heartbeatService.LogHeartbeatAsync(nameof(MarketAnalysisProcessorWorker), "Paused - Rate Limit", null, stoppingToken);
                         await Task.Delay(TimeSpan.FromSeconds(60 - DateTimeOffset.UtcNow.Second), stoppingToken);
                         break;
                     }
@@ -95,6 +100,8 @@ public class MarketAnalysisProcessorWorker : BackgroundService
                     }
                 }
 
+                await heartbeatService.LogHeartbeatAsync(nameof(MarketAnalysisProcessorWorker), "Healthy", null, stoppingToken);
+
                 // If no items were processed, wait a bit before polling again
                 if (!pendingItems.Any())
                 {
@@ -104,6 +111,13 @@ public class MarketAnalysisProcessorWorker : BackgroundService
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while processing market analysis queue.");
+                try
+                {
+                    using var errScope = _serviceProvider.CreateScope();
+                    var heartbeatService = errScope.ServiceProvider.GetRequiredService<IWorkerHeartbeatService>();
+                    await heartbeatService.LogHeartbeatAsync(nameof(MarketAnalysisProcessorWorker), "Error", ex.Message, stoppingToken);
+                }
+                catch { }
                 await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
             }
         }

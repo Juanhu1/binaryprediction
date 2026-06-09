@@ -29,15 +29,27 @@ public class MarketAnalysisQueueWorker : BackgroundService
             {
                 using var scope = _serviceProvider.CreateScope();
                 var queueService = scope.ServiceProvider.GetRequiredService<IMarketAnalysisQueueService>();
+                var heartbeatService = scope.ServiceProvider.GetRequiredService<IWorkerHeartbeatService>();
                 var settings = scope.ServiceProvider.GetRequiredService<IOptions<WorkerSettings>>().Value;
                 
+                await heartbeatService.LogHeartbeatAsync(nameof(MarketAnalysisQueueWorker), "Processing", null, stoppingToken);
+
                 await queueService.RecoverStuckItemsAsync(stoppingToken);
                 await queueService.EnqueueEligibleMarketsAsync(stoppingToken);
                 await queueService.LogQueueStatusAsync(stoppingToken);
+
+                await heartbeatService.LogHeartbeatAsync(nameof(MarketAnalysisQueueWorker), "Healthy", null, stoppingToken);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while enqueueing eligible markets.");
+                try
+                {
+                    using var errScope = _serviceProvider.CreateScope();
+                    var heartbeatService = errScope.ServiceProvider.GetRequiredService<IWorkerHeartbeatService>();
+                    await heartbeatService.LogHeartbeatAsync(nameof(MarketAnalysisQueueWorker), "Error", ex.Message, stoppingToken);
+                }
+                catch { }
             }
 
             var scopeDelay = _serviceProvider.CreateScope();

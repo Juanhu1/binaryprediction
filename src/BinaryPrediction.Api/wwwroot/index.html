@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Prediction - Operations Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --panel-bg: #1e293b;
+            --text-color: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --border: #334155;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .panel {
+            background-color: var(--panel-bg);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .panel h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .stat-box {
+            background-color: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .status-healthy { background-color: rgba(16, 185, 129, 0.2); color: var(--success); }
+        .status-processing { background-color: rgba(59, 130, 246, 0.2); color: var(--accent); }
+        .status-error { background-color: rgba(239, 68, 68, 0.2); color: var(--error); }
+        .status-warning { background-color: rgba(245, 158, 11, 0.2); color: var(--warning); }
+        
+        .refresh-info {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .error-message {
+            color: var(--error);
+            font-size: 0.85rem;
+            margin-top: 10px;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Operations Dashboard</h1>
+
+    <div class="dashboard-grid">
+        
+        <!-- Workers Health Panel -->
+        <div class="panel">
+            <h2>Worker Health</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Worker</th>
+                        <th>Status</th>
+                        <th>Last Heartbeat</th>
+                    </tr>
+                </thead>
+                <tbody id="workers-body">
+                    <tr><td colspan="3">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pipeline Status Panel -->
+        <div class="panel">
+            <h2>Pipeline Status</h2>
+            <div class="stat-grid" id="pipeline-stats">
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Markets</div></div>
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Analyses</div></div>
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Predictions</div></div>
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Missing Preds</div></div>
+            </div>
+            <div style="margin-top: 15px; font-size: 0.85rem; color: var(--text-muted);" id="pipeline-times">
+                Loading timestamps...
+            </div>
+        </div>
+
+        <!-- Queue Status Panel -->
+        <div class="panel">
+            <h2>Analysis Queue</h2>
+            <div class="stat-grid" id="queue-stats">
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Pending</div></div>
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Processing</div></div>
+                <div class="stat-box"><div class="stat-value status-healthy">-</div><div class="stat-label">Completed</div></div>
+                <div class="stat-box"><div class="stat-value status-error">-</div><div class="stat-label">Failed</div></div>
+            </div>
+        </div>
+
+        <!-- OpenAI Usage Panel -->
+        <div class="panel">
+            <h2>OpenAI Usage (Today)</h2>
+            <div class="stat-grid" id="openai-stats">
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Total Calls</div></div>
+                <div class="stat-box"><div class="stat-value status-error">-</div><div class="stat-label">Failed Calls</div></div>
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Total Cost</div></div>
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Avg Latency</div></div>
+            </div>
+            <div class="error-message" id="openai-error"></div>
+        </div>
+
+        <!-- Accuracy Status Panel -->
+        <div class="panel">
+            <h2>Prediction Accuracy</h2>
+            <div class="stat-grid" id="accuracy-stats">
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Evaluated</div></div>
+                <div class="stat-box"><div class="stat-value status-healthy">-</div><div class="stat-label">Accuracy %</div></div>
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Avg Brier</div></div>
+                <div class="stat-box"><div class="stat-value status-error">-</div><div class="stat-label">Incorrect</div></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="refresh-info">
+        Last updated: <span id="last-updated">-</span> (Auto-refreshes every 10s)
+    </div>
+
+    <script>
+        function formatTimeAgo(dateString) {
+            if (!dateString) return "Never";
+            const date = new Date(dateString);
+            const seconds = Math.floor((new Date() - date) / 1000);
+            if (seconds < 60) return `${seconds}s ago`;
+            if (seconds < 3600) return `${Math.floor(seconds/60)}m ago`;
+            if (seconds < 86400) return `${Math.floor(seconds/3600)}h ago`;
+            return `${Math.floor(seconds/86400)}d ago`;
+        }
+
+        function getStatusClass(status) {
+            status = status.toLowerCase();
+            if (status.includes('healthy')) return 'status-healthy';
+            if (status.includes('processing')) return 'status-processing';
+            if (status.includes('error') || status.includes('fail')) return 'status-error';
+            return 'status-warning';
+        }
+
+        async function fetchHealth() {
+            try {
+                const res = await fetch('/api/system/health');
+                const data = await res.json();
+                
+                const tbody = document.getElementById('workers-body');
+                tbody.innerHTML = '';
+                
+                data.workers.sort((a,b) => a.workerName.localeCompare(b.workerName)).forEach(w => {
+                    const tr = document.createElement('tr');
+                    const statusClass = w.isAlive ? getStatusClass(w.status) : 'status-error';
+                    const statusText = w.isAlive ? w.status : 'DEAD';
+                    tr.innerHTML = `
+                        <td>${w.workerName.replace('Worker','')}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>${formatTimeAgo(w.lastHeartbeatUtc)}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.getElementById('pipeline-times').innerHTML = `
+                    Last Sync: ${formatTimeAgo(data.lastMarketSyncUtc)} | 
+                    Last Analysis: ${formatTimeAgo(data.lastAnalysisUtc)} <br/>
+                    Last Prediction: ${formatTimeAgo(data.lastPredictionUtc)} |
+                    Last Eval: ${formatTimeAgo(data.lastEvaluationUtc)}
+                `;
+            } catch (e) { console.error(e); }
+        }
+
+        async function fetchPipeline() {
+            try {
+                const res = await fetch('/api/system/pipeline');
+                const data = await res.json();
+                document.getElementById('pipeline-stats').innerHTML = `
+                    <div class="stat-box"><div class="stat-value">${data.totalMarkets}</div><div class="stat-label">Markets</div></div>
+                    <div class="stat-box"><div class="stat-value">${data.totalAnalyses}</div><div class="stat-label">Analyses</div></div>
+                    <div class="stat-box"><div class="stat-value">${data.totalPredictions}</div><div class="stat-label">Predictions</div></div>
+                    <div class="stat-box"><div class="stat-value ${data.analysesWithoutPredictions > 0 ? 'status-warning' : ''}">${data.analysesWithoutPredictions}</div><div class="stat-label">Missing Preds</div></div>
+                `;
+            } catch (e) { console.error(e); }
+        }
+
+        async function fetchQueue() {
+            try {
+                const res = await fetch('/api/system/queue');
+                const data = await res.json();
+                document.getElementById('queue-stats').innerHTML = `
+                    <div class="stat-box"><div class="stat-value">${data.pendingAnalyses}</div><div class="stat-label">Pending</div></div>
+                    <div class="stat-box"><div class="stat-value">${data.processingAnalyses}</div><div class="stat-label">Processing</div></div>
+                    <div class="stat-box"><div class="stat-value status-healthy">${data.completedAnalyses}</div><div class="stat-label">Completed</div></div>
+                    <div class="stat-box"><div class="stat-value ${data.failedAnalyses > 0 ? 'status-error' : ''}">${data.failedAnalyses}</div><div class="stat-label">Failed</div></div>
+                `;
+            } catch (e) { console.error(e); }
+        }
+
+        async function fetchOpenAi() {
+            try {
+                const res = await fetch('/api/system/openai');
+                const data = await res.json();
+                document.getElementById('openai-stats').innerHTML = `
+                    <div class="stat-box"><div class="stat-value">${data.callsToday}</div><div class="stat-label">Total Calls</div></div>
+                    <div class="stat-box"><div class="stat-value ${data.failedCallsToday > 0 ? 'status-error' : ''}">${data.failedCallsToday}</div><div class="stat-label">Failed Calls</div></div>
+                    <div class="stat-box"><div class="stat-value">$${data.totalCostTodayUsd.toFixed(2)}</div><div class="stat-label">Total Cost</div></div>
+                    <div class="stat-box"><div class="stat-value">${data.averageLatencyMs}ms</div><div class="stat-label">Avg Latency</div></div>
+                `;
+                
+                if (data.mostRecentError) {
+                    document.getElementById('openai-error').innerText = `Recent Error (${formatTimeAgo(data.mostRecentErrorUtc)}): ${data.mostRecentError}`;
+                } else {
+                    document.getElementById('openai-error').innerText = '';
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function fetchAccuracy() {
+            try {
+                const res = await fetch('/api/system/accuracy');
+                const data = await res.json();
+                document.getElementById('accuracy-stats').innerHTML = `
+                    <div class="stat-box"><div class="stat-value">${data.predictionsEvaluated}</div><div class="stat-label">Evaluated</div></div>
+                    <div class="stat-box"><div class="stat-value status-healthy">${data.accuracyPercentage}%</div><div class="stat-label">Accuracy %</div></div>
+                    <div class="stat-box"><div class="stat-value">${data.averageBrierScore}</div><div class="stat-label">Avg Brier</div></div>
+                    <div class="stat-box"><div class="stat-value ${data.incorrectPredictions > 0 ? 'status-warning' : ''}">${data.incorrectPredictions}</div><div class="stat-label">Incorrect</div></div>
+                `;
+            } catch (e) { console.error(e); }
+        }
+
+        async function refreshDashboard() {
+            await Promise.all([
+                fetchHealth(),
+                fetchPipeline(),
+                fetchQueue(),
+                fetchOpenAi(),
+                fetchAccuracy()
+            ]);
+            document.getElementById('last-updated').innerText = new Date().toLocaleTimeString();
+        }
+
+        refreshDashboard();
+        setInterval(refreshDashboard, 10000);
+    </script>
+</body>
+</html>

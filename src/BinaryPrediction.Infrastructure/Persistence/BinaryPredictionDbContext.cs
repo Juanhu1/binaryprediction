@@ -19,12 +19,14 @@ public class BinaryPredictionDbContext : DbContext
     public DbSet<AiAnalysis> AiAnalyses => Set<AiAnalysis>();
     public DbSet<PredictionBenchmarkResult> PredictionBenchmarkResults => Set<PredictionBenchmarkResult>();
     
+
+    public DbSet<AiUsageRecord> AiUsageRecords { get; set; } = null!;
+    public DbSet<PromptVersion> PromptVersions { get; set; } = null!;
+    public DbSet<WorkerHeartbeat> WorkerHeartbeats { get; set; } = null!;
+
     public DbSet<Prediction> Predictions => Set<Prediction>();
     public DbSet<PredictionQualitySnapshot> PredictionQualitySnapshots => Set<PredictionQualitySnapshot>();
     
-    public DbSet<AiUsageRecord> AiUsageRecords => Set<AiUsageRecord>();
-    public DbSet<PromptVersion> PromptVersions => Set<PromptVersion>();
-
     public DbSet<Alert> Alerts => Set<Alert>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -32,6 +32,9 @@ public class PredictionWorker : BackgroundService
                 using var scope = _serviceProvider.CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<BinaryPredictionDbContext>();
                 var predictionService = scope.ServiceProvider.GetRequiredService<IPredictionService>();
+                var heartbeatService = scope.ServiceProvider.GetRequiredService<IWorkerHeartbeatService>();
+
+                await heartbeatService.LogHeartbeatAsync(nameof(PredictionWorker), "Processing", null, cancellationToken);
 
                 // Find top 10 analyses that don't have a prediction yet
                 var analysesWithoutPredictions = await dbContext.AiAnalyses
@@ -80,10 +83,19 @@ public class PredictionWorker : BackgroundService
                     _logger.LogDebug("PredictionWorker found 0 eligible analyses. Sleeping for 30s.");
                     await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken);
                 }
+                
+                await heartbeatService.LogHeartbeatAsync(nameof(PredictionWorker), "Healthy", null, cancellationToken);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in PredictionWorker.");
+                try
+                {
+                    using var errScope = _serviceProvider.CreateScope();
+                    var heartbeatService = errScope.ServiceProvider.GetRequiredService<IWorkerHeartbeatService>();
+                    await heartbeatService.LogHeartbeatAsync(nameof(PredictionWorker), "Error", ex.Message, cancellationToken);
+                }
+                catch { }
                 await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken);
             }
         }

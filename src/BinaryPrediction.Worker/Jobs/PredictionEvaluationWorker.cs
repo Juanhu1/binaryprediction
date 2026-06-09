@@ -23,6 +23,7 @@ public class PredictionEvaluationWorker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        await Task.Yield();
         _logger.LogInformation("PredictionEvaluationWorker starting with interval {Interval}.", _interval);
 
         while (!stoppingToken.IsCancellationRequested)
@@ -33,6 +34,9 @@ public class PredictionEvaluationWorker : BackgroundService
                 var dbContext = scope.ServiceProvider.GetRequiredService<BinaryPredictionDbContext>();
                 var evaluationService = scope.ServiceProvider.GetRequiredService<IPredictionEvaluationService>();
                 var statisticsService = scope.ServiceProvider.GetRequiredService<IPredictionStatisticsService>();
+                var heartbeatService = scope.ServiceProvider.GetRequiredService<IWorkerHeartbeatService>();
+
+                await heartbeatService.LogHeartbeatAsync(nameof(PredictionEvaluationWorker), "Processing", null, stoppingToken);
 
                 _logger.LogInformation("Starting prediction evaluation cycle.");
 
@@ -78,10 +82,21 @@ public class PredictionEvaluationWorker : BackgroundService
                 {
                     _logger.LogInformation("Prediction evaluation cycle completed. No pending evaluations.");
                 }
+                
+                using var scopeH = _serviceProvider.CreateScope();
+                var heartbeatServiceH = scopeH.ServiceProvider.GetRequiredService<IWorkerHeartbeatService>();
+                await heartbeatServiceH.LogHeartbeatAsync(nameof(PredictionEvaluationWorker), "Healthy", null, stoppingToken);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in PredictionEvaluationWorker.");
+                try
+                {
+                    using var errScope = _serviceProvider.CreateScope();
+                    var heartbeatService = errScope.ServiceProvider.GetRequiredService<IWorkerHeartbeatService>();
+                    await heartbeatService.LogHeartbeatAsync(nameof(PredictionEvaluationWorker), "Error", ex.Message, stoppingToken);
+                }
+                catch { }
             }
 
             if (!stoppingToken.IsCancellationRequested)

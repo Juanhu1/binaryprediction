@@ -98,6 +98,14 @@ public static class DependencyInjection
         services.AddScoped<IPredictionRepository, PredictionRepository>();
         services.AddScoped<IPredictionPerformanceRepository, PredictionPerformanceRepository>();
 
+        // System Monitoring Services
+        services.AddScoped<IWorkerHeartbeatService, WorkerHeartbeatService>();
+        services.AddScoped<IHealthMonitoringService, HealthMonitoringService>();
+        services.AddScoped<IQueueMonitoringService, QueueMonitoringService>();
+        services.AddScoped<IPipelineMonitoringService, PipelineMonitoringService>();
+        services.AddScoped<IAccuracyMonitoringService, AccuracyMonitoringService>();
+        services.AddScoped<IOpenAiMonitoringService, OpenAiMonitoringService>();
+
         return services;
     }
 }

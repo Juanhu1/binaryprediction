@@ -21,6 +21,7 @@ public class PredictionResolutionWorker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        await Task.Yield();
         _logger.LogInformation("PredictionResolutionWorker starting with interval {Interval}.", _interval);
 
         while (!stoppingToken.IsCancellationRequested)
@@ -30,8 +31,10 @@ public class PredictionResolutionWorker : BackgroundService
                 using var scope = _serviceProvider.CreateScope();
                 var resolutionService = scope.ServiceProvider.GetRequiredService<IMarketResolutionService>();
                 var statisticsService = scope.ServiceProvider.GetRequiredService<IPredictionStatisticsService>();
-
                 var dbContext = scope.ServiceProvider.GetRequiredService<BinaryPrediction.Infrastructure.Persistence.BinaryPredictionDbContext>();
+                var heartbeatService = scope.ServiceProvider.GetRequiredService<IWorkerHeartbeatService>();
+
+                await heartbeatService.LogHeartbeatAsync(nameof(PredictionResolutionWorker), "Processing", null, stoppingToken);
 
                 _logger.LogInformation("Starting prediction resolution cycle.");
 
@@ -79,10 +82,21 @@ public class PredictionResolutionWorker : BackgroundService
                 {
                     _logger.LogInformation("Prediction resolution completed. No new markets resolved.");
                 }
+                
+                using var scopeH = _serviceProvider.CreateScope();
+                var heartbeatServiceH = scopeH.ServiceProvider.GetRequiredService<IWorkerHeartbeatService>();
+                await heartbeatServiceH.LogHeartbeatAsync(nameof(PredictionResolutionWorker), "Healthy", null, stoppingToken);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred in PredictionResolutionWorker.");
+                try
+                {
+                    using var errScope = _serviceProvider.CreateScope();
+                    var heartbeatService = errScope.ServiceProvider.GetRequiredService<IWorkerHeartbeatService>();
+                    await heartbeatService.LogHeartbeatAsync(nameof(PredictionResolutionWorker), "Error", ex.Message, stoppingToken);
+                }
+                catch { }
             }
 
             if (!stoppingToken.IsCancellationRequested)
