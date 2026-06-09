@@ -77,6 +77,9 @@ public static class DependencyInjection
         }
 
         services.Configure<OpenAiSettings>(openAiSection);
+        services.AddTransient<IOpenAiRetryService, OpenAiRetryService>();
+        services.AddTransient<IPromptService, PromptService>();
+        services.AddTransient<IAiPerformanceService, AiPerformanceService>();
         services.AddHttpClient<IOpenAiAnalysisService, OpenAiAnalysisService>();
         
         services.AddScoped<IPredictionRepository, PredictionRepository>();

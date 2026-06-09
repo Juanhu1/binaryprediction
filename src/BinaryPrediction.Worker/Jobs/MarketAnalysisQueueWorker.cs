@@ -20,6 +20,7 @@ public class MarketAnalysisQueueWorker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        await Task.Yield();
         _logger.LogInformation("MarketAnalysisQueueWorker starting.");
 
         while (!stoppingToken.IsCancellationRequested)

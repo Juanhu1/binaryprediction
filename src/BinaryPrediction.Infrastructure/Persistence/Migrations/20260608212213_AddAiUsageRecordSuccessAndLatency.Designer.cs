@@ -3,17 +3,20 @@ using System;
 using BinaryPrediction.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace BinaryPrediction.Infrastructure.Migrations
+namespace BinaryPrediction.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BinaryPredictionDbContext))]
-    partial class BinaryPredictionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260608212213_AddAiUsageRecordSuccessAndLatency")]
+    partial class AddAiUsageRecordSuccessAndLatency
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -499,7 +502,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasName("pk_predictions");
 
                     b.HasIndex("AnalysisId")
-                        .IsUnique()
                         .HasDatabaseName("ix_predictions_analysis_id");
 
                     b.HasIndex("ConfidencePercentage")
@@ -515,6 +517,7 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasDatabaseName("ix_predictions_is_active");
 
                     b.HasIndex("MarketId")
+                        .IsUnique()
                         .HasDatabaseName("ix_predictions_market_id");
 
                     b.HasIndex("WasCorrect")

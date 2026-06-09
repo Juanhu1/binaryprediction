@@ -21,6 +21,7 @@ public class MarketMaintenanceWorker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        await Task.Yield();
         _logger.LogInformation("MarketMaintenanceWorker starting.");
 
         while (!stoppingToken.IsCancellationRequested)

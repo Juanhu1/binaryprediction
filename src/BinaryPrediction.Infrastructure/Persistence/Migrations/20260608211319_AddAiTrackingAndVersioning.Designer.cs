@@ -3,17 +3,20 @@ using System;
 using BinaryPrediction.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace BinaryPrediction.Infrastructure.Migrations
+namespace BinaryPrediction.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(BinaryPredictionDbContext))]
-    partial class BinaryPredictionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260608211319_AddAiTrackingAndVersioning")]
+    partial class AddAiTrackingAndVersioning
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,21 +106,9 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at_utc");
 
-                    b.Property<string>("ErrorMessage")
-                        .HasColumnType("text")
-                        .HasColumnName("error_message");
-
                     b.Property<decimal>("EstimatedCostUsd")
                         .HasColumnType("numeric")
                         .HasColumnName("estimated_cost_usd");
-
-                    b.Property<bool>("IsSuccess")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_success");
-
-                    b.Property<long>("LatencyMs")
-                        .HasColumnType("bigint")
-                        .HasColumnName("latency_ms");
 
                     b.Property<Guid?>("MarketId")
                         .HasColumnType("uuid")
@@ -499,7 +490,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasName("pk_predictions");
 
                     b.HasIndex("AnalysisId")
-                        .IsUnique()
                         .HasDatabaseName("ix_predictions_analysis_id");
 
                     b.HasIndex("ConfidencePercentage")
@@ -515,6 +505,7 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasDatabaseName("ix_predictions_is_active");
 
                     b.HasIndex("MarketId")
+                        .IsUnique()
                         .HasDatabaseName("ix_predictions_market_id");
 
                     b.HasIndex("WasCorrect")

@@ -24,6 +24,7 @@ public class MarketCollectorWorker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        await Task.Yield(); // Ensure we don't block Host startup
         Console.WriteLine("MARKET WORKER EXECUTE");
         var interval = TimeSpan.FromMinutes(Math.Max(_settings.MarketCollectionMinutes, 1));
         _logger.LogInformation("Market collector worker started with interval {Interval}.", interval);

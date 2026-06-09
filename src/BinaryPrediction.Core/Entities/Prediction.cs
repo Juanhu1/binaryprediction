@@ -16,5 +16,7 @@ public class Prediction : BaseEntity
     public DateTimeOffset? EvaluatedAtUtc { get; set; }
     public decimal? BrierScore { get; set; }
 
+    public string PromptVersionUsed { get; set; } = string.Empty;
+
     public Market? Market { get; set; }
 }

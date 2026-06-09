@@ -63,8 +63,8 @@ public class PredictionConfiguration : IEntityTypeConfiguration<Prediction>
             .HasColumnName("brier_score")
             .HasColumnType("numeric(10,4)");
 
-        builder.HasIndex(p => p.MarketId).IsUnique();
-        builder.HasIndex(p => p.AnalysisId);
+        builder.HasIndex(p => p.MarketId);
+        builder.HasIndex(p => p.AnalysisId).IsUnique();
         builder.HasIndex(p => p.IsActive);
         builder.HasIndex(p => p.CreatedAtUtc);
         

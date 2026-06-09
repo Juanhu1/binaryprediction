@@ -22,6 +22,7 @@ public class PredictionWorker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
+        await Task.Yield(); // Ensure we don't block Host startup
         _logger.LogInformation("PredictionWorker starting.");
 
         while (!cancellationToken.IsCancellationRequested)
@@ -32,9 +33,9 @@ public class PredictionWorker : BackgroundService
                 var dbContext = scope.ServiceProvider.GetRequiredService<BinaryPredictionDbContext>();
                 var predictionService = scope.ServiceProvider.GetRequiredService<IPredictionService>();
 
-                // Find top 10 analyses for markets that don't have a prediction yet
+                // Find top 10 analyses that don't have a prediction yet
                 var analysesWithoutPredictions = await dbContext.AiAnalyses
-                    .Where(a => !dbContext.Predictions.Any(p => p.MarketId == a.MarketId))
+                    .Where(a => !dbContext.Predictions.Any(p => p.AnalysisId == a.Id))
                     .OrderBy(a => a.CreatedAtUtc)
                     .Take(50)
                     .ToListAsync(cancellationToken);
@@ -76,6 +77,7 @@ public class PredictionWorker : BackgroundService
                 else
                 {
                     // If no items were processed, wait a bit before polling again
+                    _logger.LogDebug("PredictionWorker found 0 eligible analyses. Sleeping for 30s.");
                     await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken);
                 }
             }

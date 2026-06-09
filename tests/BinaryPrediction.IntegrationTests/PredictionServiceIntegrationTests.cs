@@ -34,10 +34,15 @@ public class PredictionServiceIntegrationTests
         
         _mockOpenAiService = new Mock<IOpenAiAnalysisService>();
         
+        var optionsMock = new Mock<Microsoft.Extensions.Options.IOptions<BinaryPrediction.Core.Common.OpenAiSettings>>();
+        optionsMock.Setup(x => x.Value).Returns(new BinaryPrediction.Core.Common.OpenAiSettings { Model = "test-model" });
+
         _predictionService = new PredictionService(
             _mockOpenAiService.Object,
             _predictionRepository,
-            NullLogger<PredictionService>.Instance
+            NullLogger<PredictionService>.Instance,
+            _dbContext,
+            optionsMock.Object
         );
     }
 
@@ -76,23 +81,24 @@ public class PredictionServiceIntegrationTests
     }
 
     [Fact]
-    public async Task CreatePredictionAsync_SkipsIfPredictionExists()
+    public async Task CreatePredictionAsync_SkipsIfPredictionExistsForAnalysis()
     {
         // Arrange
         var marketId = Guid.NewGuid();
         var market = new Market { Id = marketId, Question = "Test", Probability = 50m, EndDate = DateTime.UtcNow.AddDays(1) };
-        var newAnalysis = new AiAnalysis { Id = Guid.NewGuid(), MarketId = marketId, EstimatedProbability = 90m, Confidence = 90m, Summary = "New" };
+        var analysisId = Guid.NewGuid();
+        var newAnalysis = new AiAnalysis { Id = analysisId, MarketId = marketId, EstimatedProbability = 90m, Confidence = 90m, Summary = "New" };
 
         _dbContext.Markets.Add(market);
         _dbContext.AiAnalyses.Add(newAnalysis);
         await _dbContext.SaveChangesAsync();
 
-        // Add old prediction manually
+        // Add old prediction manually FOR THIS ANALYSIS
         var oldPrediction = new Prediction
         {
             Id = Guid.NewGuid(),
             MarketId = marketId,
-            AnalysisId = Guid.NewGuid(),
+            AnalysisId = analysisId,
             PredictedOutcome = "No",
             ConfidencePercentage = 50m,
             IsActive = true
@@ -104,7 +110,7 @@ public class PredictionServiceIntegrationTests
         var result = await _predictionService.CreatePredictionAsync(newAnalysis, market);
 
         // Assert
-        Assert.Null(result); // Skipped
+        Assert.Null(result); // Skipped because prediction for THIS analysis exists
 
         var allPredictions = await _dbContext.Predictions.Where(p => p.MarketId == marketId).ToListAsync();
         Assert.Single(allPredictions);

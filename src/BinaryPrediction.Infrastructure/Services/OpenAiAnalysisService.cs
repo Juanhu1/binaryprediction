@@ -17,19 +17,25 @@ public class OpenAiAnalysisService : IOpenAiAnalysisService
     private readonly ILogger<OpenAiAnalysisService> _logger;
     private readonly IMockAnalysisGenerator _mockAnalysisGenerator;
     private readonly IMockPredictionGenerator _mockPredictionGenerator;
+    private readonly IOpenAiRetryService _retryService;
+    private readonly IPromptService _promptService;
 
     public OpenAiAnalysisService(
         HttpClient httpClient, 
         IOptions<OpenAiSettings> options,
         ILogger<OpenAiAnalysisService> logger,
         IMockAnalysisGenerator mockAnalysisGenerator,
-        IMockPredictionGenerator mockPredictionGenerator)
+        IMockPredictionGenerator mockPredictionGenerator,
+        IOpenAiRetryService retryService,
+        IPromptService promptService)
     {
         _httpClient = httpClient;
         _settings = options.Value;
         _logger = logger;
         _mockAnalysisGenerator = mockAnalysisGenerator;
         _mockPredictionGenerator = mockPredictionGenerator;
+        _retryService = retryService;
+        _promptService = promptService;
 
         _httpClient.BaseAddress = new Uri("https://api.openai.com/v1/");
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _settings.ApiKey);
@@ -46,7 +52,7 @@ public class OpenAiAnalysisService : IOpenAiAnalysisService
 
         _logger.LogInformation("Generating real AI analysis for market {MarketId}", market.Id);
 
-        var prompt = PromptBuilder.BuildAnalysisPrompt(market);
+        var prompt = await _promptService.GetAnalysisPromptAsync(market, cancellationToken);
 
         var requestBody = new
         {
@@ -62,39 +68,45 @@ public class OpenAiAnalysisService : IOpenAiAnalysisService
 
         var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync("chat/completions", content, cancellationToken);
-        
-        if (!response.IsSuccessStatusCode)
+        return await _retryService.ExecuteAsync(async ct =>
         {
-            var errorBody = await response.Content.ReadAsStringAsync(cancellationToken);
-            _logger.LogError("OpenAI API call failed. Endpoint: {Endpoint}, Model: {Model}, Status: {StatusCode}, Body: {Error}", 
-                response.RequestMessage?.RequestUri, _settings.Model, response.StatusCode, errorBody);
+            var response = await _httpClient.PostAsync("chat/completions", content, ct);
             
-            throw new InvalidOperationException($"OpenAI API HTTP {(int)response.StatusCode} - {response.ReasonPhrase}: {errorBody}");
-        }
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync(ct);
+                _logger.LogError("OpenAI API call failed. Endpoint: {Endpoint}, Model: {Model}, Status: {StatusCode}, Body: {Error}", 
+                    response.RequestMessage?.RequestUri, _settings.Model, response.StatusCode, errorBody);
+                
+                throw new InvalidOperationException($"OpenAI API HTTP {(int)response.StatusCode} - {response.ReasonPhrase}: {errorBody}");
+            }
 
-        var jsonResponse = await response.Content.ReadAsStringAsync(cancellationToken);
-        
-        _logger.LogInformation("OpenAI API success. Endpoint: {Endpoint}, Model: {Model}. Raw JSON response: {RawResponse}",
-            response.RequestMessage?.RequestUri, _settings.Model, jsonResponse);
+            var jsonResponse = await response.Content.ReadAsStringAsync(ct);
+            var resultDocument = JsonDocument.Parse(jsonResponse);
+            
+            var contentString = resultDocument.RootElement
+                .GetProperty("choices")[0]
+                .GetProperty("message")
+                .GetProperty("content")
+                .GetString();
 
-        var resultDocument = JsonDocument.Parse(jsonResponse);
-        var contentString = resultDocument.RootElement
-            .GetProperty("choices")[0]
-            .GetProperty("message")
-            .GetProperty("content")
-            .GetString();
+            if (string.IsNullOrWhiteSpace(contentString))
+            {
+                throw new InvalidOperationException("OpenAI API returned empty content string.");
+            }
 
-        if (string.IsNullOrWhiteSpace(contentString))
-        {
-            _logger.LogError("OpenAI API returned empty content string.");
-            throw new InvalidOperationException("OpenAI API returned empty content string.");
-        }
+            var result = JsonSerializer.Deserialize<AiAnalysisResultDto>(contentString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            if (result == null) throw new InvalidOperationException("Failed to deserialize analysis JSON.");
 
-        return JsonSerializer.Deserialize<AiAnalysisResultDto>(contentString, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        });
+            if (resultDocument.RootElement.TryGetProperty("usage", out var usageProp))
+            {
+                result.PromptTokens = usageProp.TryGetProperty("prompt_tokens", out var p) ? p.GetInt32() : 0;
+                result.CompletionTokens = usageProp.TryGetProperty("completion_tokens", out var c) ? c.GetInt32() : 0;
+                result.TotalTokens = usageProp.TryGetProperty("total_tokens", out var t) ? t.GetInt32() : 0;
+            }
+
+            return result;
+        }, cancellationToken);
     }
 
     public async Task<AiPredictionResultDto?> GeneratePredictionAsync(Market market, AiAnalysis analysis, CancellationToken cancellationToken = default)
@@ -107,7 +119,7 @@ public class OpenAiAnalysisService : IOpenAiAnalysisService
 
         _logger.LogInformation("Generating real AI prediction for market {MarketId}", market.Id);
 
-        var prompt = PromptBuilder.BuildPredictionPrompt(market, analysis);
+        var prompt = await _promptService.GetPredictionPromptAsync(market, analysis, cancellationToken);
 
         var requestBody = new
         {
@@ -123,38 +135,55 @@ public class OpenAiAnalysisService : IOpenAiAnalysisService
 
         var content = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
 
-        var response = await _httpClient.PostAsync("chat/completions", content, cancellationToken);
-        
-        if (!response.IsSuccessStatusCode)
+        return await _retryService.ExecuteAsync(async ct =>
         {
-            var errorBody = await response.Content.ReadAsStringAsync(cancellationToken);
-            _logger.LogError("OpenAI API call failed for Prediction. Endpoint: {Endpoint}, Model: {Model}, Status: {StatusCode}, Body: {Error}", 
-                response.RequestMessage?.RequestUri, _settings.Model, response.StatusCode, errorBody);
-                
-            throw new InvalidOperationException($"OpenAI API HTTP {(int)response.StatusCode} - {response.ReasonPhrase}: {errorBody}");
-        }
+            var response = await _httpClient.PostAsync("chat/completions", content, ct);
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync(ct);
+                _logger.LogError("OpenAI API call failed for Prediction. Endpoint: {Endpoint}, Model: {Model}, Status: {StatusCode}, Body: {Error}", 
+                    response.RequestMessage?.RequestUri, _settings.Model, response.StatusCode, errorBody);
+                    
+                throw new InvalidOperationException($"OpenAI API HTTP {(int)response.StatusCode} - {response.ReasonPhrase}: {errorBody}");
+            }
 
-        var jsonResponse = await response.Content.ReadAsStringAsync(cancellationToken);
-        
-        _logger.LogInformation("OpenAI API success for Prediction. Endpoint: {Endpoint}, Model: {Model}. Raw JSON response: {RawResponse}",
-            response.RequestMessage?.RequestUri, _settings.Model, jsonResponse);
+            var jsonResponse = await response.Content.ReadAsStringAsync(ct);
+            var resultDocument = JsonDocument.Parse(jsonResponse);
+            
+            var contentString = resultDocument.RootElement
+                .GetProperty("choices")[0]
+                .GetProperty("message")
+                .GetProperty("content")
+                .GetString();
 
-        var resultDocument = JsonDocument.Parse(jsonResponse);
-        var contentString = resultDocument.RootElement
-            .GetProperty("choices")[0]
-            .GetProperty("message")
-            .GetProperty("content")
-            .GetString();
+            if (string.IsNullOrWhiteSpace(contentString))
+            {
+                throw new InvalidOperationException("OpenAI API returned empty content string for Prediction.");
+            }
 
-        if (string.IsNullOrWhiteSpace(contentString))
-        {
-            _logger.LogError("OpenAI API returned empty content string for Prediction.");
-            throw new InvalidOperationException("OpenAI API returned empty content string for Prediction.");
-        }
+            var result = JsonSerializer.Deserialize<AiPredictionResultDto>(contentString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            if (result == null) throw new InvalidOperationException("Failed to deserialize prediction JSON.");
 
-        return JsonSerializer.Deserialize<AiPredictionResultDto>(contentString, new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true
-        });
+            // Strict validation rules
+            if (result.ConfidencePercentage < 50 || result.ConfidencePercentage > 100)
+            {
+                throw new InvalidOperationException($"Invalid confidence: {result.ConfidencePercentage}. Must be between 50 and 100.");
+            }
+
+            if (result.PredictedOutcome != "Yes" && result.PredictedOutcome != "No")
+            {
+                throw new InvalidOperationException($"Invalid outcome: '{result.PredictedOutcome}'. Must be 'Yes' or 'No'.");
+            }
+
+            if (resultDocument.RootElement.TryGetProperty("usage", out var usageProp))
+            {
+                result.PromptTokens = usageProp.TryGetProperty("prompt_tokens", out var p) ? p.GetInt32() : 0;
+                result.CompletionTokens = usageProp.TryGetProperty("completion_tokens", out var c) ? c.GetInt32() : 0;
+                result.TotalTokens = usageProp.TryGetProperty("total_tokens", out var t) ? t.GetInt32() : 0;
+            }
+
+            return result;
+        }, cancellationToken);
     }
 }
