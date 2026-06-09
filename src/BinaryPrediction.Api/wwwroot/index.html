@@ -43,6 +43,9 @@
             border: 1px solid var(--border);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
+        .panel-full {
+            grid-column: 1 / -1;
+        }
         .panel h2 {
             margin-top: 0;
             margin-bottom: 20px;
@@ -133,17 +136,6 @@
                     <tr><td colspan="3">Loading...</td></tr>
                 </tbody>
             </table>
-        </div>
-
-        <!-- Pipeline Status Panel -->
-        <div class="panel">
-            <h2>Pipeline Status</h2>
-            <div class="stat-grid" id="pipeline-stats">
-                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Markets</div></div>
-                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Analyses</div></div>
-                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Predictions</div></div>
-                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Missing Preds</div></div>
-            </div>
             <div style="margin-top: 15px; font-size: 0.85rem; color: var(--text-muted);" id="pipeline-times">
                 Loading timestamps...
             </div>
@@ -172,15 +164,36 @@
             <div class="error-message" id="openai-error"></div>
         </div>
 
-        <!-- Accuracy Status Panel -->
+        <!-- Latest Snapshot Summary -->
         <div class="panel">
-            <h2>Prediction Accuracy</h2>
-            <div class="stat-grid" id="accuracy-stats">
-                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Evaluated</div></div>
-                <div class="stat-box"><div class="stat-value status-healthy">-</div><div class="stat-label">Accuracy %</div></div>
+            <h2>Latest System Snapshot</h2>
+            <div class="stat-grid" id="snapshot-summary">
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">System Status</div></div>
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Markets</div></div>
+                <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Accuracy</div></div>
                 <div class="stat-box"><div class="stat-value">-</div><div class="stat-label">Avg Brier</div></div>
-                <div class="stat-box"><div class="stat-value status-error">-</div><div class="stat-label">Incorrect</div></div>
             </div>
+        </div>
+
+        <!-- Historical Snapshots Table -->
+        <div class="panel panel-full">
+            <h2>Historical Health Snapshots</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Markets (Active)</th>
+                        <th>Analyses / Preds</th>
+                        <th>Accuracy</th>
+                        <th>Avg Brier</th>
+                        <th>Queue (Pending/Failed)</th>
+                    </tr>
+                </thead>
+                <tbody id="snapshots-body">
+                    <tr><td colspan="7">Loading...</td></tr>
+                </tbody>
+            </table>
         </div>
 
     </div>
@@ -201,32 +214,36 @@
         }
 
         function getStatusClass(status) {
-            status = status.toLowerCase();
-            if (status.includes('healthy')) return 'status-healthy';
+            if (!status) return 'status-warning';
+            status = status.toString().toLowerCase();
+            if (status.includes('healthy') || status === '0') return 'status-healthy';
             if (status.includes('processing')) return 'status-processing';
-            if (status.includes('error') || status.includes('fail')) return 'status-error';
+            if (status.includes('error') || status.includes('fail') || status.includes('critical')) return 'status-error';
             return 'status-warning';
         }
 
         async function fetchHealth() {
             try {
-                const res = await fetch('/api/system/health');
+                const res = await fetch('/api/monitoring/health');
+                if (!res.ok) throw new Error('Network response was not ok');
                 const data = await res.json();
                 
                 const tbody = document.getElementById('workers-body');
                 tbody.innerHTML = '';
                 
-                data.workers.sort((a,b) => a.workerName.localeCompare(b.workerName)).forEach(w => {
-                    const tr = document.createElement('tr');
-                    const statusClass = w.isAlive ? getStatusClass(w.status) : 'status-error';
-                    const statusText = w.isAlive ? w.status : 'DEAD';
-                    tr.innerHTML = `
-                        <td>${w.workerName.replace('Worker','')}</td>
-                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                        <td>${formatTimeAgo(w.lastHeartbeatUtc)}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
+                if (data.workers) {
+                    data.workers.sort((a,b) => a.workerName.localeCompare(b.workerName)).forEach(w => {
+                        const tr = document.createElement('tr');
+                        const statusClass = w.isAlive ? getStatusClass(w.status) : 'status-error';
+                        const statusText = w.isAlive ? w.status : 'DEAD';
+                        tr.innerHTML = `
+                            <td>${w.workerName.replace('Worker','')}</td>
+                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                            <td>${formatTimeAgo(w.lastHeartbeatUtc)}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
 
                 document.getElementById('pipeline-times').innerHTML = `
                     Last Sync: ${formatTimeAgo(data.lastMarketSyncUtc)} | 
@@ -237,22 +254,10 @@
             } catch (e) { console.error(e); }
         }
 
-        async function fetchPipeline() {
-            try {
-                const res = await fetch('/api/system/pipeline');
-                const data = await res.json();
-                document.getElementById('pipeline-stats').innerHTML = `
-                    <div class="stat-box"><div class="stat-value">${data.totalMarkets}</div><div class="stat-label">Markets</div></div>
-                    <div class="stat-box"><div class="stat-value">${data.totalAnalyses}</div><div class="stat-label">Analyses</div></div>
-                    <div class="stat-box"><div class="stat-value">${data.totalPredictions}</div><div class="stat-label">Predictions</div></div>
-                    <div class="stat-box"><div class="stat-value ${data.analysesWithoutPredictions > 0 ? 'status-warning' : ''}">${data.analysesWithoutPredictions}</div><div class="stat-label">Missing Preds</div></div>
-                `;
-            } catch (e) { console.error(e); }
-        }
-
         async function fetchQueue() {
             try {
-                const res = await fetch('/api/system/queue');
+                const res = await fetch('/api/monitoring/queues');
+                if (!res.ok) throw new Error('Network response was not ok');
                 const data = await res.json();
                 document.getElementById('queue-stats').innerHTML = `
                     <div class="stat-box"><div class="stat-value">${data.pendingAnalyses}</div><div class="stat-label">Pending</div></div>
@@ -265,7 +270,8 @@
 
         async function fetchOpenAi() {
             try {
-                const res = await fetch('/api/system/openai');
+                const res = await fetch('/api/monitoring/usage');
+                if (!res.ok) throw new Error('Network response was not ok');
                 const data = await res.json();
                 document.getElementById('openai-stats').innerHTML = `
                     <div class="stat-box"><div class="stat-value">${data.callsToday}</div><div class="stat-label">Total Calls</div></div>
@@ -282,26 +288,48 @@
             } catch (e) { console.error(e); }
         }
 
-        async function fetchAccuracy() {
+        async function fetchSnapshots() {
             try {
-                const res = await fetch('/api/system/accuracy');
+                const res = await fetch('/api/monitoring/snapshots');
+                if (!res.ok) throw new Error('Network response was not ok');
                 const data = await res.json();
-                document.getElementById('accuracy-stats').innerHTML = `
-                    <div class="stat-box"><div class="stat-value">${data.predictionsEvaluated}</div><div class="stat-label">Evaluated</div></div>
-                    <div class="stat-box"><div class="stat-value status-healthy">${data.accuracyPercentage}%</div><div class="stat-label">Accuracy %</div></div>
-                    <div class="stat-box"><div class="stat-value">${data.averageBrierScore}</div><div class="stat-label">Avg Brier</div></div>
-                    <div class="stat-box"><div class="stat-value ${data.incorrectPredictions > 0 ? 'status-warning' : ''}">${data.incorrectPredictions}</div><div class="stat-label">Incorrect</div></div>
-                `;
+                
+                if (data.length > 0) {
+                    const latest = data[0];
+                    document.getElementById('snapshot-summary').innerHTML = `
+                        <div class="stat-box"><div class="stat-value ${getStatusClass(latest.status)}">${latest.status === 0 ? 'Healthy' : latest.status === 1 ? 'Warning' : 'Critical'}</div><div class="stat-label">System Status</div></div>
+                        <div class="stat-box"><div class="stat-value">${latest.totalMarkets}</div><div class="stat-label">Markets</div></div>
+                        <div class="stat-box"><div class="stat-value status-healthy">${latest.predictionAccuracy.toFixed(1)}%</div><div class="stat-label">Accuracy</div></div>
+                        <div class="stat-box"><div class="stat-value">${latest.averageBrierScore.toFixed(3)}</div><div class="stat-label">Avg Brier</div></div>
+                    `;
+                }
+
+                const tbody = document.getElementById('snapshots-body');
+                tbody.innerHTML = '';
+                
+                data.forEach(s => {
+                    const tr = document.createElement('tr');
+                    const statusText = s.status === 0 ? 'Healthy' : s.status === 1 ? 'Warning' : 'Critical';
+                    tr.innerHTML = `
+                        <td>${new Date(s.createdAtUtc).toLocaleString()}</td>
+                        <td><span class="status-badge ${getStatusClass(statusText)}">${statusText}</span></td>
+                        <td>${s.totalMarkets} (${s.activeMarkets})</td>
+                        <td>${s.totalAnalyses} / ${s.totalPredictions}</td>
+                        <td>${s.predictionAccuracy.toFixed(1)}%</td>
+                        <td>${s.averageBrierScore.toFixed(3)}</td>
+                        <td>${s.queuedMarkets} / ${s.failedMarkets}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
             } catch (e) { console.error(e); }
         }
 
         async function refreshDashboard() {
             await Promise.all([
                 fetchHealth(),
-                fetchPipeline(),
                 fetchQueue(),
                 fetchOpenAi(),
-                fetchAccuracy()
+                fetchSnapshots()
             ]);
             document.getElementById('last-updated').innerText = new Date().toLocaleTimeString();
         }

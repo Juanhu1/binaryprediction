@@ -105,6 +105,7 @@ public static class DependencyInjection
         services.AddScoped<IPipelineMonitoringService, PipelineMonitoringService>();
         services.AddScoped<IAccuracyMonitoringService, AccuracyMonitoringService>();
         services.AddScoped<IOpenAiMonitoringService, OpenAiMonitoringService>();
+        services.AddScoped<ISystemHealthService, SystemHealthService>();
 
         return services;
     }

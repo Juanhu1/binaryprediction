@@ -29,6 +29,7 @@ public class MarketAnalysisProcessorWorker : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            using var workerScope = _logger.BeginScope(new Dictionary<string, object> { ["WorkerName"] = nameof(MarketAnalysisProcessorWorker) });
             try
             {
                 using var scope = _serviceProvider.CreateScope();
@@ -46,6 +47,12 @@ public class MarketAnalysisProcessorWorker : BackgroundService
                 foreach (var item in pendingItems)
                 {
                     if (stoppingToken.IsCancellationRequested) break;
+                    
+                    using var itemScope = _logger.BeginScope(new Dictionary<string, object> 
+                    { 
+                        ["QueueItemId"] = item.Id, 
+                        ["MarketId"] = item.MarketId 
+                    });
 
                     var todayUtc = new DateTimeOffset(DateTimeOffset.UtcNow.UtcDateTime.Date, TimeSpan.Zero);
                     var analysesToday = await dbContext.Set<BinaryPrediction.Core.Entities.AiAnalysis>()

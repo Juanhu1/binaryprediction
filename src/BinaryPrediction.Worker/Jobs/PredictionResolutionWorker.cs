@@ -26,6 +26,7 @@ public class PredictionResolutionWorker : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            using var workerScope = _logger.BeginScope(new Dictionary<string, object> { ["WorkerName"] = nameof(PredictionResolutionWorker) });
             try
             {
                 using var scope = _serviceProvider.CreateScope();

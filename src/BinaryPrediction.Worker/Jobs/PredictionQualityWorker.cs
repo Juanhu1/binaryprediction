@@ -26,6 +26,7 @@ public class PredictionQualityWorker : BackgroundService
 
         while (!cancellationToken.IsCancellationRequested)
         {
+            using var workerScope = _logger.BeginScope(new Dictionary<string, object> { ["WorkerName"] = nameof(PredictionQualityWorker) });
             try
             {
                 using var scope = _serviceProvider.CreateScope();
@@ -36,7 +37,7 @@ public class PredictionQualityWorker : BackgroundService
 
                 await heartbeatService.LogHeartbeatAsync(nameof(PredictionQualityWorker), "Processing", null, cancellationToken);
 
-                var today = DateTimeOffset.UtcNow.Date;
+                var today = new DateTimeOffset(DateTime.UtcNow.Date, TimeSpan.Zero);
 
                 // Check if a snapshot already exists for today
                 var existingSnapshot = await dbContext.PredictionQualitySnapshots

@@ -27,6 +27,7 @@ public class PredictionWorker : BackgroundService
 
         while (!cancellationToken.IsCancellationRequested)
         {
+            using var workerScope = _logger.BeginScope(new Dictionary<string, object> { ["WorkerName"] = nameof(PredictionWorker) });
             try
             {
                 using var scope = _serviceProvider.CreateScope();
@@ -52,6 +53,12 @@ public class PredictionWorker : BackgroundService
                     foreach (var analysis in toProcess)
                     {
                         if (cancellationToken.IsCancellationRequested) break;
+                        
+                        using var itemScope = _logger.BeginScope(new Dictionary<string, object> 
+                        { 
+                            ["AnalysisId"] = analysis.Id, 
+                            ["MarketId"] = analysis.MarketId 
+                        });
 
                         var market = await dbContext.Markets.FindAsync(new object[] { analysis.MarketId }, cancellationToken);
                         if (market == null)

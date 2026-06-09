@@ -25,6 +25,7 @@ public class MarketAnalysisQueueWorker : BackgroundService
 
         while (!stoppingToken.IsCancellationRequested)
         {
+            using var workerScope = _logger.BeginScope(new Dictionary<string, object> { ["WorkerName"] = nameof(MarketAnalysisQueueWorker) });
             try
             {
                 using var scope = _serviceProvider.CreateScope();

@@ -22,7 +22,8 @@ public class BinaryPredictionDbContext : DbContext
 
     public DbSet<AiUsageRecord> AiUsageRecords { get; set; } = null!;
     public DbSet<PromptVersion> PromptVersions { get; set; } = null!;
-    public DbSet<WorkerHeartbeat> WorkerHeartbeats { get; set; } = null!;
+    public DbSet<WorkerHeartbeat> WorkerHeartbeats => Set<WorkerHeartbeat>();
+    public DbSet<SystemHealthSnapshot> SystemHealthSnapshots => Set<SystemHealthSnapshot>();
 
     public DbSet<Prediction> Predictions => Set<Prediction>();
     public DbSet<PredictionQualitySnapshot> PredictionQualitySnapshots => Set<PredictionQualitySnapshot>();

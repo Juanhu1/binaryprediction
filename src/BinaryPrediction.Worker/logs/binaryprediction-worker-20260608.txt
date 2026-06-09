@@ -1,0 +1,1197 @@
+2026-06-08 22:20:38.965 -07:00 [INF] Queue processor enabled
+2026-06-08 22:20:39.011 -07:00 [INF] Queue creator enabled
+2026-06-08 22:20:39.011 -07:00 [INF] Legacy analysis workers disabled
+2026-06-08 22:20:39.014 -07:00 [INF] Registered Hosted Services:
+2026-06-08 22:20:39.019 -07:00 [INF] - MarketCollectorWorker
+2026-06-08 22:20:39.021 -07:00 [INF] - MarketAnalysisQueueWorker
+2026-06-08 22:20:39.021 -07:00 [INF] - MarketAnalysisProcessorWorker
+2026-06-08 22:20:39.021 -07:00 [INF] - MarketMaintenanceWorker
+2026-06-08 22:20:39.021 -07:00 [INF] - PredictionWorker
+2026-06-08 22:20:39.021 -07:00 [INF] - PredictionResolutionWorker
+2026-06-08 22:20:39.021 -07:00 [INF] - PredictionEvaluationWorker
+2026-06-08 22:20:39.021 -07:00 [INF] - PredictionQualityWorker
+2026-06-08 22:20:39.021 -07:00 [INF] - SystemHealthWorker
+2026-06-08 22:20:39.042 -07:00 [INF] Market collector worker started with interval "01:00:00".
+2026-06-08 22:20:39.052 -07:00 [INF] MarketAnalysisQueueWorker starting.
+2026-06-08 22:20:39.056 -07:00 [INF] MarketAnalysisProcessorWorker starting.
+2026-06-08 22:20:39.067 -07:00 [INF] PredictionWorker starting.
+2026-06-08 22:20:39.072 -07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-08 22:20:39.072 -07:00 [INF] Hosting environment: Development
+2026-06-08 22:20:39.072 -07:00 [INF] Content root path: E:\work\BinaryPrediction\src\BinaryPrediction.Worker
+2026-06-08 22:20:39.087 -07:00 [INF] MarketMaintenanceWorker starting.
+2026-06-08 22:20:39.087 -07:00 [INF] PredictionResolutionWorker starting with interval "00:15:00".
+2026-06-08 22:20:40.034 -07:00 [INF] PredictionEvaluationWorker starting with interval "00:05:00".
+2026-06-08 22:20:40.305 -07:00 [INF] PredictionQualityWorker starting.
+2026-06-08 22:20:40.307 -07:00 [INF] SystemHealthWorker starting.
+2026-06-08 22:20:40.724 -07:00 [INF] Starting prediction resolution cycle.
+2026-06-08 22:20:40.726 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-08 22:20:40.741 -07:00 [INF] Starting Polymarket market collection.
+2026-06-08 22:20:40.800 -07:00 [INF] Prediction resolution completed. No new markets resolved.
+2026-06-08 22:20:40.843 -07:00 [ERR] Failed executing DbCommand (34ms) [Parameters=[@__p_0='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM prediction_quality_snapshots AS p
+    WHERE p.snapshot_date_utc = @__p_0)
+2026-06-08 22:20:40.861 -07:00 [ERR] An exception occurred while iterating over the results of a query for context type 'BinaryPrediction.Infrastructure.Persistence.BinaryPredictionDbContext'.
+System.ArgumentException: Cannot write DateTimeOffset with Offset=-07:00:00 to PostgreSQL type 'timestamp with time zone', only offset 0 (UTC) is supported.  (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeOffsetConverter.WriteCore(PgWriter writer, DateTimeOffset value)
+   at Npgsql.Internal.PgBufferedConverter`1.Write(PgWriter writer, T value)
+   at Npgsql.Internal.PgBufferedConverter`1.WriteAsObject(Boolean async, PgWriter writer, Object value, CancellationToken cancellationToken)
+   at Npgsql.Internal.PgConverter.WriteAsObjectAsync(PgWriter writer, Object value, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlParameter.WriteValue(Boolean async, PgWriter writer, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlParameter.Write(Boolean async, PgWriter writer, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.WriteBind(List`1 parameters, String portal, Byte[] asciiName, Boolean allResultTypesAreUnknown, Boolean[] unknownResultTypeList, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+System.ArgumentException: Cannot write DateTimeOffset with Offset=-07:00:00 to PostgreSQL type 'timestamp with time zone', only offset 0 (UTC) is supported.  (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeOffsetConverter.WriteCore(PgWriter writer, DateTimeOffset value)
+   at Npgsql.Internal.PgBufferedConverter`1.Write(PgWriter writer, T value)
+   at Npgsql.Internal.PgBufferedConverter`1.WriteAsObject(Boolean async, PgWriter writer, Object value, CancellationToken cancellationToken)
+   at Npgsql.Internal.PgConverter.WriteAsObjectAsync(PgWriter writer, Object value, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlParameter.WriteValue(Boolean async, PgWriter writer, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlParameter.Write(Boolean async, PgWriter writer, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.WriteBind(List`1 parameters, String portal, Byte[] asciiName, Boolean allResultTypesAreUnknown, Boolean[] unknownResultTypeList, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-06-08 22:20:40.878 -07:00 [ERR] Error generating prediction quality snapshot.
+System.ArgumentException: Cannot write DateTimeOffset with Offset=-07:00:00 to PostgreSQL type 'timestamp with time zone', only offset 0 (UTC) is supported.  (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeOffsetConverter.WriteCore(PgWriter writer, DateTimeOffset value)
+   at Npgsql.Internal.PgBufferedConverter`1.Write(PgWriter writer, T value)
+   at Npgsql.Internal.PgBufferedConverter`1.WriteAsObject(Boolean async, PgWriter writer, Object value, CancellationToken cancellationToken)
+   at Npgsql.Internal.PgConverter.WriteAsObjectAsync(PgWriter writer, Object value, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlParameter.WriteValue(Boolean async, PgWriter writer, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlParameter.Write(Boolean async, PgWriter writer, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.WriteBind(List`1 parameters, String portal, Byte[] asciiName, Boolean allResultTypesAreUnknown, Boolean[] unknownResultTypeList, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at BinaryPrediction.Worker.Jobs.PredictionQualityWorker.ExecuteAsync(CancellationToken cancellationToken) in E:\work\BinaryPrediction\src\BinaryPrediction.Worker\Jobs\PredictionQualityWorker.cs:line 43
+2026-06-08 22:20:40.912 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-08 22:20:40.916 -07:00 [INF] Skipping analysis for market "56e5dd69-87d5-40ff-82ec-814167845696". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.919 -07:00 [INF] Skipping analysis for market "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293". Last analysis age: 2.3 hours.
+2026-06-08 22:20:40.919 -07:00 [INF] Skipping analysis for market "ef593b1a-3f5b-4e23-8cc9-416f233af9fb". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.919 -07:00 [INF] Skipping analysis for market "3030365e-ba27-454e-b6dc-7c79b405268c". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.919 -07:00 [INF] Skipping analysis for market "a0df8fea-96a4-460a-8af9-501083b7a5b1". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.919 -07:00 [INF] Skipping analysis for market "88b6cc1d-27ea-47e8-8bba-23af8fbb3326". Last analysis age: 0.7 hours.
+2026-06-08 22:20:40.919 -07:00 [INF] Skipping analysis for market "78c1f4a3-1734-4249-92b4-96a0ea15d4f4". Last analysis age: 0.7 hours.
+2026-06-08 22:20:40.920 -07:00 [INF] Skipping analysis for market "79dc4638-a249-4eac-a70d-3c65dfdee9ab". Last analysis age: 2.5 hours.
+2026-06-08 22:20:40.920 -07:00 [INF] Skipping analysis for market "205205bc-3365-41c9-8863-35b2ee3bc59a". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.920 -07:00 [INF] Skipping analysis for market "e763e172-2c5b-44bd-8be4-34cd4562a98e". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.920 -07:00 [INF] Skipping analysis for market "8c443f80-a467-449f-a803-79613919134a". Last analysis age: 0.2 hours.
+2026-06-08 22:20:40.920 -07:00 [INF] Skipping analysis for market "7f0e3999-edfb-42f5-b328-9b1ec2e91579". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.920 -07:00 [INF] Skipping analysis for market "0e62b7be-e842-4b70-b605-24537997079c". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.920 -07:00 [INF] Skipping analysis for market "f3f6c390-2369-4604-8424-6cfc73a26947". Last analysis age: 0.7 hours.
+2026-06-08 22:20:40.920 -07:00 [INF] Skipping analysis for market "fcc80371-1ca6-4069-bbff-f769616d7183". Last analysis age: 2.3 hours.
+2026-06-08 22:20:40.920 -07:00 [INF] Skipping analysis for market "59400af6-2c0a-4d9f-8fb3-84b8e5287272". Last analysis age: 2.5 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "60c9c61d-b105-457f-bd40-4601d69e53ff". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "c4226d4d-146d-44ce-a0a5-15d3cbf20654". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "8e455544-fac9-492e-963a-219e8d19318c". Last analysis age: 2.5 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "3ae0682f-3085-491e-b4a1-929f4eec3c6c". Last analysis age: 2.3 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "a57620c4-f3e0-4d4a-b7da-bad2c36f508b". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed". Last analysis age: 2.5 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "0dc82206-bff6-42f0-a9bd-b5eabc36135f". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f". Last analysis age: 2.3 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "a27b7902-573a-433a-be4e-e9a60aea3bd6". Last analysis age: 2.5 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "18b038f9-2e7c-4dc8-8b35-c471b49a706e". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "06af8a9f-22ba-473f-9a62-fd98bcda6471". Last analysis age: 2.3 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "c037021c-7219-40cf-91e0-5acdf037178e". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "15fb2700-3449-44ee-9dae-e2160b38c9ac". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "7ede308a-92aa-4b45-81b1-437d9e7b9e18". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.922 -07:00 [INF] Skipping analysis for market "38d973e5-94a7-4574-9f19-53a88d63fac8". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "44399ad0-e6b7-4855-b34a-87e32dc1e366". Last analysis age: 2.5 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "bf471033-2f74-4ccf-b541-53e422e08c3d". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "b207c376-fb60-4322-aa35-1a70f33a94a2". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "1848b239-f3ca-45d0-82a8-cf298ebcb924". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "96871bb6-af33-4047-965d-d7755e550d12". Last analysis age: 2.3 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "5619bf88-4ac3-4d4d-91b5-483a6dfc3925". Last analysis age: 2.5 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "f608629e-f9da-4514-9406-22873da497f7". Last analysis age: 0.7 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "3069734a-aeac-48a2-a8bf-ed5929cd8c09". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "d634f666-e232-4e60-8d67-754334683546". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "68b5be93-cf79-4bb6-afd0-52f4ada690c0". Last analysis age: 2.5 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "5d71ef14-1522-40a1-8941-906b91d35eae". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "b1aca895-198d-48f7-ad9f-308beab650f0". Last analysis age: 0.7 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "37cb5cee-1db9-4338-b8b9-03d1bf49226c". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "43c0b754-0562-4628-96eb-649b9ec10949". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "b98b415b-6c2f-4e26-a417-94f316cf0eb5". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "faead2d6-6492-41da-a72b-4ee73bc96679". Last analysis age: 2.5 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "3d100871-4422-494c-9ceb-3da7eefc9d5a". Last analysis age: 2.5 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "2e7cc400-9916-4c26-a95e-46904d9c33fe". Last analysis age: 2.4 hours.
+2026-06-08 22:20:40.923 -07:00 [INF] Skipping analysis for market "17ee4ced-9a1e-4c34-81b3-93f16f050bbe". Last analysis age: 2.3 hours.
+2026-06-08 22:20:40.924 -07:00 [INF] Skipping analysis for market "536eb2c9-5ad6-4685-8abb-b3f3a55efef1". Last analysis age: 2.3 hours.
+2026-06-08 22:20:40.924 -07:00 [INF] QueueWorker: Eligible=54, ExistingActive=0, ToQueue=0
+2026-06-08 22:20:40.927 -07:00 [INF] First few eligible IDs: 56e5dd69-87d5-40ff-82ec-814167845696, 66f1ac3a-e7a2-435c-b0bf-dde2f35c2293, ef593b1a-3f5b-4e23-8cc9-416f233af9fb
+2026-06-08 22:20:40.949 -07:00 [INF] Queue status:
+Pending=0
+Processing=0
+Completed=214
+Failed=10
+AI analyses created today: 54
+OpenAI calls today: 54
+2026-06-08 22:20:41.073 -07:00 [INF] Health Snapshot Created. Markets: 100, Predictions: 214, Accuracy: 50.0%, Avg Brier: 0.3507, Queue Pending: 0, Queue Failed: 10
+2026-06-08 22:20:41.293 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.296 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:20:41.355 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.356 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:20:41.364 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.364 -07:00 [INF] Market evaluated: category="Other" score=90 eligible=false reason=Market category could not be determined.
+2026-06-08 22:20:41.374 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.374 -07:00 [INF] Market evaluated: category="Politics" score=80 eligible=true reason=null
+2026-06-08 22:20:41.383 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.383 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:20:41.393 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.393 -07:00 [INF] Market evaluated: category="Crypto" score=90 eligible=true reason=null
+2026-06-08 22:20:41.401 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.401 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:20:41.410 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.411 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:20:41.418 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.418 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:20:41.427 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.427 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:20:41.435 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.435 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:20:41.444 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.444 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:20:41.465 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.465 -07:00 [INF] Sports category inferred from base keyword: stanley cup
+2026-06-08 22:20:41.466 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.486 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.486 -07:00 [INF] Sports category inferred from base keyword: stanley cup
+2026-06-08 22:20:41.486 -07:00 [INF] Market evaluated: category="Sports" score=100 eligible=true reason=null
+2026-06-08 22:20:41.496 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.496 -07:00 [INF] Sports category inferred from base keyword: finals
+2026-06-08 22:20:41.496 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.504 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.504 -07:00 [INF] Sports category inferred from base keyword: finals
+2026-06-08 22:20:41.504 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.512 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.512 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:20:41.520 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.520 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.520 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.529 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.529 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.529 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.536 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.536 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.536 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.544 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.544 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.544 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.552 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.552 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.552 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.563 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.563 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.563 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.572 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.572 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.572 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.585 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.585 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.585 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.598 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.598 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.598 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.612 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.612 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.612 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.622 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.622 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.622 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.630 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.631 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.631 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.639 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.639 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.639 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.669 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.669 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.669 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.692 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.692 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.692 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.702 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.702 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.702 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.715 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.715 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.715 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.724 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.724 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.724 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.733 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.733 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.733 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.756 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.756 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.756 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.765 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.765 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.765 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.777 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.777 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.777 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.786 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.786 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.786 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.795 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.795 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.795 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.804 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.804 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.804 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.813 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.813 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.813 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.823 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.823 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.823 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.833 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.833 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.833 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.842 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.842 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.842 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.853 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.853 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.853 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.878 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.878 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.878 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.889 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.889 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.889 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.901 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.901 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.901 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.915 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.915 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.915 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.928 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.929 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.929 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.943 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.943 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.943 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:41.959 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:41.959 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:41.959 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:42.001 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.001 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:42.001 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:42.023 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.024 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:42.024 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:42.052 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.052 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:42.052 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:42.077 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.077 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:42.077 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:42.098 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.099 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:42.100 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:42.115 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.115 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:42.115 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:42.130 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.130 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:42.130 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:42.144 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.144 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:42.144 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:42.161 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.161 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:42.161 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:42.177 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.177 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:42.177 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:42.194 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.194 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:20:42.194 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:20:42.212 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.212 -07:00 [INF] Market evaluated: category="Other" score=90 eligible=false reason=Market category could not be determined.
+2026-06-08 22:20:42.230 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.230 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.247 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.247 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.268 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.268 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.285 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.286 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.301 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.301 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.318 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.318 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.432 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.432 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.473 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.473 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.499 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.500 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.515 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.515 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.534 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.534 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.554 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.554 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.576 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.576 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.592 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.593 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.609 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.609 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.627 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.628 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.644 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.644 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.660 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.660 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.676 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.676 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.694 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.694 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.713 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.713 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.730 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.730 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.746 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.746 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.762 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.762 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.780 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.780 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.797 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.797 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.814 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.814 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.830 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.831 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.849 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.850 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.869 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.869 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.886 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.886 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.903 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.903 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.921 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.921 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.940 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:20:42.940 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:20:42.958 -07:00 [INF] Polymarket synchronization completed. Synced 100 markets and skipped 0.
+2026-06-08 22:20:42.958 -07:00 [INF] Finished Polymarket market collection.
+2026-06-08 22:23:52.568 -07:00 [INF] Queue processor enabled
+2026-06-08 22:23:52.604 -07:00 [INF] Queue creator enabled
+2026-06-08 22:23:52.604 -07:00 [INF] Legacy analysis workers disabled
+2026-06-08 22:23:52.606 -07:00 [INF] Registered Hosted Services:
+2026-06-08 22:23:52.610 -07:00 [INF] - MarketCollectorWorker
+2026-06-08 22:23:52.611 -07:00 [INF] - MarketAnalysisQueueWorker
+2026-06-08 22:23:52.611 -07:00 [INF] - MarketAnalysisProcessorWorker
+2026-06-08 22:23:52.611 -07:00 [INF] - MarketMaintenanceWorker
+2026-06-08 22:23:52.611 -07:00 [INF] - PredictionWorker
+2026-06-08 22:23:52.611 -07:00 [INF] - PredictionResolutionWorker
+2026-06-08 22:23:52.611 -07:00 [INF] - PredictionEvaluationWorker
+2026-06-08 22:23:52.611 -07:00 [INF] - PredictionQualityWorker
+2026-06-08 22:23:52.611 -07:00 [INF] - SystemHealthWorker
+2026-06-08 22:23:52.629 -07:00 [INF] MarketAnalysisQueueWorker starting.
+2026-06-08 22:23:52.628 -07:00 [INF] Market collector worker started with interval "01:00:00".
+2026-06-08 22:23:52.634 -07:00 [INF] MarketAnalysisProcessorWorker starting.
+2026-06-08 22:23:52.637 -07:00 [INF] MarketMaintenanceWorker starting.
+2026-06-08 22:23:52.640 -07:00 [INF] PredictionWorker starting.
+2026-06-08 22:23:52.644 -07:00 [INF] PredictionResolutionWorker starting with interval "00:15:00".
+2026-06-08 22:23:52.653 -07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-08 22:23:52.653 -07:00 [INF] Hosting environment: Development
+2026-06-08 22:23:52.653 -07:00 [INF] Content root path: E:\work\BinaryPrediction\src\BinaryPrediction.Worker
+2026-06-08 22:23:53.611 -07:00 [INF] PredictionEvaluationWorker starting with interval "00:05:00".
+2026-06-08 22:23:53.613 -07:00 [INF] PredictionQualityWorker starting.
+2026-06-08 22:23:53.613 -07:00 [INF] SystemHealthWorker starting.
+2026-06-08 22:23:53.906 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-08 22:23:53.906 -07:00 [INF] Starting prediction resolution cycle.
+2026-06-08 22:23:53.911 -07:00 [INF] Starting Polymarket market collection.
+2026-06-08 22:23:53.940 -07:00 [INF] Prediction resolution completed. No new markets resolved.
+2026-06-08 22:23:53.950 -07:00 [ERR] Failed executing DbCommand (4ms) [Parameters=[@__p_0='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM prediction_quality_snapshots AS p
+    WHERE p.snapshot_date_utc = @__p_0)
+2026-06-08 22:23:53.985 -07:00 [ERR] An exception occurred while iterating over the results of a query for context type 'BinaryPrediction.Infrastructure.Persistence.BinaryPredictionDbContext'.
+System.ArgumentException: Cannot write DateTimeOffset with Offset=-07:00:00 to PostgreSQL type 'timestamp with time zone', only offset 0 (UTC) is supported.  (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeOffsetConverter.WriteCore(PgWriter writer, DateTimeOffset value)
+   at Npgsql.Internal.PgBufferedConverter`1.Write(PgWriter writer, T value)
+   at Npgsql.Internal.PgBufferedConverter`1.WriteAsObject(Boolean async, PgWriter writer, Object value, CancellationToken cancellationToken)
+   at Npgsql.Internal.PgConverter.WriteAsObjectAsync(PgWriter writer, Object value, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlParameter.WriteValue(Boolean async, PgWriter writer, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlParameter.Write(Boolean async, PgWriter writer, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.WriteBind(List`1 parameters, String portal, Byte[] asciiName, Boolean allResultTypesAreUnknown, Boolean[] unknownResultTypeList, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+System.ArgumentException: Cannot write DateTimeOffset with Offset=-07:00:00 to PostgreSQL type 'timestamp with time zone', only offset 0 (UTC) is supported.  (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeOffsetConverter.WriteCore(PgWriter writer, DateTimeOffset value)
+   at Npgsql.Internal.PgBufferedConverter`1.Write(PgWriter writer, T value)
+   at Npgsql.Internal.PgBufferedConverter`1.WriteAsObject(Boolean async, PgWriter writer, Object value, CancellationToken cancellationToken)
+   at Npgsql.Internal.PgConverter.WriteAsObjectAsync(PgWriter writer, Object value, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlParameter.WriteValue(Boolean async, PgWriter writer, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlParameter.Write(Boolean async, PgWriter writer, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.WriteBind(List`1 parameters, String portal, Byte[] asciiName, Boolean allResultTypesAreUnknown, Boolean[] unknownResultTypeList, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-06-08 22:23:53.991 -07:00 [ERR] Error generating prediction quality snapshot.
+System.ArgumentException: Cannot write DateTimeOffset with Offset=-07:00:00 to PostgreSQL type 'timestamp with time zone', only offset 0 (UTC) is supported.  (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeOffsetConverter.WriteCore(PgWriter writer, DateTimeOffset value)
+   at Npgsql.Internal.PgBufferedConverter`1.Write(PgWriter writer, T value)
+   at Npgsql.Internal.PgBufferedConverter`1.WriteAsObject(Boolean async, PgWriter writer, Object value, CancellationToken cancellationToken)
+   at Npgsql.Internal.PgConverter.WriteAsObjectAsync(PgWriter writer, Object value, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlParameter.WriteValue(Boolean async, PgWriter writer, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlParameter.Write(Boolean async, PgWriter writer, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.WriteBind(List`1 parameters, String portal, Byte[] asciiName, Boolean allResultTypesAreUnknown, Boolean[] unknownResultTypeList, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.<Write>g__WriteExecute|101_0(NpgsqlConnector connector, Boolean async, Boolean flush, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at BinaryPrediction.Worker.Jobs.PredictionQualityWorker.ExecuteAsync(CancellationToken cancellationToken) in E:\work\BinaryPrediction\src\BinaryPrediction.Worker\Jobs\PredictionQualityWorker.cs:line 43
+2026-06-08 22:23:54.047 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-08 22:23:54.051 -07:00 [INF] Skipping analysis for market "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.054 -07:00 [INF] Skipping analysis for market "ef593b1a-3f5b-4e23-8cc9-416f233af9fb". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.054 -07:00 [INF] Skipping analysis for market "3030365e-ba27-454e-b6dc-7c79b405268c". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.054 -07:00 [INF] Skipping analysis for market "a0df8fea-96a4-460a-8af9-501083b7a5b1". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.054 -07:00 [INF] Skipping analysis for market "88b6cc1d-27ea-47e8-8bba-23af8fbb3326". Last analysis age: 0.8 hours.
+2026-06-08 22:23:54.054 -07:00 [INF] Skipping analysis for market "78c1f4a3-1734-4249-92b4-96a0ea15d4f4". Last analysis age: 0.8 hours.
+2026-06-08 22:23:54.054 -07:00 [INF] Skipping analysis for market "79dc4638-a249-4eac-a70d-3c65dfdee9ab". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.054 -07:00 [INF] Skipping analysis for market "205205bc-3365-41c9-8863-35b2ee3bc59a". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.054 -07:00 [INF] Skipping analysis for market "e763e172-2c5b-44bd-8be4-34cd4562a98e". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.054 -07:00 [INF] Skipping analysis for market "8c443f80-a467-449f-a803-79613919134a". Last analysis age: 0.3 hours.
+2026-06-08 22:23:54.054 -07:00 [INF] Skipping analysis for market "7f0e3999-edfb-42f5-b328-9b1ec2e91579". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.054 -07:00 [INF] Skipping analysis for market "0e62b7be-e842-4b70-b605-24537997079c". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.054 -07:00 [INF] Skipping analysis for market "f3f6c390-2369-4604-8424-6cfc73a26947". Last analysis age: 0.8 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "fcc80371-1ca6-4069-bbff-f769616d7183". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "59400af6-2c0a-4d9f-8fb3-84b8e5287272". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "60c9c61d-b105-457f-bd40-4601d69e53ff". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "c4226d4d-146d-44ce-a0a5-15d3cbf20654". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "8e455544-fac9-492e-963a-219e8d19318c". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "3ae0682f-3085-491e-b4a1-929f4eec3c6c". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "a57620c4-f3e0-4d4a-b7da-bad2c36f508b". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "0dc82206-bff6-42f0-a9bd-b5eabc36135f". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "56e5dd69-87d5-40ff-82ec-814167845696". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "a27b7902-573a-433a-be4e-e9a60aea3bd6". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "18b038f9-2e7c-4dc8-8b35-c471b49a706e". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "06af8a9f-22ba-473f-9a62-fd98bcda6471". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "c037021c-7219-40cf-91e0-5acdf037178e". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "15fb2700-3449-44ee-9dae-e2160b38c9ac". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "7ede308a-92aa-4b45-81b1-437d9e7b9e18". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "38d973e5-94a7-4574-9f19-53a88d63fac8". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "44399ad0-e6b7-4855-b34a-87e32dc1e366". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "bf471033-2f74-4ccf-b541-53e422e08c3d". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "b207c376-fb60-4322-aa35-1a70f33a94a2". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.055 -07:00 [INF] Skipping analysis for market "1848b239-f3ca-45d0-82a8-cf298ebcb924". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "96871bb6-af33-4047-965d-d7755e550d12". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "5619bf88-4ac3-4d4d-91b5-483a6dfc3925". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "f608629e-f9da-4514-9406-22873da497f7". Last analysis age: 0.8 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "3069734a-aeac-48a2-a8bf-ed5929cd8c09". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "d634f666-e232-4e60-8d67-754334683546". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "68b5be93-cf79-4bb6-afd0-52f4ada690c0". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "5d71ef14-1522-40a1-8941-906b91d35eae". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "b1aca895-198d-48f7-ad9f-308beab650f0". Last analysis age: 0.8 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "37cb5cee-1db9-4338-b8b9-03d1bf49226c". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "43c0b754-0562-4628-96eb-649b9ec10949". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "b98b415b-6c2f-4e26-a417-94f316cf0eb5". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "faead2d6-6492-41da-a72b-4ee73bc96679". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "3d100871-4422-494c-9ceb-3da7eefc9d5a". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "2e7cc400-9916-4c26-a95e-46904d9c33fe". Last analysis age: 2.5 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "17ee4ced-9a1e-4c34-81b3-93f16f050bbe". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] Skipping analysis for market "536eb2c9-5ad6-4685-8abb-b3f3a55efef1". Last analysis age: 2.4 hours.
+2026-06-08 22:23:54.056 -07:00 [INF] QueueWorker: Eligible=54, ExistingActive=0, ToQueue=0
+2026-06-08 22:23:54.058 -07:00 [INF] First few eligible IDs: 66f1ac3a-e7a2-435c-b0bf-dde2f35c2293, ef593b1a-3f5b-4e23-8cc9-416f233af9fb, 3030365e-ba27-454e-b6dc-7c79b405268c
+2026-06-08 22:23:54.077 -07:00 [INF] Queue status:
+Pending=0
+Processing=0
+Completed=214
+Failed=10
+AI analyses created today: 54
+OpenAI calls today: 54
+2026-06-08 22:23:54.164 -07:00 [INF] Health Snapshot Created. Markets: 100, Predictions: 214, Accuracy: 50.0%, Avg Brier: 0.3507, Queue Pending: 0, Queue Failed: 10
+2026-06-08 22:23:54.398 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.401 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:23:54.459 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.459 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:23:54.467 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.468 -07:00 [INF] Market evaluated: category="Other" score=90 eligible=false reason=Market category could not be determined.
+2026-06-08 22:23:54.474 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.475 -07:00 [INF] Market evaluated: category="Politics" score=80 eligible=true reason=null
+2026-06-08 22:23:54.482 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.483 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:23:54.491 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.491 -07:00 [INF] Market evaluated: category="Crypto" score=90 eligible=true reason=null
+2026-06-08 22:23:54.499 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.499 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:23:54.507 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.507 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:23:54.515 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.515 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:23:54.521 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.525 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:23:54.533 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.533 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:23:54.539 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.539 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:23:54.545 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.545 -07:00 [INF] Sports category inferred from base keyword: stanley cup
+2026-06-08 22:23:54.545 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.552 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.552 -07:00 [INF] Sports category inferred from base keyword: stanley cup
+2026-06-08 22:23:54.552 -07:00 [INF] Market evaluated: category="Sports" score=100 eligible=true reason=null
+2026-06-08 22:23:54.559 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.559 -07:00 [INF] Sports category inferred from base keyword: finals
+2026-06-08 22:23:54.559 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.566 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.566 -07:00 [INF] Sports category inferred from base keyword: finals
+2026-06-08 22:23:54.566 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.572 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.572 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:23:54.579 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.579 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.579 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.586 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.586 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.586 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.592 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.592 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.592 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.599 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.599 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.599 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.606 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.606 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.606 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.613 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.613 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.613 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.619 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.619 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.619 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.626 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.627 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.627 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.638 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.638 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.638 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.645 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.645 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.645 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.653 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.653 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.653 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.661 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.661 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.661 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.670 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.670 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.670 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.684 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.684 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.684 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.781 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.782 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.782 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.831 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.831 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.831 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.854 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.854 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.854 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.895 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.895 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.915 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.946 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.946 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.946 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.970 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.970 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.970 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.984 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.984 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.984 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:54.996 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:54.996 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:54.997 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.019 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.019 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.019 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.036 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.036 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.036 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.047 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.047 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.047 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.060 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.060 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.060 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.075 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.075 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.075 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.086 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.087 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.087 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.101 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.101 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.101 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.118 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.118 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.118 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.128 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.128 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.129 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.138 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.138 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.138 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.153 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.153 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.153 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.162 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.162 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.163 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.171 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.171 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.171 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.178 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.178 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.178 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.187 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.187 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.187 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.194 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.194 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.194 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.202 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.202 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.202 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.209 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.209 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.209 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.216 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.217 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.217 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.223 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.223 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.223 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.231 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.231 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.231 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.237 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.237 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.237 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.244 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.245 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.245 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.251 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.251 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.251 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.257 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.257 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.257 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.267 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.267 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:23:55.267 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:23:55.273 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.273 -07:00 [INF] Market evaluated: category="Other" score=90 eligible=false reason=Market category could not be determined.
+2026-06-08 22:23:55.280 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.280 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.287 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.287 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.301 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.301 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.307 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.307 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.314 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.315 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.321 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.321 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.329 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.329 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.336 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.336 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.342 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.343 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.350 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.350 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.356 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.356 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.363 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.363 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.369 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.370 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.376 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.376 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.386 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.386 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.394 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.394 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.403 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.404 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.410 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.410 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.418 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.418 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.424 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.424 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.433 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.433 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.439 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.439 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.446 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.446 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.455 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.456 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.462 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.462 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.468 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.468 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.474 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.475 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.481 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.481 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.487 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.487 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.495 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.495 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.502 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.502 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.508 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.508 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.514 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.514 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.521 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:23:55.521 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:23:55.526 -07:00 [INF] Polymarket synchronization completed. Synced 100 markets and skipped 0.
+2026-06-08 22:23:55.526 -07:00 [INF] Finished Polymarket market collection.
+2026-06-08 22:28:54.078 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-08 22:28:54.086 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-08 22:33:41.233 -07:00 [INF] Queue processor enabled
+2026-06-08 22:33:41.266 -07:00 [INF] Queue creator enabled
+2026-06-08 22:33:41.266 -07:00 [INF] Legacy analysis workers disabled
+2026-06-08 22:33:41.267 -07:00 [INF] Registered Hosted Services:
+2026-06-08 22:33:41.272 -07:00 [INF] - MarketCollectorWorker
+2026-06-08 22:33:41.272 -07:00 [INF] - MarketAnalysisQueueWorker
+2026-06-08 22:33:41.272 -07:00 [INF] - MarketAnalysisProcessorWorker
+2026-06-08 22:33:41.272 -07:00 [INF] - MarketMaintenanceWorker
+2026-06-08 22:33:41.272 -07:00 [INF] - PredictionWorker
+2026-06-08 22:33:41.272 -07:00 [INF] - PredictionResolutionWorker
+2026-06-08 22:33:41.272 -07:00 [INF] - PredictionEvaluationWorker
+2026-06-08 22:33:41.273 -07:00 [INF] - PredictionQualityWorker
+2026-06-08 22:33:41.273 -07:00 [INF] - SystemHealthWorker
+2026-06-08 22:33:41.288 -07:00 [INF] MarketAnalysisQueueWorker starting.
+2026-06-08 22:33:41.287 -07:00 [INF] Market collector worker started with interval "01:00:00".
+2026-06-08 22:33:41.292 -07:00 [INF] MarketAnalysisProcessorWorker starting.
+2026-06-08 22:33:41.296 -07:00 [INF] MarketMaintenanceWorker starting.
+2026-06-08 22:33:41.301 -07:00 [INF] PredictionWorker starting.
+2026-06-08 22:33:41.303 -07:00 [INF] PredictionResolutionWorker starting with interval "00:15:00".
+2026-06-08 22:33:41.314 -07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-08 22:33:41.314 -07:00 [INF] Hosting environment: Development
+2026-06-08 22:33:41.314 -07:00 [INF] Content root path: E:\work\BinaryPrediction\src\BinaryPrediction.Worker
+2026-06-08 22:33:42.184 -07:00 [INF] PredictionEvaluationWorker starting with interval "00:05:00".
+2026-06-08 22:33:42.186 -07:00 [INF] PredictionQualityWorker starting.
+2026-06-08 22:33:42.186 -07:00 [INF] SystemHealthWorker starting.
+2026-06-08 22:33:42.438 -07:00 [INF] Starting prediction resolution cycle.
+2026-06-08 22:33:42.439 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-08 22:33:42.443 -07:00 [INF] Starting Polymarket market collection.
+2026-06-08 22:33:42.474 -07:00 [INF] Prediction resolution completed. No new markets resolved.
+2026-06-08 22:33:42.493 -07:00 [INF] PredictionQualityWorker sleeping for 18.4 hours until next snapshot.
+2026-06-08 22:33:42.546 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-08 22:33:42.550 -07:00 [INF] Skipping analysis for market "0e62b7be-e842-4b70-b605-24537997079c". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.553 -07:00 [INF] Skipping analysis for market "ef593b1a-3f5b-4e23-8cc9-416f233af9fb". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "3030365e-ba27-454e-b6dc-7c79b405268c". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "a0df8fea-96a4-460a-8af9-501083b7a5b1". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "88b6cc1d-27ea-47e8-8bba-23af8fbb3326". Last analysis age: 0.9 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "78c1f4a3-1734-4249-92b4-96a0ea15d4f4". Last analysis age: 0.9 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "79dc4638-a249-4eac-a70d-3c65dfdee9ab". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "205205bc-3365-41c9-8863-35b2ee3bc59a". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "e763e172-2c5b-44bd-8be4-34cd4562a98e". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "8c443f80-a467-449f-a803-79613919134a". Last analysis age: 0.4 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "7f0e3999-edfb-42f5-b328-9b1ec2e91579". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "f3f6c390-2369-4604-8424-6cfc73a26947". Last analysis age: 0.9 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "fcc80371-1ca6-4069-bbff-f769616d7183". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "59400af6-2c0a-4d9f-8fb3-84b8e5287272". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "60c9c61d-b105-457f-bd40-4601d69e53ff". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "c4226d4d-146d-44ce-a0a5-15d3cbf20654". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "8e455544-fac9-492e-963a-219e8d19318c". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "3ae0682f-3085-491e-b4a1-929f4eec3c6c". Last analysis age: 2.5 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "a57620c4-f3e0-4d4a-b7da-bad2c36f508b". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "0dc82206-bff6-42f0-a9bd-b5eabc36135f". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "56e5dd69-87d5-40ff-82ec-814167845696". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "a27b7902-573a-433a-be4e-e9a60aea3bd6". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "18b038f9-2e7c-4dc8-8b35-c471b49a706e". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.554 -07:00 [INF] Skipping analysis for market "06af8a9f-22ba-473f-9a62-fd98bcda6471". Last analysis age: 2.5 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "c037021c-7219-40cf-91e0-5acdf037178e". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "15fb2700-3449-44ee-9dae-e2160b38c9ac". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "7ede308a-92aa-4b45-81b1-437d9e7b9e18". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "38d973e5-94a7-4574-9f19-53a88d63fac8". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "44399ad0-e6b7-4855-b34a-87e32dc1e366". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "bf471033-2f74-4ccf-b541-53e422e08c3d". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "b207c376-fb60-4322-aa35-1a70f33a94a2". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "1848b239-f3ca-45d0-82a8-cf298ebcb924". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "96871bb6-af33-4047-965d-d7755e550d12". Last analysis age: 2.5 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "5619bf88-4ac3-4d4d-91b5-483a6dfc3925". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "f608629e-f9da-4514-9406-22873da497f7". Last analysis age: 0.9 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "3069734a-aeac-48a2-a8bf-ed5929cd8c09". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "d634f666-e232-4e60-8d67-754334683546". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "68b5be93-cf79-4bb6-afd0-52f4ada690c0". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "5d71ef14-1522-40a1-8941-906b91d35eae". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "b1aca895-198d-48f7-ad9f-308beab650f0". Last analysis age: 0.9 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "37cb5cee-1db9-4338-b8b9-03d1bf49226c". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "43c0b754-0562-4628-96eb-649b9ec10949". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "b98b415b-6c2f-4e26-a417-94f316cf0eb5". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "faead2d6-6492-41da-a72b-4ee73bc96679". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "3d100871-4422-494c-9ceb-3da7eefc9d5a". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "2e7cc400-9916-4c26-a95e-46904d9c33fe". Last analysis age: 2.7 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "17ee4ced-9a1e-4c34-81b3-93f16f050bbe". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] Skipping analysis for market "536eb2c9-5ad6-4685-8abb-b3f3a55efef1". Last analysis age: 2.6 hours.
+2026-06-08 22:33:42.555 -07:00 [INF] QueueWorker: Eligible=54, ExistingActive=0, ToQueue=0
+2026-06-08 22:33:42.558 -07:00 [INF] First few eligible IDs: 0e62b7be-e842-4b70-b605-24537997079c, ef593b1a-3f5b-4e23-8cc9-416f233af9fb, 3030365e-ba27-454e-b6dc-7c79b405268c
+2026-06-08 22:33:42.582 -07:00 [INF] Queue status:
+Pending=0
+Processing=0
+Completed=214
+Failed=10
+AI analyses created today: 54
+OpenAI calls today: 54
+2026-06-08 22:33:42.664 -07:00 [INF] Health Snapshot Created. Markets: 100, Predictions: 214, Accuracy: 50.0%, Avg Brier: 0.3507, Queue Pending: 0, Queue Failed: 10
+2026-06-08 22:33:42.834 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.837 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:33:42.894 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.894 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:33:42.904 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.904 -07:00 [INF] Market evaluated: category="Other" score=90 eligible=false reason=Market category could not be determined.
+2026-06-08 22:33:42.912 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.912 -07:00 [INF] Market evaluated: category="Politics" score=80 eligible=true reason=null
+2026-06-08 22:33:42.918 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.919 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:33:42.925 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.925 -07:00 [INF] Market evaluated: category="Crypto" score=90 eligible=true reason=null
+2026-06-08 22:33:42.931 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.931 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:33:42.937 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.937 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:33:42.943 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.943 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:33:42.949 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.949 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:33:42.956 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.956 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-08 22:33:42.963 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.963 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:33:42.969 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.970 -07:00 [INF] Sports category inferred from base keyword: stanley cup
+2026-06-08 22:33:42.970 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:42.976 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.976 -07:00 [INF] Sports category inferred from base keyword: stanley cup
+2026-06-08 22:33:42.976 -07:00 [INF] Market evaluated: category="Sports" score=100 eligible=true reason=null
+2026-06-08 22:33:42.990 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.990 -07:00 [INF] Sports category inferred from base keyword: finals
+2026-06-08 22:33:42.990 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:42.996 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:42.996 -07:00 [INF] Sports category inferred from base keyword: finals
+2026-06-08 22:33:42.996 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.003 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.003 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-08 22:33:43.009 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.009 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.009 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.016 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.016 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.016 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.022 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.022 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.022 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.028 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.029 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.029 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.035 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.035 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.035 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.042 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.042 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.042 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.049 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.050 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.050 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.056 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.056 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.057 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.063 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.063 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.063 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.070 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.070 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.070 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.077 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.077 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.077 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.083 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.083 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.083 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.091 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.091 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.091 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.098 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.098 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.098 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.104 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.104 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.104 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.111 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.112 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.112 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.118 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.118 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.118 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.126 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.126 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.126 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.133 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.133 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.133 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.141 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.141 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.141 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.162 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.162 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.162 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.174 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.174 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.175 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.200 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.200 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.200 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.212 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.212 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.212 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.222 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.222 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.222 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.233 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.233 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.233 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.242 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.243 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.243 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.251 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.251 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.251 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.260 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.260 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.260 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.268 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.268 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.269 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.277 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.277 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.277 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.287 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.287 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.287 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.296 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.296 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.296 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.305 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.305 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.305 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.314 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.314 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.314 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.323 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.323 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.323 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.331 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.331 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.331 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.340 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.340 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.340 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.348 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.348 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.348 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.356 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.356 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.356 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.365 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.365 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.365 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.373 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.373 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.373 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.382 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.382 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.382 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.390 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.390 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.390 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.398 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.398 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.398 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.406 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.407 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.407 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.415 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.415 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.415 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.423 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.423 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-08 22:33:43.424 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-08 22:33:43.432 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.432 -07:00 [INF] Market evaluated: category="Other" score=90 eligible=false reason=Market category could not be determined.
+2026-06-08 22:33:43.441 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.441 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.452 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.452 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.461 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.461 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.469 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.469 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.478 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.478 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.486 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.486 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.495 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.495 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.504 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.504 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.513 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.513 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.522 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.522 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.530 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.530 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.539 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.539 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.548 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.548 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.557 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.557 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.567 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.567 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.582 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.582 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.598 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.598 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.614 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.614 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.630 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.630 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.645 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.646 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.662 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.662 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.679 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.680 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.702 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.702 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.721 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.721 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.738 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.738 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.755 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.755 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.772 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.772 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.787 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.787 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.803 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.803 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.818 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.818 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.833 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.833 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.848 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.848 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.865 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.865 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.881 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-08 22:33:43.881 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-08 22:33:43.895 -07:00 [INF] Polymarket synchronization completed. Synced 100 markets and skipped 0.
+2026-06-08 22:33:43.895 -07:00 [INF] Finished Polymarket market collection.
+2026-06-08 22:38:42.585 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-08 22:38:42.593 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-08 22:43:42.610 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-08 22:43:42.614 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
