@@ -39,5 +39,9 @@ public class MarketConfiguration : IEntityTypeConfiguration<Market>
 
         builder.HasIndex(market => new { market.Active, market.Closed });
         builder.HasIndex(market => market.ResolvedAtUtc);
+        builder.HasOne(market => market.PredictionCategory)
+            .WithMany()
+            .HasForeignKey(market => market.PredictionCategoryId)
+            .IsRequired(false);
     }
 }

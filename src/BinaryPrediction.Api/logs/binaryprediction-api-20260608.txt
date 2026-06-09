@@ -7666,3 +7666,5 @@
 2026-06-08 22:45:41.421 -07:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5001/api/system/accuracy, Response status code: 404
 2026-06-08 22:45:41.424 -07:00 [INF] Request finished HTTP/1.1 GET http://localhost:5001/api/system/openai - 404 0 null 3.787ms
 2026-06-08 22:45:41.424 -07:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5001/api/system/openai, Response status code: 404
+2026-06-08 23:57:12.021 -07:00 [ERR] Failed executing DbCommand (9ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE markets ADD CONSTRAINT fk_markets_prediction_categories_prediction_category_id FOREIGN KEY (prediction_category_id) REFERENCES prediction_categories (id) ON DELETE CASCADE;

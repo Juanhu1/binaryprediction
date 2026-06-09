@@ -16,10 +16,7 @@ builder.Services.AddSerilog((services, loggerConfiguration) => loggerConfigurati
 builder.Services.AddWorkerServices(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// Background Workers
 builder.Services.AddHostedService<MarketCollectorWorker>();
-// We keep AiAnalysisWorker disabled or intact per instructions to not rewrite existing, 
-// but we will register our new queue workers:
 builder.Services.AddHostedService<MarketAnalysisQueueWorker>();
 builder.Services.AddHostedService<MarketAnalysisProcessorWorker>();
 builder.Services.AddHostedService<MarketMaintenanceWorker>();
@@ -28,6 +25,7 @@ builder.Services.AddHostedService<PredictionResolutionWorker>();
 builder.Services.AddHostedService<PredictionEvaluationWorker>();
 builder.Services.AddHostedService<PredictionQualityWorker>();
 builder.Services.AddHostedService<SystemHealthWorker>();
+builder.Services.AddHostedService<PredictionAnalyticsWorker>();
 
 var host = builder.Build();
 

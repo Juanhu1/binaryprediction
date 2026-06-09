@@ -11,4 +11,5 @@ public class PredictionCalibrationSnapshot
     public decimal ActualAccuracyPercentage { get; set; }
     public decimal ExpectedAccuracyPercentage { get; set; }
     public decimal CalibrationError { get; set; }
+    public decimal Confidence { get; set; }
 }

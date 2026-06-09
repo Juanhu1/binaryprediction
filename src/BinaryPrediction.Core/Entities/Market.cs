@@ -25,6 +25,8 @@ public class Market : BaseEntity
     public int? QualityScore { get; set; }
 
     public BinaryPrediction.Core.Enums.MarketCategory Category { get; set; }
+    public Guid? PredictionCategoryId { get; set; }
+    public PredictionCategory? PredictionCategory { get; set; }
 
     public bool EligibleForAnalysis { get; set; }
 

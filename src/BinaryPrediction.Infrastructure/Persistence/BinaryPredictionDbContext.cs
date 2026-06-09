@@ -30,6 +30,10 @@ public class BinaryPredictionDbContext : DbContext
     
     public DbSet<Alert> Alerts => Set<Alert>();
 
+    // Analytics entities
+    public DbSet<PredictionCategory> PredictionCategories { get; set; } = null!;
+    public DbSet<PredictionCalibrationSnapshot> PredictionCalibrationSnapshots { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

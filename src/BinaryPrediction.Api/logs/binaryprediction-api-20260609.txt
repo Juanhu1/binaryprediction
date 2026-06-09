@@ -1,0 +1,2 @@
+2026-06-09 00:37:33.123 -07:00 [ERR] Failed executing DbCommand (10ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE markets ADD CONSTRAINT fk_markets_prediction_categories_prediction_category_id FOREIGN KEY (prediction_category_id) REFERENCES prediction_categories (id) ON DELETE CASCADE;

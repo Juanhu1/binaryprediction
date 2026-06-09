@@ -1,10 +1,12 @@
 using BinaryPrediction.Core.Entities;
 using BinaryPrediction.Core.Repositories;
 using BinaryPrediction.Core.Services;
+using BinaryPrediction.Infrastructure.Persistence;
 using BinaryPrediction.Core.Interfaces;
 using BinaryPrediction.Infrastructure.External.Polymarket;
 using BinaryPrediction.Infrastructure.External.Polymarket.DTOs;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
 namespace BinaryPrediction.Infrastructure.Services;
@@ -19,6 +21,7 @@ public class MarketSynchronizationService : IMarketSynchronizationService
     private readonly IMarketEligibilityService _eligibilityService;
     private readonly IMarketResolutionDateResolver _dateResolver;
     private readonly ILogger<MarketSynchronizationService> _logger;
+        private readonly BinaryPredictionDbContext _dbContext;
 
     public MarketSynchronizationService(
         IPolymarketClient polymarketClient,
@@ -28,7 +31,8 @@ public class MarketSynchronizationService : IMarketSynchronizationService
         IMarketQualityScoringService scoringService,
         IMarketEligibilityService eligibilityService,
         IMarketResolutionDateResolver dateResolver,
-        ILogger<MarketSynchronizationService> logger)
+        ILogger<MarketSynchronizationService> logger,
+        BinaryPredictionDbContext dbContext)
     {
         _polymarketClient = polymarketClient;
         _marketRepository = marketRepository;
@@ -38,6 +42,7 @@ public class MarketSynchronizationService : IMarketSynchronizationService
         _eligibilityService = eligibilityService;
         _dateResolver = dateResolver;
         _logger = logger;
+        _dbContext = dbContext;
     }
 
     public async Task SynchronizeActiveMarketsAsync(CancellationToken cancellationToken = default)
@@ -90,6 +95,17 @@ public class MarketSynchronizationService : IMarketSynchronizationService
             
             market.QualityScore = score;
             market.Category = category;
+            // Ensure PredictionCategory exists and assign its Id
+            var normalizedName = category.ToString().ToLower();
+var pc = await _dbContext.PredictionCategories
+    .FirstOrDefaultAsync(c => c.Name.ToLower() == normalizedName, cancellationToken);
+if (pc == null)
+{
+    pc = new PredictionCategory { Id = Guid.NewGuid(), Name = category.ToString(), CreatedAtUtc = DateTimeOffset.UtcNow };
+    _dbContext.PredictionCategories.Add(pc);
+    await _dbContext.SaveChangesAsync(cancellationToken);
+}
+            market.PredictionCategoryId = pc.Id;
             market.LastQualityEvaluationUtc = DateTimeOffset.UtcNow;
 
             // 3. Eligibility
