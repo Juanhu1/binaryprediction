@@ -1,15 +1,18 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace BinaryPrediction.Core.Entities;
-
-public class PredictionPerformanceSnapshot
+namespace BinaryPrediction.Core.Entities
 {
-    public Guid Id { get; set; }
-    public DateTimeOffset CreatedAtUtc { get; set; }
-    public decimal DailyAccuracy { get; set; }
-    public decimal DailyBrierScore { get; set; }
-    public decimal WeeklyAccuracy { get; set; }
-    public decimal WeeklyBrierScore { get; set; }
-    public decimal MonthlyAccuracy { get; set; }
-    public decimal MonthlyBrierScore { get; set; }
+    public class PredictionPerformanceSnapshot
+    {
+        [Key]
+        public Guid Id { get; set; }
+
+        public DateOnly SnapshotDateUtc { get; set; }
+        public int TotalPredictions { get; set; }
+        public int CorrectPredictions { get; set; }
+        public decimal AccuracyPercentage { get; set; }
+        public decimal AverageBrierScore { get; set; }
+        public DateTimeOffset CreatedAtUtc { get; set; }
+    }
 }

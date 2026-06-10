@@ -33,6 +33,9 @@ public class BinaryPredictionDbContext : DbContext
     // Analytics entities
     public DbSet<PredictionCategory> PredictionCategories { get; set; } = null!;
     public DbSet<PredictionCalibrationSnapshot> PredictionCalibrationSnapshots { get; set; } = null!;
+    public DbSet<PredictionPerformanceSnapshot> PredictionPerformanceSnapshots { get; set; } = null!;
+    public DbSet<CategoryPerformanceSnapshot> CategoryPerformanceSnapshots { get; set; } = null!;
+    public DbSet<CalibrationTrendSnapshot> CalibrationTrendSnapshots { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

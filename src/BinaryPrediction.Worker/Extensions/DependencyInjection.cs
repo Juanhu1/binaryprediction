@@ -1,4 +1,7 @@
 using BinaryPrediction.Core.Common;
+using BinaryPrediction.Worker.Jobs;
+using BinaryPrediction.Core.Interfaces;
+using BinaryPrediction.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +13,8 @@ public static class DependencyInjection
     {
         services.Configure<OpenAiSettings>(configuration.GetSection("OpenAiSettings"));
         services.Configure<AnalysisSettings>(configuration.GetSection("AnalysisSettings"));
+        services.AddScoped<IPerformanceSnapshotService, PerformanceSnapshotService>();
+        services.AddHostedService<DailyAnalyticsWorker>();
         return services;
     }
 }

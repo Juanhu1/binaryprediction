@@ -347,3 +347,1620 @@ OpenAI calls today: 54
 2026-06-09 00:55:15.337 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
 2026-06-09 00:55:15.346 -07:00 [INF] Polymarket synchronization completed. Synced 100 markets and skipped 0.
 2026-06-09 00:55:15.346 -07:00 [INF] Finished Polymarket market collection.
+2026-06-09 22:24:14.644 -07:00 [INF] Queue processor enabled
+2026-06-09 22:24:14.684 -07:00 [INF] Queue creator enabled
+2026-06-09 22:24:14.685 -07:00 [INF] Legacy analysis workers disabled
+2026-06-09 22:24:14.686 -07:00 [INF] Registered Hosted Services:
+2026-06-09 22:24:14.690 -07:00 [INF] - DailyAnalyticsWorker
+2026-06-09 22:24:14.691 -07:00 [INF] - MarketCollectorWorker
+2026-06-09 22:24:14.691 -07:00 [INF] - MarketAnalysisQueueWorker
+2026-06-09 22:24:14.691 -07:00 [INF] - MarketAnalysisProcessorWorker
+2026-06-09 22:24:14.691 -07:00 [INF] - MarketMaintenanceWorker
+2026-06-09 22:24:14.691 -07:00 [INF] - PredictionWorker
+2026-06-09 22:24:14.691 -07:00 [INF] - PredictionResolutionWorker
+2026-06-09 22:24:14.691 -07:00 [INF] - PredictionEvaluationWorker
+2026-06-09 22:24:14.691 -07:00 [INF] - PredictionQualityWorker
+2026-06-09 22:24:14.691 -07:00 [INF] - SystemHealthWorker
+2026-06-09 22:24:14.692 -07:00 [INF] - PredictionAnalyticsWorker
+2026-06-09 22:24:14.705 -07:00 [INF] DailyAnalyticsWorker started at: "2026-06-10T05:24:14.7051251+00:00"
+2026-06-09 22:24:15.957 -07:00 [INF] Market collector worker started with interval "01:00:00".
+2026-06-09 22:24:15.960 -07:00 [INF] MarketAnalysisQueueWorker starting.
+2026-06-09 22:24:15.978 -07:00 [INF] MarketAnalysisProcessorWorker starting.
+2026-06-09 22:24:15.982 -07:00 [INF] PredictionAnalyticsWorker started, running every "01:00:00".
+2026-06-09 22:24:15.991 -07:00 [INF] MarketMaintenanceWorker starting.
+2026-06-09 22:24:15.999 -07:00 [INF] PredictionWorker starting.
+2026-06-09 22:24:16.021 -07:00 [INF] PredictionResolutionWorker starting with interval "00:15:00".
+2026-06-09 22:24:16.030 -07:00 [INF] SystemHealthWorker starting.
+2026-06-09 22:24:16.030 -07:00 [INF] PredictionQualityWorker starting.
+2026-06-09 22:24:16.031 -07:00 [INF] PredictionEvaluationWorker starting with interval "00:05:00".
+2026-06-09 22:24:16.034 -07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-09 22:24:16.034 -07:00 [INF] Hosting environment: Development
+2026-06-09 22:24:16.034 -07:00 [INF] Content root path: E:\work\BinaryPrediction\src\BinaryPrediction.Worker
+2026-06-09 22:24:16.123 -07:00 [ERR] Failed executing DbCommand (37ms) [Parameters=[@__today_0='?' (DbType = DateTime)], CommandType='"Text"', CommandTimeout='30']
+SELECT EXISTS (
+    SELECT 1
+    FROM prediction_performance_snapshots AS p
+    WHERE p.snapshot_date_utc = @__today_0)
+2026-06-09 22:24:16.154 -07:00 [ERR] An exception occurred while iterating over the results of a query for context type 'BinaryPrediction.Infrastructure.Persistence.BinaryPredictionDbContext'.
+System.ArgumentException: Cannot write DateTime with Kind=Unspecified to PostgreSQL type 'timestamp with time zone', only UTC is supported. Note that it's not possible to mix DateTimes with different Kinds in an array, range, or multirange. (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(DateTime value, Nullable`1 expectedPgTypeId, Boolean validateOnly)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver.<>c.<CreateResolver>b__0_0(DateTimeConverterResolver`1 resolver, DateTime value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(T value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgConverterResolver`1.GetAsObjectInternal(PgTypeInfo typeInfo, Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgResolverTypeInfo.GetResolutionAsObject(Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgTypeInfo.GetObjectResolution(Object value)
+   at Npgsql.NpgsqlParameter.ResolveConverter(PgTypeInfo typeInfo)
+   at Npgsql.NpgsqlParameter.ResolveTypeInfo(PgSerializerOptions options)
+   at Npgsql.NpgsqlParameterCollection.ProcessParameters(PgSerializerOptions options, Boolean validateValues, CommandType commandType)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+System.ArgumentException: Cannot write DateTime with Kind=Unspecified to PostgreSQL type 'timestamp with time zone', only UTC is supported. Note that it's not possible to mix DateTimes with different Kinds in an array, range, or multirange. (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(DateTime value, Nullable`1 expectedPgTypeId, Boolean validateOnly)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver.<>c.<CreateResolver>b__0_0(DateTimeConverterResolver`1 resolver, DateTime value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(T value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgConverterResolver`1.GetAsObjectInternal(PgTypeInfo typeInfo, Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgResolverTypeInfo.GetResolutionAsObject(Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgTypeInfo.GetObjectResolution(Object value)
+   at Npgsql.NpgsqlParameter.ResolveConverter(PgTypeInfo typeInfo)
+   at Npgsql.NpgsqlParameter.ResolveTypeInfo(PgSerializerOptions options)
+   at Npgsql.NpgsqlParameterCollection.ProcessParameters(PgSerializerOptions options, Boolean validateValues, CommandType commandType)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+2026-06-09 22:24:16.173 -07:00 [ERR] Error generating daily analytics snapshots
+System.ArgumentException: Cannot write DateTime with Kind=Unspecified to PostgreSQL type 'timestamp with time zone', only UTC is supported. Note that it's not possible to mix DateTimes with different Kinds in an array, range, or multirange. (Parameter 'value')
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(DateTime value, Nullable`1 expectedPgTypeId, Boolean validateOnly)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver.<>c.<CreateResolver>b__0_0(DateTimeConverterResolver`1 resolver, DateTime value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.Converters.DateTimeConverterResolver`1.Get(T value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgConverterResolver`1.GetAsObjectInternal(PgTypeInfo typeInfo, Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgResolverTypeInfo.GetResolutionAsObject(Object value, Nullable`1 expectedPgTypeId)
+   at Npgsql.Internal.PgTypeInfo.GetObjectResolution(Object value)
+   at Npgsql.NpgsqlParameter.ResolveConverter(PgTypeInfo typeInfo)
+   at Npgsql.NpgsqlParameter.ResolveTypeInfo(PgSerializerOptions options)
+   at Npgsql.NpgsqlParameterCollection.ProcessParameters(PgSerializerOptions options, Boolean validateValues, CommandType commandType)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at BinaryPrediction.Infrastructure.Services.PerformanceSnapshotService.GenerateDailySnapshotAsync() in E:\work\BinaryPrediction\src\BinaryPrediction.Infrastructure\Services\PerformanceSnapshotService.cs:line 28
+   at BinaryPrediction.Worker.Jobs.DailyAnalyticsWorker.ExecuteAsync(CancellationToken stoppingToken) in E:\work\BinaryPrediction\src\BinaryPrediction.Worker\Jobs\DailyAnalyticsWorker.cs:line 30
+2026-06-09 22:24:16.283 -07:00 [INF] Starting prediction resolution cycle.
+2026-06-09 22:24:16.286 -07:00 [INF] Starting Polymarket market collection.
+2026-06-09 22:24:16.309 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-09 22:24:16.324 -07:00 [INF] Generating daily prediction quality snapshot...
+2026-06-09 22:24:16.333 -07:00 [INF] Prediction resolution completed. No new markets resolved.
+2026-06-09 22:24:16.440 -07:00 [INF] Inserted 4 calibration snapshots.
+2026-06-09 22:24:16.465 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-09 22:24:16.470 -07:00 [INF] QueueWorker: Eligible=54, ExistingActive=0, ToQueue=54
+2026-06-09 22:24:16.474 -07:00 [INF] First few eligible IDs: 7f0e3999-edfb-42f5-b328-9b1ec2e91579, 0e62b7be-e842-4b70-b605-24537997079c, f3f6c390-2369-4604-8424-6cfc73a26947
+2026-06-09 22:24:16.476 -07:00 [INF] Creating 54 queue entries
+2026-06-09 22:24:16.499 -07:00 [INF] Before SaveChangesAsync()
+2026-06-09 22:24:16.536 -07:00 [INF] Created quality snapshot. Calibration Error: 0.484, Benchmark Advantage: -10
+2026-06-09 22:24:16.542 -07:00 [INF] PredictionQualityWorker sleeping for 18.6 hours until next snapshot.
+2026-06-09 22:24:16.557 -07:00 [INF] Health Snapshot Created. Markets: 100, Predictions: 267, Accuracy: 50.0%, Avg Brier: 0.3550, Queue Pending: 0, Queue Failed: 10
+2026-06-09 22:24:16.565 -07:00 [INF] After SaveChangesAsync()
+2026-06-09 22:24:16.565 -07:00 [INF] Queue entries saved successfully
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "7f0e3999-edfb-42f5-b328-9b1ec2e91579"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "0e62b7be-e842-4b70-b605-24537997079c"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "f3f6c390-2369-4604-8424-6cfc73a26947"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "fcc80371-1ca6-4069-bbff-f769616d7183"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "59400af6-2c0a-4d9f-8fb3-84b8e5287272"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "60c9c61d-b105-457f-bd40-4601d69e53ff"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "c4226d4d-146d-44ce-a0a5-15d3cbf20654"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "8e455544-fac9-492e-963a-219e8d19318c"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "3ae0682f-3085-491e-b4a1-929f4eec3c6c"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "a57620c4-f3e0-4d4a-b7da-bad2c36f508b"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "0dc82206-bff6-42f0-a9bd-b5eabc36135f"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "56e5dd69-87d5-40ff-82ec-814167845696"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "ef593b1a-3f5b-4e23-8cc9-416f233af9fb"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "3030365e-ba27-454e-b6dc-7c79b405268c"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "88b6cc1d-27ea-47e8-8bba-23af8fbb3326"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "78c1f4a3-1734-4249-92b4-96a0ea15d4f4"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "79dc4638-a249-4eac-a70d-3c65dfdee9ab"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "205205bc-3365-41c9-8863-35b2ee3bc59a"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "e763e172-2c5b-44bd-8be4-34cd4562a98e"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "8c443f80-a467-449f-a803-79613919134a"
+2026-06-09 22:24:16.566 -07:00 [INF] Enqueued market for analysis: "a27b7902-573a-433a-be4e-e9a60aea3bd6"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "18b038f9-2e7c-4dc8-8b35-c471b49a706e"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "06af8a9f-22ba-473f-9a62-fd98bcda6471"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "c037021c-7219-40cf-91e0-5acdf037178e"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "a0df8fea-96a4-460a-8af9-501083b7a5b1"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "15fb2700-3449-44ee-9dae-e2160b38c9ac"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "7ede308a-92aa-4b45-81b1-437d9e7b9e18"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "38d973e5-94a7-4574-9f19-53a88d63fac8"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "44399ad0-e6b7-4855-b34a-87e32dc1e366"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "bf471033-2f74-4ccf-b541-53e422e08c3d"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "b207c376-fb60-4322-aa35-1a70f33a94a2"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "3069734a-aeac-48a2-a8bf-ed5929cd8c09"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "d634f666-e232-4e60-8d67-754334683546"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "1848b239-f3ca-45d0-82a8-cf298ebcb924"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "96871bb6-af33-4047-965d-d7755e550d12"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "5619bf88-4ac3-4d4d-91b5-483a6dfc3925"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "f608629e-f9da-4514-9406-22873da497f7"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "43c0b754-0562-4628-96eb-649b9ec10949"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "b98b415b-6c2f-4e26-a417-94f316cf0eb5"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "68b5be93-cf79-4bb6-afd0-52f4ada690c0"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "5d71ef14-1522-40a1-8941-906b91d35eae"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "b1aca895-198d-48f7-ad9f-308beab650f0"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "37cb5cee-1db9-4338-b8b9-03d1bf49226c"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "faead2d6-6492-41da-a72b-4ee73bc96679"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "3d100871-4422-494c-9ceb-3da7eefc9d5a"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "2e7cc400-9916-4c26-a95e-46904d9c33fe"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "17ee4ced-9a1e-4c34-81b3-93f16f050bbe"
+2026-06-09 22:24:16.567 -07:00 [INF] Enqueued market for analysis: "536eb2c9-5ad6-4685-8abb-b3f3a55efef1"
+2026-06-09 22:24:16.584 -07:00 [INF] Queue status:
+Pending=54
+Processing=0
+Completed=267
+Failed=10
+AI analyses created today: 0
+OpenAI calls today: 0
+2026-06-09 22:24:16.787 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:16.813 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-09 22:24:16.922 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:16.925 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-09 22:24:16.947 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:16.949 -07:00 [INF] Market evaluated: category="Other" score=90 eligible=false reason=Market category could not be determined.
+2026-06-09 22:24:16.958 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:16.961 -07:00 [INF] Market evaluated: category="Politics" score=80 eligible=true reason=null
+2026-06-09 22:24:16.971 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:16.972 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-09 22:24:16.981 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:16.983 -07:00 [INF] Market evaluated: category="Crypto" score=90 eligible=true reason=null
+2026-06-09 22:24:16.990 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:16.992 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-09 22:24:17.001 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.003 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-09 22:24:17.011 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.013 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-09 22:24:17.023 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.030 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-09 22:24:17.037 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.039 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-09 22:24:17.048 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.049 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-09 22:24:17.058 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.058 -07:00 [INF] Sports category inferred from base keyword: stanley cup
+2026-06-09 22:24:17.059 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.066 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.066 -07:00 [INF] Sports category inferred from base keyword: stanley cup
+2026-06-09 22:24:17.067 -07:00 [INF] Market evaluated: category="Sports" score=100 eligible=true reason=null
+2026-06-09 22:24:17.074 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.075 -07:00 [INF] Sports category inferred from base keyword: finals
+2026-06-09 22:24:17.076 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.083 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.083 -07:00 [INF] Sports category inferred from base keyword: finals
+2026-06-09 22:24:17.084 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.092 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.093 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-09 22:24:17.100 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.101 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.102 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.109 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.109 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.110 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.116 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.117 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.118 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.125 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.125 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.126 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.133 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.133 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.135 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.142 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.142 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.143 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.151 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.152 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.153 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.160 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.160 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.161 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.169 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.169 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.170 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.178 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.178 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.179 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.186 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.187 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.188 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.195 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.195 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.196 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.204 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.204 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.205 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.216 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.216 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.218 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.225 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.225 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.226 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.241 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.241 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.242 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.272 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.272 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.274 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.283 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.283 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.285 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.294 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.294 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.295 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.305 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.305 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.306 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.315 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.315 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.317 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.326 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.326 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.327 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.336 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.337 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.338 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.346 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.346 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.347 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.357 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.357 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.358 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.367 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.367 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.369 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.378 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.378 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.379 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.389 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.389 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.390 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.400 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.400 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.401 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.412 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.412 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.413 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.423 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.423 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.425 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.434 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.435 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.436 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.445 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.445 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.447 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.460 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.460 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.461 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.471 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.471 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.473 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.482 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.482 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.484 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.494 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.494 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.496 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.506 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.506 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.508 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.517 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.517 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.519 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.527 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.527 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.529 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.540 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.540 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.541 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.551 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.551 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.552 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.561 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.561 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.563 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.573 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.573 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.574 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.583 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.583 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.584 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.593 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.593 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.595 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.605 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.605 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.607 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.616 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.616 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 22:24:17.618 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 22:24:17.627 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.629 -07:00 [INF] Market evaluated: category="Other" score=90 eligible=false reason=Market category could not be determined.
+2026-06-09 22:24:17.639 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.640 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.651 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.653 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.664 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.665 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.680 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.681 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.693 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.694 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.710 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.711 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.723 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.725 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.742 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.743 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.765 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.766 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.785 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.786 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.805 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.807 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.824 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.825 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.842 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.844 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.861 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.862 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.879 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.880 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.898 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.900 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.919 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.920 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.938 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.939 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.958 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.959 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:17.979 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:17.980 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.001 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.003 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.022 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.024 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.041 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.043 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.061 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.063 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.080 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.081 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.099 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.101 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.121 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.122 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.141 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.142 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.161 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.162 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.182 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.185 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.209 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.210 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.231 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.233 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.254 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.256 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.277 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 22:24:18.278 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 22:24:18.295 -07:00 [INF] Polymarket synchronization completed. Synced 100 markets and skipped 0.
+2026-06-09 22:24:18.295 -07:00 [INF] Finished Polymarket market collection.
+2026-06-09 22:24:46.371 -07:00 [INF] Queue item picked: "13033b4c-d68a-48fb-8d2b-b343b1584cf9"
+2026-06-09 22:24:46.379 -07:00 [INF] Queue item started: "13033b4c-d68a-48fb-8d2b-b343b1584cf9"
+2026-06-09 22:24:46.395 -07:00 [INF] Starting AI analysis for market "3d100871-4422-494c-9ceb-3da7eefc9d5a".
+2026-06-09 22:24:46.396 -07:00 [INF] Generating real AI analysis for market "3d100871-4422-494c-9ceb-3da7eefc9d5a"
+2026-06-09 22:24:50.792 -07:00 [INF] AI analysis completed successfully for market "3d100871-4422-494c-9ceb-3da7eefc9d5a". Edge: 1%, Confidence: 85%, Cost: $0.006720, Latency: 4346ms
+2026-06-09 22:24:50.805 -07:00 [INF] AI analysis saved: "6eea831e-240a-46ff-bbe7-cfcfdf80f464"
+2026-06-09 22:24:50.805 -07:00 [INF] Queue item completed: "13033b4c-d68a-48fb-8d2b-b343b1584cf9"
+2026-06-09 22:24:50.807 -07:00 [INF] Queue item picked: "16adc684-3e8a-43d0-9bc8-ba826b9124b8"
+2026-06-09 22:24:50.811 -07:00 [INF] Queue item started: "16adc684-3e8a-43d0-9bc8-ba826b9124b8"
+2026-06-09 22:24:50.814 -07:00 [INF] Starting AI analysis for market "ef593b1a-3f5b-4e23-8cc9-416f233af9fb".
+2026-06-09 22:24:50.814 -07:00 [INF] Generating real AI analysis for market "ef593b1a-3f5b-4e23-8cc9-416f233af9fb"
+2026-06-09 22:24:52.958 -07:00 [INF] AI analysis completed successfully for market "ef593b1a-3f5b-4e23-8cc9-416f233af9fb". Edge: 5%, Confidence: 70%, Cost: $0.005390, Latency: 2140ms
+2026-06-09 22:24:52.964 -07:00 [INF] AI analysis saved: "7def1ed1-a1f8-440a-99a3-ef59c80e10dd"
+2026-06-09 22:24:52.964 -07:00 [INF] Queue item completed: "16adc684-3e8a-43d0-9bc8-ba826b9124b8"
+2026-06-09 22:24:52.967 -07:00 [INF] Queue item picked: "1b1cf978-df78-4787-bc6b-bd1d8d5f741b"
+2026-06-09 22:24:52.969 -07:00 [INF] Queue item started: "1b1cf978-df78-4787-bc6b-bd1d8d5f741b"
+2026-06-09 22:24:52.972 -07:00 [INF] Starting AI analysis for market "2e7cc400-9916-4c26-a95e-46904d9c33fe".
+2026-06-09 22:24:52.972 -07:00 [INF] Generating real AI analysis for market "2e7cc400-9916-4c26-a95e-46904d9c33fe"
+2026-06-09 22:24:55.288 -07:00 [INF] AI analysis completed successfully for market "2e7cc400-9916-4c26-a95e-46904d9c33fe". Edge: 1%, Confidence: 85%, Cost: $0.006320, Latency: 2311ms
+2026-06-09 22:24:55.293 -07:00 [INF] AI analysis saved: "418992ca-43ca-4c04-a5f3-cf3d802480b0"
+2026-06-09 22:24:55.293 -07:00 [INF] Queue item completed: "1b1cf978-df78-4787-bc6b-bd1d8d5f741b"
+2026-06-09 22:24:55.295 -07:00 [INF] Queue item picked: "1d31bf40-e412-482c-a665-de0c8bac5625"
+2026-06-09 22:24:55.298 -07:00 [INF] Queue item started: "1d31bf40-e412-482c-a665-de0c8bac5625"
+2026-06-09 22:24:55.300 -07:00 [INF] Starting AI analysis for market "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f".
+2026-06-09 22:24:55.300 -07:00 [INF] Generating real AI analysis for market "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f"
+2026-06-09 22:24:58.178 -07:00 [INF] AI analysis completed successfully for market "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f". Edge: 5%, Confidence: 70%, Cost: $0.005810, Latency: 2873ms
+2026-06-09 22:24:58.184 -07:00 [INF] AI analysis saved: "2558cf6e-f2db-47c9-b29e-6d1d875d0ceb"
+2026-06-09 22:24:58.184 -07:00 [INF] Queue item completed: "1d31bf40-e412-482c-a665-de0c8bac5625"
+2026-06-09 22:24:58.186 -07:00 [INF] Queue item picked: "1da24165-6698-4949-9ae2-493cf5eabb8a"
+2026-06-09 22:24:58.189 -07:00 [INF] Queue item started: "1da24165-6698-4949-9ae2-493cf5eabb8a"
+2026-06-09 22:24:58.191 -07:00 [INF] Starting AI analysis for market "b207c376-fb60-4322-aa35-1a70f33a94a2".
+2026-06-09 22:24:58.191 -07:00 [INF] Generating real AI analysis for market "b207c376-fb60-4322-aa35-1a70f33a94a2"
+2026-06-09 22:25:00.447 -07:00 [INF] AI analysis completed successfully for market "b207c376-fb60-4322-aa35-1a70f33a94a2". Edge: 1%, Confidence: 85%, Cost: $0.006120, Latency: 2250ms
+2026-06-09 22:25:00.451 -07:00 [INF] AI analysis saved: "2e9c0af9-fceb-4374-b125-14d64ab94a42"
+2026-06-09 22:25:00.451 -07:00 [INF] Queue item completed: "1da24165-6698-4949-9ae2-493cf5eabb8a"
+2026-06-09 22:25:00.452 -07:00 [INF] Queue item picked: "1e36863e-cf85-41eb-8420-e3a4b2f59ae4"
+2026-06-09 22:25:00.455 -07:00 [INF] Queue item started: "1e36863e-cf85-41eb-8420-e3a4b2f59ae4"
+2026-06-09 22:25:00.457 -07:00 [INF] Starting AI analysis for market "d634f666-e232-4e60-8d67-754334683546".
+2026-06-09 22:25:00.457 -07:00 [INF] Generating real AI analysis for market "d634f666-e232-4e60-8d67-754334683546"
+2026-06-09 22:25:02.626 -07:00 [INF] AI analysis completed successfully for market "d634f666-e232-4e60-8d67-754334683546". Edge: 1%, Confidence: 85%, Cost: $0.006510, Latency: 2163ms
+2026-06-09 22:25:02.630 -07:00 [INF] AI analysis saved: "bc51b7e0-7287-41b9-a8d2-9af3a2693eca"
+2026-06-09 22:25:02.630 -07:00 [INF] Queue item completed: "1e36863e-cf85-41eb-8420-e3a4b2f59ae4"
+2026-06-09 22:25:02.632 -07:00 [INF] Queue item picked: "20886e73-ba0e-4a74-ae2d-2a5f7a8fa7ac"
+2026-06-09 22:25:02.636 -07:00 [INF] Queue item started: "20886e73-ba0e-4a74-ae2d-2a5f7a8fa7ac"
+2026-06-09 22:25:02.638 -07:00 [INF] Starting AI analysis for market "3ae0682f-3085-491e-b4a1-929f4eec3c6c".
+2026-06-09 22:25:02.638 -07:00 [INF] Generating real AI analysis for market "3ae0682f-3085-491e-b4a1-929f4eec3c6c"
+2026-06-09 22:25:04.955 -07:00 [INF] AI analysis completed successfully for market "3ae0682f-3085-491e-b4a1-929f4eec3c6c". Edge: 15%, Confidence: 70%, Cost: $0.006260, Latency: 2312ms
+2026-06-09 22:25:04.959 -07:00 [INF] AI analysis saved: "4bfb5136-0863-48b0-a1a0-bdcaf67215f0"
+2026-06-09 22:25:04.959 -07:00 [INF] Queue item completed: "20886e73-ba0e-4a74-ae2d-2a5f7a8fa7ac"
+2026-06-09 22:25:04.961 -07:00 [INF] Queue item picked: "2164c914-dc66-4c12-bdd2-7f0535b5d1ef"
+2026-06-09 22:25:04.963 -07:00 [INF] Queue item started: "2164c914-dc66-4c12-bdd2-7f0535b5d1ef"
+2026-06-09 22:25:04.965 -07:00 [INF] Starting AI analysis for market "78c1f4a3-1734-4249-92b4-96a0ea15d4f4".
+2026-06-09 22:25:04.965 -07:00 [INF] Generating real AI analysis for market "78c1f4a3-1734-4249-92b4-96a0ea15d4f4"
+2026-06-09 22:25:07.182 -07:00 [INF] AI analysis completed successfully for market "78c1f4a3-1734-4249-92b4-96a0ea15d4f4". Edge: 1%, Confidence: 85%, Cost: $0.005690, Latency: 2212ms
+2026-06-09 22:25:07.185 -07:00 [INF] AI analysis saved: "3d8f835a-28a3-4063-aece-6813dd7816ff"
+2026-06-09 22:25:07.185 -07:00 [INF] Queue item completed: "2164c914-dc66-4c12-bdd2-7f0535b5d1ef"
+2026-06-09 22:25:07.187 -07:00 [INF] Queue item picked: "2ca837ed-d15e-4ca5-9fc0-08ced1c1d27b"
+2026-06-09 22:25:07.189 -07:00 [INF] Queue item started: "2ca837ed-d15e-4ca5-9fc0-08ced1c1d27b"
+2026-06-09 22:25:07.191 -07:00 [INF] Starting AI analysis for market "3069734a-aeac-48a2-a8bf-ed5929cd8c09".
+2026-06-09 22:25:07.191 -07:00 [INF] Generating real AI analysis for market "3069734a-aeac-48a2-a8bf-ed5929cd8c09"
+2026-06-09 22:25:08.964 -07:00 [INF] AI analysis completed successfully for market "3069734a-aeac-48a2-a8bf-ed5929cd8c09". Edge: 1%, Confidence: 90%, Cost: $0.005690, Latency: 1768ms
+2026-06-09 22:25:08.970 -07:00 [INF] AI analysis saved: "8bdb8e7e-f639-4e48-8559-dbdf3e01cd3a"
+2026-06-09 22:25:08.970 -07:00 [INF] Queue item completed: "2ca837ed-d15e-4ca5-9fc0-08ced1c1d27b"
+2026-06-09 22:25:08.971 -07:00 [INF] Queue item picked: "0a6ffde9-34a0-4bbc-ac4a-3cbce3d75aa2"
+2026-06-09 22:25:08.974 -07:00 [INF] Queue item started: "0a6ffde9-34a0-4bbc-ac4a-3cbce3d75aa2"
+2026-06-09 22:25:08.975 -07:00 [INF] Starting AI analysis for market "37cb5cee-1db9-4338-b8b9-03d1bf49226c".
+2026-06-09 22:25:08.975 -07:00 [INF] Generating real AI analysis for market "37cb5cee-1db9-4338-b8b9-03d1bf49226c"
+2026-06-09 22:25:11.139 -07:00 [INF] AI analysis completed successfully for market "37cb5cee-1db9-4338-b8b9-03d1bf49226c". Edge: 1%, Confidence: 85%, Cost: $0.005840, Latency: 2159ms
+2026-06-09 22:25:11.143 -07:00 [INF] AI analysis saved: "acff81a1-a421-4fcf-bc7b-59bd92bbfcc4"
+2026-06-09 22:25:11.143 -07:00 [INF] Queue item completed: "0a6ffde9-34a0-4bbc-ac4a-3cbce3d75aa2"
+2026-06-09 22:25:11.154 -07:00 [WRN] OpenAI rate limit reached. Deferring remaining queue items.
+2026-06-09 22:25:16.381 -07:00 [INF] Found 10 analyses without predictions. Starting prediction generation.
+2026-06-09 22:25:16.389 -07:00 [INF] Generating prediction for Analysis "6618de25-7012-4b4a-9330-80869716f232", Market "3d100871-4422-494c-9ceb-3da7eefc9d5a"
+2026-06-09 22:25:16.390 -07:00 [INF] Generating real AI prediction for market "3d100871-4422-494c-9ceb-3da7eefc9d5a"
+2026-06-09 22:25:17.412 -07:00 [INF] Prediction "6b3241ef-9a87-48f4-883f-4c9222948c73" created and activated for Analysis "6618de25-7012-4b4a-9330-80869716f232", Market "3d100871-4422-494c-9ceb-3da7eefc9d5a" with Outcome 'No' and Confidence 85. Cost: $0.003960, Latency: 989ms
+2026-06-09 22:25:17.414 -07:00 [INF] Generating prediction for Analysis "e8ff3df8-2184-4cd5-9fa9-8d58953a77d6", Market "ef593b1a-3f5b-4e23-8cc9-416f233af9fb"
+2026-06-09 22:25:17.414 -07:00 [INF] Generating real AI prediction for market "ef593b1a-3f5b-4e23-8cc9-416f233af9fb"
+2026-06-09 22:25:18.708 -07:00 [INF] Prediction "2eac1143-ba5b-4108-a8fc-639d2aa2722f" created and activated for Analysis "e8ff3df8-2184-4cd5-9fa9-8d58953a77d6", Market "ef593b1a-3f5b-4e23-8cc9-416f233af9fb" with Outcome 'No' and Confidence 70. Cost: $0.004170, Latency: 1289ms
+2026-06-09 22:25:18.711 -07:00 [INF] Generating prediction for Analysis "3fbb0a81-efc0-42c6-822f-3b2ba8542528", Market "2e7cc400-9916-4c26-a95e-46904d9c33fe"
+2026-06-09 22:25:18.711 -07:00 [INF] Generating real AI prediction for market "2e7cc400-9916-4c26-a95e-46904d9c33fe"
+2026-06-09 22:25:20.309 -07:00 [INF] Prediction "f6fe19ba-6942-41f8-ae15-c03bd2866743" created and activated for Analysis "3fbb0a81-efc0-42c6-822f-3b2ba8542528", Market "2e7cc400-9916-4c26-a95e-46904d9c33fe" with Outcome 'No' and Confidence 85. Cost: $0.004600, Latency: 1592ms
+2026-06-09 22:25:20.313 -07:00 [INF] Generating prediction for Analysis "2e01d661-57d0-4ec5-b630-7174c93503db", Market "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f"
+2026-06-09 22:25:20.313 -07:00 [INF] Generating real AI prediction for market "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f"
+2026-06-09 22:25:21.537 -07:00 [INF] Prediction "906ea5e2-9280-41ce-baa9-54f1d27061ec" created and activated for Analysis "2e01d661-57d0-4ec5-b630-7174c93503db", Market "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f" with Outcome 'No' and Confidence 70. Cost: $0.004010, Latency: 1218ms
+2026-06-09 22:25:21.541 -07:00 [INF] Generating prediction for Analysis "7c3e0137-cd01-4017-b870-382010532dc7", Market "b207c376-fb60-4322-aa35-1a70f33a94a2"
+2026-06-09 22:25:21.541 -07:00 [INF] Generating real AI prediction for market "b207c376-fb60-4322-aa35-1a70f33a94a2"
+2026-06-09 22:25:23.053 -07:00 [INF] Prediction "1c7ec40f-b70d-4289-8b56-bd484607e512" created and activated for Analysis "7c3e0137-cd01-4017-b870-382010532dc7", Market "b207c376-fb60-4322-aa35-1a70f33a94a2" with Outcome 'No' and Confidence 85. Cost: $0.004090, Latency: 1508ms
+2026-06-09 22:25:23.056 -07:00 [INF] Generating prediction for Analysis "79ffec5e-53ea-4898-abf7-6380a09dfadf", Market "d634f666-e232-4e60-8d67-754334683546"
+2026-06-09 22:25:23.056 -07:00 [INF] Generating real AI prediction for market "d634f666-e232-4e60-8d67-754334683546"
+2026-06-09 22:25:24.693 -07:00 [INF] Prediction "ca139051-5c88-4302-b9a5-6b6aa397c181" created and activated for Analysis "79ffec5e-53ea-4898-abf7-6380a09dfadf", Market "d634f666-e232-4e60-8d67-754334683546" with Outcome 'No' and Confidence 85. Cost: $0.004150, Latency: 1632ms
+2026-06-09 22:25:24.695 -07:00 [INF] Generating prediction for Analysis "3c01d9ae-99cb-41e2-a471-e6581b01087e", Market "3ae0682f-3085-491e-b4a1-929f4eec3c6c"
+2026-06-09 22:25:24.696 -07:00 [INF] Generating real AI prediction for market "3ae0682f-3085-491e-b4a1-929f4eec3c6c"
+2026-06-09 22:25:26.143 -07:00 [INF] Prediction "74c3dfc5-4959-4297-9585-9f5be4073839" created and activated for Analysis "3c01d9ae-99cb-41e2-a471-e6581b01087e", Market "3ae0682f-3085-491e-b4a1-929f4eec3c6c" with Outcome 'Yes' and Confidence 65. Cost: $0.004230, Latency: 1444ms
+2026-06-09 22:25:26.146 -07:00 [INF] Generating prediction for Analysis "aa0e5716-cbe0-4923-af42-411da63dce59", Market "78c1f4a3-1734-4249-92b4-96a0ea15d4f4"
+2026-06-09 22:25:26.146 -07:00 [INF] Generating real AI prediction for market "78c1f4a3-1734-4249-92b4-96a0ea15d4f4"
+2026-06-09 22:25:28.247 -07:00 [INF] Prediction "57ece680-1e35-4571-ad05-ab677d47a13a" created and activated for Analysis "aa0e5716-cbe0-4923-af42-411da63dce59", Market "78c1f4a3-1734-4249-92b4-96a0ea15d4f4" with Outcome 'No' and Confidence 85. Cost: $0.004070, Latency: 2096ms
+2026-06-09 22:25:28.250 -07:00 [INF] Generating prediction for Analysis "07e8aa52-7715-4cc6-bb80-64c62cdebb41", Market "3069734a-aeac-48a2-a8bf-ed5929cd8c09"
+2026-06-09 22:25:28.250 -07:00 [INF] Generating real AI prediction for market "3069734a-aeac-48a2-a8bf-ed5929cd8c09"
+2026-06-09 22:25:29.469 -07:00 [INF] Prediction "1fdd1358-98b0-449b-9f28-f765d0c755bd" created and activated for Analysis "07e8aa52-7715-4cc6-bb80-64c62cdebb41", Market "3069734a-aeac-48a2-a8bf-ed5929cd8c09" with Outcome 'No' and Confidence 90. Cost: $0.004320, Latency: 1214ms
+2026-06-09 22:25:29.472 -07:00 [INF] Generating prediction for Analysis "8cd35e40-9406-4b88-bb6a-d92cc2da84e5", Market "37cb5cee-1db9-4338-b8b9-03d1bf49226c"
+2026-06-09 22:25:29.472 -07:00 [INF] Generating real AI prediction for market "37cb5cee-1db9-4338-b8b9-03d1bf49226c"
+2026-06-09 22:25:30.626 -07:00 [INF] Prediction "6873ce18-2613-4eef-ae6c-04adba8872c8" created and activated for Analysis "8cd35e40-9406-4b88-bb6a-d92cc2da84e5", Market "37cb5cee-1db9-4338-b8b9-03d1bf49226c" with Outcome 'No' and Confidence 85. Cost: $0.004090, Latency: 1150ms
+2026-06-09 22:26:00.174 -07:00 [INF] Queue item picked: "2ed66efd-d4ab-4c42-8d08-4e161946d837"
+2026-06-09 22:26:00.178 -07:00 [INF] Queue item started: "2ed66efd-d4ab-4c42-8d08-4e161946d837"
+2026-06-09 22:26:00.180 -07:00 [INF] Starting AI analysis for market "5d71ef14-1522-40a1-8941-906b91d35eae".
+2026-06-09 22:26:00.180 -07:00 [INF] Generating real AI analysis for market "5d71ef14-1522-40a1-8941-906b91d35eae"
+2026-06-09 22:26:02.870 -07:00 [INF] AI analysis completed successfully for market "5d71ef14-1522-40a1-8941-906b91d35eae". Edge: 2%, Confidence: 75%, Cost: $0.006200, Latency: 2686ms
+2026-06-09 22:26:02.874 -07:00 [INF] AI analysis saved: "2c0a682c-e6b3-412b-865f-fd9803511eb8"
+2026-06-09 22:26:02.874 -07:00 [INF] Queue item completed: "2ed66efd-d4ab-4c42-8d08-4e161946d837"
+2026-06-09 22:26:02.875 -07:00 [INF] Queue item picked: "3e76b1c2-1894-4198-956f-552b4e645f08"
+2026-06-09 22:26:02.878 -07:00 [INF] Queue item started: "3e76b1c2-1894-4198-956f-552b4e645f08"
+2026-06-09 22:26:02.879 -07:00 [INF] Starting AI analysis for market "a27b7902-573a-433a-be4e-e9a60aea3bd6".
+2026-06-09 22:26:02.879 -07:00 [INF] Generating real AI analysis for market "a27b7902-573a-433a-be4e-e9a60aea3bd6"
+2026-06-09 22:26:06.710 -07:00 [INF] AI analysis completed successfully for market "a27b7902-573a-433a-be4e-e9a60aea3bd6". Edge: 1%, Confidence: 90%, Cost: $0.005700, Latency: 3827ms
+2026-06-09 22:26:06.715 -07:00 [INF] AI analysis saved: "02935da4-a981-4d2e-a896-9e4fee9945d8"
+2026-06-09 22:26:06.715 -07:00 [INF] Queue item completed: "3e76b1c2-1894-4198-956f-552b4e645f08"
+2026-06-09 22:26:06.716 -07:00 [INF] Queue item picked: "3fd81b66-9e54-4345-a966-b0ac0f6b0826"
+2026-06-09 22:26:06.719 -07:00 [INF] Queue item started: "3fd81b66-9e54-4345-a966-b0ac0f6b0826"
+2026-06-09 22:26:06.720 -07:00 [INF] Starting AI analysis for market "a57620c4-f3e0-4d4a-b7da-bad2c36f508b".
+2026-06-09 22:26:06.720 -07:00 [INF] Generating real AI analysis for market "a57620c4-f3e0-4d4a-b7da-bad2c36f508b"
+2026-06-09 22:26:09.154 -07:00 [INF] AI analysis completed successfully for market "a57620c4-f3e0-4d4a-b7da-bad2c36f508b". Edge: 12%, Confidence: 70%, Cost: $0.005570, Latency: 2430ms
+2026-06-09 22:26:09.158 -07:00 [INF] AI analysis saved: "a2c1f29f-d32d-487a-abb9-894492c225f7"
+2026-06-09 22:26:09.158 -07:00 [INF] Queue item completed: "3fd81b66-9e54-4345-a966-b0ac0f6b0826"
+2026-06-09 22:26:09.159 -07:00 [INF] Queue item picked: "466c6932-3116-4a86-bcb3-afea1342baca"
+2026-06-09 22:26:09.162 -07:00 [INF] Queue item started: "466c6932-3116-4a86-bcb3-afea1342baca"
+2026-06-09 22:26:09.164 -07:00 [INF] Starting AI analysis for market "7f0e3999-edfb-42f5-b328-9b1ec2e91579".
+2026-06-09 22:26:09.164 -07:00 [INF] Generating real AI analysis for market "7f0e3999-edfb-42f5-b328-9b1ec2e91579"
+2026-06-09 22:26:11.656 -07:00 [INF] AI analysis completed successfully for market "7f0e3999-edfb-42f5-b328-9b1ec2e91579". Edge: 1%, Confidence: 85%, Cost: $0.006610, Latency: 2488ms
+2026-06-09 22:26:11.660 -07:00 [INF] AI analysis saved: "53acd496-332c-4174-a7c6-d54414611a3f"
+2026-06-09 22:26:11.660 -07:00 [INF] Queue item completed: "466c6932-3116-4a86-bcb3-afea1342baca"
+2026-06-09 22:26:11.661 -07:00 [INF] Queue item picked: "496f184a-5e50-4a07-bbf4-53e66c2f3818"
+2026-06-09 22:26:11.663 -07:00 [INF] Queue item started: "496f184a-5e50-4a07-bbf4-53e66c2f3818"
+2026-06-09 22:26:11.666 -07:00 [INF] Starting AI analysis for market "60c9c61d-b105-457f-bd40-4601d69e53ff".
+2026-06-09 22:26:11.667 -07:00 [INF] Generating real AI analysis for market "60c9c61d-b105-457f-bd40-4601d69e53ff"
+2026-06-09 22:26:14.129 -07:00 [INF] AI analysis completed successfully for market "60c9c61d-b105-457f-bd40-4601d69e53ff". Edge: 8%, Confidence: 70%, Cost: $0.006170, Latency: 2457ms
+2026-06-09 22:26:14.133 -07:00 [INF] AI analysis saved: "8031986c-acc4-4ba7-9675-6bf76a148992"
+2026-06-09 22:26:14.133 -07:00 [INF] Queue item completed: "496f184a-5e50-4a07-bbf4-53e66c2f3818"
+2026-06-09 22:26:14.134 -07:00 [WRN] OpenAI rate limit reached. Deferring remaining queue items.
+2026-06-09 22:26:30.664 -07:00 [INF] Found 5 analyses without predictions. Starting prediction generation.
+2026-06-09 22:26:30.667 -07:00 [INF] Generating prediction for Analysis "a91d6087-ef5f-4657-983d-f38c9c5d0425", Market "5d71ef14-1522-40a1-8941-906b91d35eae"
+2026-06-09 22:26:30.667 -07:00 [INF] Generating real AI prediction for market "5d71ef14-1522-40a1-8941-906b91d35eae"
+2026-06-09 22:26:32.430 -07:00 [INF] Prediction "15d9c745-e277-4f6d-9965-1a452c1f5465" created and activated for Analysis "a91d6087-ef5f-4657-983d-f38c9c5d0425", Market "5d71ef14-1522-40a1-8941-906b91d35eae" with Outcome 'No' and Confidence 75. Cost: $0.004140, Latency: 1759ms
+2026-06-09 22:26:32.433 -07:00 [INF] Generating prediction for Analysis "158daaf6-0dc2-494e-929c-afed733b1659", Market "a27b7902-573a-433a-be4e-e9a60aea3bd6"
+2026-06-09 22:26:32.433 -07:00 [INF] Generating real AI prediction for market "a27b7902-573a-433a-be4e-e9a60aea3bd6"
+2026-06-09 22:26:33.538 -07:00 [INF] Prediction "b06d8006-8125-4c0d-94ce-69e41959e764" created and activated for Analysis "158daaf6-0dc2-494e-929c-afed733b1659", Market "a27b7902-573a-433a-be4e-e9a60aea3bd6" with Outcome 'No' and Confidence 90. Cost: $0.003930, Latency: 1101ms
+2026-06-09 22:26:33.541 -07:00 [INF] Generating prediction for Analysis "78b15e11-400f-4d87-b350-bc451f096ea3", Market "a57620c4-f3e0-4d4a-b7da-bad2c36f508b"
+2026-06-09 22:26:33.541 -07:00 [INF] Generating real AI prediction for market "a57620c4-f3e0-4d4a-b7da-bad2c36f508b"
+2026-06-09 22:26:34.797 -07:00 [INF] Prediction "091a6839-e11b-4254-be07-76c92e8b9f78" created and activated for Analysis "78b15e11-400f-4d87-b350-bc451f096ea3", Market "a57620c4-f3e0-4d4a-b7da-bad2c36f508b" with Outcome 'Yes' and Confidence 62. Cost: $0.004330, Latency: 1253ms
+2026-06-09 22:26:34.800 -07:00 [INF] Generating prediction for Analysis "9b542bbb-c55b-41ee-b18c-fbd7f20bd62b", Market "7f0e3999-edfb-42f5-b328-9b1ec2e91579"
+2026-06-09 22:26:34.800 -07:00 [INF] Generating real AI prediction for market "7f0e3999-edfb-42f5-b328-9b1ec2e91579"
+2026-06-09 22:26:36.720 -07:00 [INF] Prediction "4e16d326-9491-4eef-a86e-5778c1c88b9f" created and activated for Analysis "9b542bbb-c55b-41ee-b18c-fbd7f20bd62b", Market "7f0e3999-edfb-42f5-b328-9b1ec2e91579" with Outcome 'No' and Confidence 85. Cost: $0.004360, Latency: 1916ms
+2026-06-09 22:26:36.722 -07:00 [INF] Generating prediction for Analysis "0d2a8e3c-2bcf-41ef-925a-788dcdde1378", Market "60c9c61d-b105-457f-bd40-4601d69e53ff"
+2026-06-09 22:26:36.722 -07:00 [INF] Generating real AI prediction for market "60c9c61d-b105-457f-bd40-4601d69e53ff"
+2026-06-09 22:26:37.897 -07:00 [INF] Prediction "cdae97c9-dc3f-4112-9e0a-1409bfca835d" created and activated for Analysis "0d2a8e3c-2bcf-41ef-925a-788dcdde1378", Market "60c9c61d-b105-457f-bd40-4601d69e53ff" with Outcome 'Yes' and Confidence 58. Cost: $0.004200, Latency: 1170ms
+2026-06-09 22:27:00.151 -07:00 [INF] Queue item picked: "4adeab1d-3893-4fa6-a18e-473e6e7e01c1"
+2026-06-09 22:27:00.153 -07:00 [INF] Queue item started: "4adeab1d-3893-4fa6-a18e-473e6e7e01c1"
+2026-06-09 22:27:00.155 -07:00 [INF] Starting AI analysis for market "a0df8fea-96a4-460a-8af9-501083b7a5b1".
+2026-06-09 22:27:00.156 -07:00 [INF] Generating real AI analysis for market "a0df8fea-96a4-460a-8af9-501083b7a5b1"
+2026-06-09 22:27:02.058 -07:00 [INF] AI analysis completed successfully for market "a0df8fea-96a4-460a-8af9-501083b7a5b1". Edge: 1%, Confidence: 85%, Cost: $0.005630, Latency: 1898ms
+2026-06-09 22:27:02.062 -07:00 [INF] AI analysis saved: "d750a7aa-c8c7-4929-ba17-8830d66dba4d"
+2026-06-09 22:27:02.062 -07:00 [INF] Queue item completed: "4adeab1d-3893-4fa6-a18e-473e6e7e01c1"
+2026-06-09 22:27:02.063 -07:00 [INF] Queue item picked: "58b9e9df-9b54-49b5-bfc6-da8af3efdefe"
+2026-06-09 22:27:02.067 -07:00 [INF] Queue item started: "58b9e9df-9b54-49b5-bfc6-da8af3efdefe"
+2026-06-09 22:27:02.068 -07:00 [INF] Starting AI analysis for market "205205bc-3365-41c9-8863-35b2ee3bc59a".
+2026-06-09 22:27:02.068 -07:00 [INF] Generating real AI analysis for market "205205bc-3365-41c9-8863-35b2ee3bc59a"
+2026-06-09 22:27:04.341 -07:00 [INF] AI analysis completed successfully for market "205205bc-3365-41c9-8863-35b2ee3bc59a". Edge: 1%, Confidence: 85%, Cost: $0.005900, Latency: 2269ms
+2026-06-09 22:27:04.344 -07:00 [INF] AI analysis saved: "09e5cf32-986a-49a5-9e7b-9c682a8d9b8b"
+2026-06-09 22:27:04.345 -07:00 [INF] Queue item completed: "58b9e9df-9b54-49b5-bfc6-da8af3efdefe"
+2026-06-09 22:27:04.346 -07:00 [INF] Queue item picked: "6196f6d1-aaa6-4133-bef3-7311ea186c82"
+2026-06-09 22:27:04.348 -07:00 [INF] Queue item started: "6196f6d1-aaa6-4133-bef3-7311ea186c82"
+2026-06-09 22:27:04.350 -07:00 [INF] Starting AI analysis for market "79dc4638-a249-4eac-a70d-3c65dfdee9ab".
+2026-06-09 22:27:04.350 -07:00 [INF] Generating real AI analysis for market "79dc4638-a249-4eac-a70d-3c65dfdee9ab"
+2026-06-09 22:27:06.236 -07:00 [INF] AI analysis completed successfully for market "79dc4638-a249-4eac-a70d-3c65dfdee9ab". Edge: 1%, Confidence: 85%, Cost: $0.005720, Latency: 1882ms
+2026-06-09 22:27:06.239 -07:00 [INF] AI analysis saved: "bdefa8fa-02bc-4b6d-8476-e0eb65d405a2"
+2026-06-09 22:27:06.239 -07:00 [INF] Queue item completed: "6196f6d1-aaa6-4133-bef3-7311ea186c82"
+2026-06-09 22:27:06.240 -07:00 [INF] Queue item picked: "6309b602-5f59-4cfc-b381-430047b34b3f"
+2026-06-09 22:27:06.242 -07:00 [INF] Queue item started: "6309b602-5f59-4cfc-b381-430047b34b3f"
+2026-06-09 22:27:06.243 -07:00 [INF] Starting AI analysis for market "56e5dd69-87d5-40ff-82ec-814167845696".
+2026-06-09 22:27:06.243 -07:00 [INF] Generating real AI analysis for market "56e5dd69-87d5-40ff-82ec-814167845696"
+2026-06-09 22:27:07.918 -07:00 [INF] Found 3 analyses without predictions. Starting prediction generation.
+2026-06-09 22:27:07.920 -07:00 [INF] Generating prediction for Analysis "63407ae8-077b-42a5-8620-c48d2f23329a", Market "a0df8fea-96a4-460a-8af9-501083b7a5b1"
+2026-06-09 22:27:07.920 -07:00 [INF] Generating real AI prediction for market "a0df8fea-96a4-460a-8af9-501083b7a5b1"
+2026-06-09 22:27:08.798 -07:00 [INF] AI analysis completed successfully for market "56e5dd69-87d5-40ff-82ec-814167845696". Edge: 2%, Confidence: 85%, Cost: $0.005690, Latency: 2552ms
+2026-06-09 22:27:08.801 -07:00 [INF] AI analysis saved: "b839102c-20fd-4901-b0e3-7af8a34b381b"
+2026-06-09 22:27:08.801 -07:00 [INF] Queue item completed: "6309b602-5f59-4cfc-b381-430047b34b3f"
+2026-06-09 22:27:08.802 -07:00 [INF] Queue item picked: "6457574a-ea43-4df9-92a9-7846b1f1958f"
+2026-06-09 22:27:08.805 -07:00 [INF] Queue item started: "6457574a-ea43-4df9-92a9-7846b1f1958f"
+2026-06-09 22:27:08.806 -07:00 [INF] Starting AI analysis for market "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e".
+2026-06-09 22:27:08.806 -07:00 [INF] Generating real AI analysis for market "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e"
+2026-06-09 22:27:09.166 -07:00 [INF] Prediction "d08142ee-3021-499d-9cec-a195a6c41a35" created and activated for Analysis "63407ae8-077b-42a5-8620-c48d2f23329a", Market "a0df8fea-96a4-460a-8af9-501083b7a5b1" with Outcome 'No' and Confidence 85. Cost: $0.003850, Latency: 1241ms
+2026-06-09 22:27:09.168 -07:00 [INF] Generating prediction for Analysis "5fa2d24b-e503-485c-bdeb-ceaac0ea64ea", Market "205205bc-3365-41c9-8863-35b2ee3bc59a"
+2026-06-09 22:27:09.168 -07:00 [INF] Generating real AI prediction for market "205205bc-3365-41c9-8863-35b2ee3bc59a"
+2026-06-09 22:27:10.442 -07:00 [INF] Prediction "73fff6a7-7d69-4bf8-9a21-51dd72bb1e28" created and activated for Analysis "5fa2d24b-e503-485c-bdeb-ceaac0ea64ea", Market "205205bc-3365-41c9-8863-35b2ee3bc59a" with Outcome 'No' and Confidence 85. Cost: $0.003940, Latency: 1270ms
+2026-06-09 22:27:10.445 -07:00 [INF] Generating prediction for Analysis "784acf79-18d7-47c2-b3ca-2bc0dc025ad6", Market "79dc4638-a249-4eac-a70d-3c65dfdee9ab"
+2026-06-09 22:27:10.445 -07:00 [INF] Generating real AI prediction for market "79dc4638-a249-4eac-a70d-3c65dfdee9ab"
+2026-06-09 22:27:11.183 -07:00 [INF] AI analysis completed successfully for market "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e". Edge: 1%, Confidence: 90%, Cost: $0.006140, Latency: 2373ms
+2026-06-09 22:27:11.186 -07:00 [INF] AI analysis saved: "d667a426-f131-41ca-a98f-d603d359e3b2"
+2026-06-09 22:27:11.186 -07:00 [INF] Queue item completed: "6457574a-ea43-4df9-92a9-7846b1f1958f"
+2026-06-09 22:27:11.188 -07:00 [WRN] OpenAI rate limit reached. Deferring remaining queue items.
+2026-06-09 22:27:12.128 -07:00 [INF] Prediction "de109e50-a848-4b8f-adcc-72315fd66b38" created and activated for Analysis "784acf79-18d7-47c2-b3ca-2bc0dc025ad6", Market "79dc4638-a249-4eac-a70d-3c65dfdee9ab" with Outcome 'No' and Confidence 85. Cost: $0.003840, Latency: 1679ms
+2026-06-09 22:27:12.136 -07:00 [INF] Found 2 analyses without predictions. Starting prediction generation.
+2026-06-09 22:27:12.138 -07:00 [INF] Generating prediction for Analysis "5abd9470-8975-49ca-96ca-8b0ebaa20305", Market "56e5dd69-87d5-40ff-82ec-814167845696"
+2026-06-09 22:27:12.138 -07:00 [INF] Generating real AI prediction for market "56e5dd69-87d5-40ff-82ec-814167845696"
+2026-06-09 22:27:13.462 -07:00 [INF] Prediction "e12a8f91-a753-4791-91f0-5a71ddb6178d" created and activated for Analysis "5abd9470-8975-49ca-96ca-8b0ebaa20305", Market "56e5dd69-87d5-40ff-82ec-814167845696" with Outcome 'No' and Confidence 85. Cost: $0.004060, Latency: 1319ms
+2026-06-09 22:27:13.464 -07:00 [INF] Generating prediction for Analysis "53f1635f-2010-43a0-a279-b951f406e7bf", Market "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e"
+2026-06-09 22:27:13.464 -07:00 [INF] Generating real AI prediction for market "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e"
+2026-06-09 22:27:14.624 -07:00 [INF] Prediction "6f16a0c3-749b-43ed-a58a-b7506cae9269" created and activated for Analysis "53f1635f-2010-43a0-a279-b951f406e7bf", Market "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e" with Outcome 'No' and Confidence 90. Cost: $0.004090, Latency: 1155ms
+2026-06-09 22:28:00.203 -07:00 [INF] Queue item picked: "68bd54b0-b28c-4dfd-a458-bff723aaf0d6"
+2026-06-09 22:28:00.207 -07:00 [INF] Queue item started: "68bd54b0-b28c-4dfd-a458-bff723aaf0d6"
+2026-06-09 22:28:00.208 -07:00 [INF] Starting AI analysis for market "96871bb6-af33-4047-965d-d7755e550d12".
+2026-06-09 22:28:00.209 -07:00 [INF] Generating real AI analysis for market "96871bb6-af33-4047-965d-d7755e550d12"
+2026-06-09 22:28:03.640 -07:00 [INF] AI analysis completed successfully for market "96871bb6-af33-4047-965d-d7755e550d12". Edge: 2%, Confidence: 70%, Cost: $0.005850, Latency: 3426ms
+2026-06-09 22:28:03.643 -07:00 [INF] AI analysis saved: "2fa03cb9-11db-4796-8f1b-06c408757227"
+2026-06-09 22:28:03.643 -07:00 [INF] Queue item completed: "68bd54b0-b28c-4dfd-a458-bff723aaf0d6"
+2026-06-09 22:28:03.645 -07:00 [INF] Queue item picked: "6b91c4a1-a650-43f7-aa60-3e84b7ed81a1"
+2026-06-09 22:28:03.647 -07:00 [INF] Queue item started: "6b91c4a1-a650-43f7-aa60-3e84b7ed81a1"
+2026-06-09 22:28:03.649 -07:00 [INF] Starting AI analysis for market "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302".
+2026-06-09 22:28:03.649 -07:00 [INF] Generating real AI analysis for market "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302"
+2026-06-09 22:28:06.505 -07:00 [INF] AI analysis completed successfully for market "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302". Edge: 1%, Confidence: 90%, Cost: $0.006770, Latency: 2852ms
+2026-06-09 22:28:06.509 -07:00 [INF] AI analysis saved: "747fb41c-2275-4e8e-97f1-0053322e6e39"
+2026-06-09 22:28:06.509 -07:00 [INF] Queue item completed: "6b91c4a1-a650-43f7-aa60-3e84b7ed81a1"
+2026-06-09 22:28:06.510 -07:00 [INF] Queue item picked: "6c668d2a-908c-4b72-8d88-701bf076052b"
+2026-06-09 22:28:06.512 -07:00 [INF] Queue item started: "6c668d2a-908c-4b72-8d88-701bf076052b"
+2026-06-09 22:28:06.513 -07:00 [INF] Starting AI analysis for market "fcc80371-1ca6-4069-bbff-f769616d7183".
+2026-06-09 22:28:06.513 -07:00 [INF] Generating real AI analysis for market "fcc80371-1ca6-4069-bbff-f769616d7183"
+2026-06-09 22:28:08.593 -07:00 [INF] AI analysis completed successfully for market "fcc80371-1ca6-4069-bbff-f769616d7183". Edge: 5%, Confidence: 70%, Cost: $0.005980, Latency: 2075ms
+2026-06-09 22:28:08.596 -07:00 [INF] AI analysis saved: "1b6c1a25-0b5c-41d8-a914-0dad0051733b"
+2026-06-09 22:28:08.596 -07:00 [INF] Queue item completed: "6c668d2a-908c-4b72-8d88-701bf076052b"
+2026-06-09 22:28:08.597 -07:00 [INF] Queue item picked: "795f76e3-0583-4592-9203-f472e941f8ba"
+2026-06-09 22:28:08.600 -07:00 [INF] Queue item started: "795f76e3-0583-4592-9203-f472e941f8ba"
+2026-06-09 22:28:08.601 -07:00 [INF] Starting AI analysis for market "b98b415b-6c2f-4e26-a417-94f316cf0eb5".
+2026-06-09 22:28:08.601 -07:00 [INF] Generating real AI analysis for market "b98b415b-6c2f-4e26-a417-94f316cf0eb5"
+2026-06-09 22:28:11.221 -07:00 [INF] AI analysis completed successfully for market "b98b415b-6c2f-4e26-a417-94f316cf0eb5". Edge: 1%, Confidence: 85%, Cost: $0.006240, Latency: 2617ms
+2026-06-09 22:28:11.224 -07:00 [INF] AI analysis saved: "85931254-cd0b-4c5f-a6a4-9053d55cbd39"
+2026-06-09 22:28:11.224 -07:00 [INF] Queue item completed: "795f76e3-0583-4592-9203-f472e941f8ba"
+2026-06-09 22:28:11.225 -07:00 [INF] Queue item picked: "7d7c19c1-c094-4ae0-ba90-6041314e6e42"
+2026-06-09 22:28:11.228 -07:00 [INF] Queue item started: "7d7c19c1-c094-4ae0-ba90-6041314e6e42"
+2026-06-09 22:28:11.229 -07:00 [INF] Starting AI analysis for market "43c0b754-0562-4628-96eb-649b9ec10949".
+2026-06-09 22:28:11.229 -07:00 [INF] Generating real AI analysis for market "43c0b754-0562-4628-96eb-649b9ec10949"
+2026-06-09 22:28:13.347 -07:00 [INF] AI analysis completed successfully for market "43c0b754-0562-4628-96eb-649b9ec10949". Edge: 1%, Confidence: 85%, Cost: $0.005990, Latency: 2113ms
+2026-06-09 22:28:13.349 -07:00 [INF] AI analysis saved: "ea36917e-598b-48c0-ad72-e39e393fbd01"
+2026-06-09 22:28:13.349 -07:00 [INF] Queue item completed: "7d7c19c1-c094-4ae0-ba90-6041314e6e42"
+2026-06-09 22:28:13.350 -07:00 [WRN] OpenAI rate limit reached. Deferring remaining queue items.
+2026-06-09 22:28:14.668 -07:00 [INF] Found 5 analyses without predictions. Starting prediction generation.
+2026-06-09 22:28:14.670 -07:00 [INF] Generating prediction for Analysis "e699bbe8-ef0a-420d-8ba9-eac66372b4b8", Market "96871bb6-af33-4047-965d-d7755e550d12"
+2026-06-09 22:28:14.670 -07:00 [INF] Generating real AI prediction for market "96871bb6-af33-4047-965d-d7755e550d12"
+2026-06-09 22:28:15.954 -07:00 [INF] Prediction "e2b8b9f4-cf46-488b-8c90-e627afbbcf53" created and activated for Analysis "e699bbe8-ef0a-420d-8ba9-eac66372b4b8", Market "96871bb6-af33-4047-965d-d7755e550d12" with Outcome 'No' and Confidence 70. Cost: $0.004070, Latency: 1279ms
+2026-06-09 22:28:15.956 -07:00 [INF] Generating prediction for Analysis "3c6ed9f4-6a9c-45c2-807c-6415cb5e3236", Market "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302"
+2026-06-09 22:28:15.956 -07:00 [INF] Generating real AI prediction for market "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302"
+2026-06-09 22:28:17.221 -07:00 [INF] Prediction "4814158f-a9dc-4330-8f04-e4a6ce6b22a9" created and activated for Analysis "3c6ed9f4-6a9c-45c2-807c-6415cb5e3236", Market "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302" with Outcome 'No' and Confidence 90. Cost: $0.004360, Latency: 1260ms
+2026-06-09 22:28:17.223 -07:00 [INF] Generating prediction for Analysis "16344505-854e-467f-ae7e-7e8b9c879e33", Market "fcc80371-1ca6-4069-bbff-f769616d7183"
+2026-06-09 22:28:17.223 -07:00 [INF] Generating real AI prediction for market "fcc80371-1ca6-4069-bbff-f769616d7183"
+2026-06-09 22:28:18.584 -07:00 [INF] Prediction "a30e1ab6-638b-41f2-9112-a68a29e52d67" created and activated for Analysis "16344505-854e-467f-ae7e-7e8b9c879e33", Market "fcc80371-1ca6-4069-bbff-f769616d7183" with Outcome 'No' and Confidence 70. Cost: $0.004430, Latency: 1356ms
+2026-06-09 22:28:18.586 -07:00 [INF] Generating prediction for Analysis "af4b3500-0cd7-4b87-a16a-6e86c2f8bee4", Market "b98b415b-6c2f-4e26-a417-94f316cf0eb5"
+2026-06-09 22:28:18.586 -07:00 [INF] Generating real AI prediction for market "b98b415b-6c2f-4e26-a417-94f316cf0eb5"
+2026-06-09 22:28:19.966 -07:00 [INF] Prediction "b1038c06-8dc7-421a-bced-6c17beffd445" created and activated for Analysis "af4b3500-0cd7-4b87-a16a-6e86c2f8bee4", Market "b98b415b-6c2f-4e26-a417-94f316cf0eb5" with Outcome 'No' and Confidence 85. Cost: $0.004050, Latency: 1376ms
+2026-06-09 22:28:19.969 -07:00 [INF] Generating prediction for Analysis "5d72a24e-14ba-4401-8dda-f7b94f5a0dab", Market "43c0b754-0562-4628-96eb-649b9ec10949"
+2026-06-09 22:28:19.969 -07:00 [INF] Generating real AI prediction for market "43c0b754-0562-4628-96eb-649b9ec10949"
+2026-06-09 22:28:21.137 -07:00 [INF] Prediction "0f7407e2-ae84-422d-827e-f55753b6b45d" created and activated for Analysis "5d72a24e-14ba-4401-8dda-f7b94f5a0dab", Market "43c0b754-0562-4628-96eb-649b9ec10949" with Outcome 'No' and Confidence 85. Cost: $0.003950, Latency: 1164ms
+2026-06-09 22:29:00.377 -07:00 [INF] Queue item picked: "7dc002e3-1a85-402d-9dd3-48dda31a5d5e"
+2026-06-09 22:29:00.379 -07:00 [INF] Queue item started: "7dc002e3-1a85-402d-9dd3-48dda31a5d5e"
+2026-06-09 22:29:00.381 -07:00 [INF] Starting AI analysis for market "e763e172-2c5b-44bd-8be4-34cd4562a98e".
+2026-06-09 22:29:00.381 -07:00 [INF] Generating real AI analysis for market "e763e172-2c5b-44bd-8be4-34cd4562a98e"
+2026-06-09 22:29:04.006 -07:00 [INF] AI analysis completed successfully for market "e763e172-2c5b-44bd-8be4-34cd4562a98e". Edge: 1%, Confidence: 85%, Cost: $0.006050, Latency: 3622ms
+2026-06-09 22:29:04.010 -07:00 [INF] AI analysis saved: "82db2d37-8282-44cb-8a64-6fd7b2938630"
+2026-06-09 22:29:04.010 -07:00 [INF] Queue item completed: "7dc002e3-1a85-402d-9dd3-48dda31a5d5e"
+2026-06-09 22:29:04.011 -07:00 [INF] Queue item picked: "83f3745a-0585-421d-b11b-dc5a6b21d928"
+2026-06-09 22:29:04.014 -07:00 [INF] Queue item started: "83f3745a-0585-421d-b11b-dc5a6b21d928"
+2026-06-09 22:29:04.015 -07:00 [INF] Starting AI analysis for market "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed".
+2026-06-09 22:29:04.015 -07:00 [INF] Generating real AI analysis for market "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed"
+2026-06-09 22:29:06.037 -07:00 [INF] AI analysis completed successfully for market "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed". Edge: 15%, Confidence: 70%, Cost: $0.005840, Latency: 2018ms
+2026-06-09 22:29:06.041 -07:00 [INF] AI analysis saved: "2d4982e5-595e-4457-9c4c-763e535d448b"
+2026-06-09 22:29:06.041 -07:00 [INF] Queue item completed: "83f3745a-0585-421d-b11b-dc5a6b21d928"
+2026-06-09 22:29:06.043 -07:00 [INF] Queue item picked: "86af7e88-3049-4217-95f3-c6d72538dc18"
+2026-06-09 22:29:06.045 -07:00 [INF] Queue item started: "86af7e88-3049-4217-95f3-c6d72538dc18"
+2026-06-09 22:29:06.046 -07:00 [INF] Starting AI analysis for market "f3f6c390-2369-4604-8424-6cfc73a26947".
+2026-06-09 22:29:06.046 -07:00 [INF] Generating real AI analysis for market "f3f6c390-2369-4604-8424-6cfc73a26947"
+2026-06-09 22:29:08.919 -07:00 [INF] AI analysis completed successfully for market "f3f6c390-2369-4604-8424-6cfc73a26947". Edge: 8%, Confidence: 70%, Cost: $0.006500, Latency: 2868ms
+2026-06-09 22:29:08.922 -07:00 [INF] AI analysis saved: "d95b5046-e750-4807-90a3-ac8a7ebd29a7"
+2026-06-09 22:29:08.922 -07:00 [INF] Queue item completed: "86af7e88-3049-4217-95f3-c6d72538dc18"
+2026-06-09 22:29:08.923 -07:00 [INF] Queue item picked: "8968ed27-f84a-430a-8c89-231f6a819e38"
+2026-06-09 22:29:08.927 -07:00 [INF] Queue item started: "8968ed27-f84a-430a-8c89-231f6a819e38"
+2026-06-09 22:29:08.928 -07:00 [INF] Starting AI analysis for market "1848b239-f3ca-45d0-82a8-cf298ebcb924".
+2026-06-09 22:29:08.928 -07:00 [INF] Generating real AI analysis for market "1848b239-f3ca-45d0-82a8-cf298ebcb924"
+2026-06-09 22:29:12.223 -07:00 [INF] AI analysis completed successfully for market "1848b239-f3ca-45d0-82a8-cf298ebcb924". Edge: 1%, Confidence: 85%, Cost: $0.005750, Latency: 3290ms
+2026-06-09 22:29:12.227 -07:00 [INF] AI analysis saved: "f0a2264a-75bf-4a89-9f40-ac2ab8310d2c"
+2026-06-09 22:29:12.227 -07:00 [INF] Queue item completed: "8968ed27-f84a-430a-8c89-231f6a819e38"
+2026-06-09 22:29:12.228 -07:00 [INF] Queue item picked: "8e706de8-5385-4af4-8a5d-75abad5ed86a"
+2026-06-09 22:29:12.230 -07:00 [INF] Queue item started: "8e706de8-5385-4af4-8a5d-75abad5ed86a"
+2026-06-09 22:29:12.232 -07:00 [INF] Starting AI analysis for market "44399ad0-e6b7-4855-b34a-87e32dc1e366".
+2026-06-09 22:29:12.232 -07:00 [INF] Generating real AI analysis for market "44399ad0-e6b7-4855-b34a-87e32dc1e366"
+2026-06-09 22:29:15.606 -07:00 [INF] AI analysis completed successfully for market "44399ad0-e6b7-4855-b34a-87e32dc1e366". Edge: 1%, Confidence: 85%, Cost: $0.006080, Latency: 3371ms
+2026-06-09 22:29:15.613 -07:00 [INF] AI analysis saved: "cbe62a3c-fd2f-441d-a3f7-844b6fc7935f"
+2026-06-09 22:29:15.613 -07:00 [INF] Queue item completed: "8e706de8-5385-4af4-8a5d-75abad5ed86a"
+2026-06-09 22:29:15.614 -07:00 [WRN] OpenAI rate limit reached. Deferring remaining queue items.
+2026-06-09 22:29:16.491 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-09 22:29:16.498 -07:00 [INF] Unevaluated predictions detected for resolved MarketId="5d71ef14-1522-40a1-8941-906b91d35eae"
+2026-06-09 22:29:16.508 -07:00 [INF] Prediction evaluated.
+
+Market: Will Senegal win the 2026 FIFA World Cup?
+Prediction: No
+Actual Outcome: Yes
+Correct: false
+Confidence: 75.00%
+Brier Score: 0.5625
+2026-06-09 22:29:16.534 -07:00 [INF] Prediction evaluation cycle completed. MarketsEvaluated: 1, CurrentAccuracyPercentage: 45.45%, AverageBrierScore: 0.3739
+2026-06-09 22:29:21.177 -07:00 [INF] Found 5 analyses without predictions. Starting prediction generation.
+2026-06-09 22:29:21.180 -07:00 [INF] Generating prediction for Analysis "10450659-76fb-4d2b-bf83-3a26a493990f", Market "e763e172-2c5b-44bd-8be4-34cd4562a98e"
+2026-06-09 22:29:21.180 -07:00 [INF] Generating real AI prediction for market "e763e172-2c5b-44bd-8be4-34cd4562a98e"
+2026-06-09 22:29:22.162 -07:00 [INF] Prediction "03a83052-7e15-4bb4-9f49-1ebe6caa726d" created and activated for Analysis "10450659-76fb-4d2b-bf83-3a26a493990f", Market "e763e172-2c5b-44bd-8be4-34cd4562a98e" with Outcome 'No' and Confidence 85. Cost: $0.003850, Latency: 974ms
+2026-06-09 22:29:22.168 -07:00 [INF] Generating prediction for Analysis "0b51ad69-7c23-4b7c-8945-36a9eb017b0b", Market "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed"
+2026-06-09 22:29:22.168 -07:00 [INF] Generating real AI prediction for market "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed"
+2026-06-09 22:29:23.199 -07:00 [INF] Prediction "0253edfd-b57f-49e4-a370-0dd89b6442c8" created and activated for Analysis "0b51ad69-7c23-4b7c-8945-36a9eb017b0b", Market "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed" with Outcome 'Yes' and Confidence 65. Cost: $0.004220, Latency: 1026ms
+2026-06-09 22:29:23.201 -07:00 [INF] Generating prediction for Analysis "a972762a-5ad7-434e-97ea-cd0e24abfd81", Market "f3f6c390-2369-4604-8424-6cfc73a26947"
+2026-06-09 22:29:23.201 -07:00 [INF] Generating real AI prediction for market "f3f6c390-2369-4604-8424-6cfc73a26947"
+2026-06-09 22:29:53.214 -07:00 [WRN] OpenAI Network/Timeout failure. Attempt 1/3
+System.Threading.Tasks.TaskCanceledException: The request was canceled due to the configured HttpClient.Timeout of 30 seconds elapsing.
+ ---> System.TimeoutException: The operation was canceled.
+ ---> System.Threading.Tasks.TaskCanceledException: The operation was canceled.
+ ---> System.IO.IOException: Unable to read data from the transport connection: The I/O operation has been aborted because of either a thread exit or an application request..
+ ---> System.Net.Sockets.SocketException (995): The I/O operation has been aborted because of either a thread exit or an application request.
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](CancellationToken cancellationToken, Int32 estimatedSize)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.ReadAsyncInternal[TIOAdapter](Memory`1 buffer, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at Microsoft.Extensions.Http.Logging.LoggingScopeHttpMessageHandler.<SendCoreAsync>g__Core|4_0(HttpRequestMessage request, Boolean useAsync, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   --- End of inner exception stack trace ---
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at BinaryPrediction.Infrastructure.Services.OpenAiAnalysisService.<>c__DisplayClass9_0.<<GeneratePredictionAsync>b__0>d.MoveNext() in E:\work\BinaryPrediction\src\BinaryPrediction.Infrastructure\Services\OpenAiAnalysisService.cs:line 140
+--- End of stack trace from previous location ---
+   at BinaryPrediction.Infrastructure.Services.OpenAiRetryService.ExecuteAsync[T](Func`2 action, CancellationToken cancellationToken)
+2026-06-09 22:29:53.217 -07:00 [INF] Waiting 2s before retrying...
+2026-06-09 22:30:00.640 -07:00 [INF] Queue item picked: "9654a6a9-9d52-4ad0-a5bb-6f4874e086aa"
+2026-06-09 22:30:00.643 -07:00 [INF] Queue item started: "9654a6a9-9d52-4ad0-a5bb-6f4874e086aa"
+2026-06-09 22:30:00.645 -07:00 [INF] Starting AI analysis for market "faead2d6-6492-41da-a72b-4ee73bc96679".
+2026-06-09 22:30:00.645 -07:00 [INF] Generating real AI analysis for market "faead2d6-6492-41da-a72b-4ee73bc96679"
+2026-06-09 22:30:00.996 -07:00 [INF] Prediction "34acf519-78e8-4bbc-9fb6-b6c3daf272bb" created and activated for Analysis "a972762a-5ad7-434e-97ea-cd0e24abfd81", Market "f3f6c390-2369-4604-8424-6cfc73a26947" with Outcome 'No' and Confidence 70. Cost: $0.004380, Latency: 37791ms
+2026-06-09 22:30:00.998 -07:00 [INF] Generating prediction for Analysis "8cedabed-4053-4c7e-b1d6-8b4659492cf0", Market "1848b239-f3ca-45d0-82a8-cf298ebcb924"
+2026-06-09 22:30:00.998 -07:00 [INF] Generating real AI prediction for market "1848b239-f3ca-45d0-82a8-cf298ebcb924"
+2026-06-09 22:30:03.361 -07:00 [INF] AI analysis completed successfully for market "faead2d6-6492-41da-a72b-4ee73bc96679". Edge: 2%, Confidence: 85%, Cost: $0.006150, Latency: 2712ms
+2026-06-09 22:30:03.365 -07:00 [INF] AI analysis saved: "7f2e0ceb-b1c3-49da-b82c-0b120a0c1ea4"
+2026-06-09 22:30:03.365 -07:00 [INF] Queue item completed: "9654a6a9-9d52-4ad0-a5bb-6f4874e086aa"
+2026-06-09 22:30:03.366 -07:00 [INF] Queue item picked: "ae6bb858-be58-49c0-8f75-e81a38e1eb9a"
+2026-06-09 22:30:03.368 -07:00 [INF] Queue item started: "ae6bb858-be58-49c0-8f75-e81a38e1eb9a"
+2026-06-09 22:30:03.370 -07:00 [INF] Starting AI analysis for market "c037021c-7219-40cf-91e0-5acdf037178e".
+2026-06-09 22:30:03.370 -07:00 [INF] Generating real AI analysis for market "c037021c-7219-40cf-91e0-5acdf037178e"
+2026-06-09 22:30:04.057 -07:00 [INF] Prediction "26cc09ac-7d9e-438b-a0ee-adce7305dbce" created and activated for Analysis "8cedabed-4053-4c7e-b1d6-8b4659492cf0", Market "1848b239-f3ca-45d0-82a8-cf298ebcb924" with Outcome 'No' and Confidence 85. Cost: $0.004000, Latency: 3054ms
+2026-06-09 22:30:04.059 -07:00 [INF] Generating prediction for Analysis "358049f6-938c-4081-8b93-7bf3cbdfe62b", Market "44399ad0-e6b7-4855-b34a-87e32dc1e366"
+2026-06-09 22:30:04.059 -07:00 [INF] Generating real AI prediction for market "44399ad0-e6b7-4855-b34a-87e32dc1e366"
+2026-06-09 22:30:05.087 -07:00 [INF] AI analysis completed successfully for market "c037021c-7219-40cf-91e0-5acdf037178e". Edge: 1%, Confidence: 85%, Cost: $0.005700, Latency: 1713ms
+2026-06-09 22:30:05.091 -07:00 [INF] AI analysis saved: "f97b28f8-1fd8-4c20-b9ce-808a12fdfa30"
+2026-06-09 22:30:05.091 -07:00 [INF] Queue item completed: "ae6bb858-be58-49c0-8f75-e81a38e1eb9a"
+2026-06-09 22:30:05.092 -07:00 [INF] Queue item picked: "aeed4977-1701-4f62-818f-58ddb932b52b"
+2026-06-09 22:30:05.094 -07:00 [INF] Queue item started: "aeed4977-1701-4f62-818f-58ddb932b52b"
+2026-06-09 22:30:05.096 -07:00 [INF] Starting AI analysis for market "3030365e-ba27-454e-b6dc-7c79b405268c".
+2026-06-09 22:30:05.096 -07:00 [INF] Generating real AI analysis for market "3030365e-ba27-454e-b6dc-7c79b405268c"
+2026-06-09 22:30:05.496 -07:00 [INF] Prediction "f30bf19d-24e3-4d86-83c9-28eb158f8391" created and activated for Analysis "358049f6-938c-4081-8b93-7bf3cbdfe62b", Market "44399ad0-e6b7-4855-b34a-87e32dc1e366" with Outcome 'No' and Confidence 85. Cost: $0.003930, Latency: 1431ms
+2026-06-09 22:30:05.505 -07:00 [INF] Found 2 analyses without predictions. Starting prediction generation.
+2026-06-09 22:30:05.507 -07:00 [INF] Generating prediction for Analysis "b566470f-821d-45f3-a42e-2fc6a61f3308", Market "faead2d6-6492-41da-a72b-4ee73bc96679"
+2026-06-09 22:30:05.507 -07:00 [INF] Generating real AI prediction for market "faead2d6-6492-41da-a72b-4ee73bc96679"
+2026-06-09 22:30:07.097 -07:00 [INF] Prediction "ef4774d2-c98f-4845-8f40-438a96e4bff9" created and activated for Analysis "b566470f-821d-45f3-a42e-2fc6a61f3308", Market "faead2d6-6492-41da-a72b-4ee73bc96679" with Outcome 'No' and Confidence 85. Cost: $0.004050, Latency: 1586ms
+2026-06-09 22:30:07.099 -07:00 [INF] Generating prediction for Analysis "9b345e89-e38e-465e-8e5b-1dba58d86260", Market "c037021c-7219-40cf-91e0-5acdf037178e"
+2026-06-09 22:30:07.100 -07:00 [INF] Generating real AI prediction for market "c037021c-7219-40cf-91e0-5acdf037178e"
+2026-06-09 22:30:08.024 -07:00 [INF] AI analysis completed successfully for market "3030365e-ba27-454e-b6dc-7c79b405268c". Edge: 2%, Confidence: 75%, Cost: $0.006380, Latency: 2923ms
+2026-06-09 22:30:08.027 -07:00 [INF] AI analysis saved: "40eef4a0-2d64-40e4-b9e4-394844442a62"
+2026-06-09 22:30:08.027 -07:00 [INF] Queue item completed: "aeed4977-1701-4f62-818f-58ddb932b52b"
+2026-06-09 22:30:08.028 -07:00 [INF] Queue item picked: "b0225ee4-6ce5-43e3-874e-233c5b809bd9"
+2026-06-09 22:30:08.030 -07:00 [INF] Queue item started: "b0225ee4-6ce5-43e3-874e-233c5b809bd9"
+2026-06-09 22:30:08.031 -07:00 [INF] Starting AI analysis for market "68b5be93-cf79-4bb6-afd0-52f4ada690c0".
+2026-06-09 22:30:08.031 -07:00 [INF] Generating real AI analysis for market "68b5be93-cf79-4bb6-afd0-52f4ada690c0"
+2026-06-09 22:30:08.292 -07:00 [INF] Prediction "4e3fbd85-02d9-42f7-92d9-bab80a817b39" created and activated for Analysis "9b345e89-e38e-465e-8e5b-1dba58d86260", Market "c037021c-7219-40cf-91e0-5acdf037178e" with Outcome 'No' and Confidence 85. Cost: $0.003840, Latency: 1188ms
+2026-06-09 22:30:08.300 -07:00 [INF] Found 1 analyses without predictions. Starting prediction generation.
+2026-06-09 22:30:08.302 -07:00 [INF] Generating prediction for Analysis "e3973d05-12d1-4d1f-817f-cc25c0b4f97a", Market "3030365e-ba27-454e-b6dc-7c79b405268c"
+2026-06-09 22:30:08.302 -07:00 [INF] Generating real AI prediction for market "3030365e-ba27-454e-b6dc-7c79b405268c"
+2026-06-09 22:30:09.286 -07:00 [INF] Prediction "e8a0b4c5-3a96-49d0-95ce-f4aafaff0bed" created and activated for Analysis "e3973d05-12d1-4d1f-817f-cc25c0b4f97a", Market "3030365e-ba27-454e-b6dc-7c79b405268c" with Outcome 'No' and Confidence 75. Cost: $0.003930, Latency: 980ms
+2026-06-09 22:30:10.035 -07:00 [INF] AI analysis completed successfully for market "68b5be93-cf79-4bb6-afd0-52f4ada690c0". Edge: 1%, Confidence: 90%, Cost: $0.006140, Latency: 2000ms
+2026-06-09 22:30:10.038 -07:00 [INF] AI analysis saved: "93e74b59-7378-4988-9cd9-4d1f119a678a"
+2026-06-09 22:30:10.039 -07:00 [INF] Queue item completed: "b0225ee4-6ce5-43e3-874e-233c5b809bd9"
+2026-06-09 22:30:10.040 -07:00 [INF] Queue item picked: "b32399ae-1b85-41a7-b897-05fd334f3525"
+2026-06-09 22:30:10.042 -07:00 [INF] Queue item started: "b32399ae-1b85-41a7-b897-05fd334f3525"
+2026-06-09 22:30:10.043 -07:00 [INF] Starting AI analysis for market "38d973e5-94a7-4574-9f19-53a88d63fac8".
+2026-06-09 22:30:10.043 -07:00 [INF] Generating real AI analysis for market "38d973e5-94a7-4574-9f19-53a88d63fac8"
+2026-06-09 22:30:12.284 -07:00 [INF] AI analysis completed successfully for market "38d973e5-94a7-4574-9f19-53a88d63fac8". Edge: 1%, Confidence: 85%, Cost: $0.006200, Latency: 2237ms
+2026-06-09 22:30:12.287 -07:00 [INF] AI analysis saved: "0417f28a-6c1a-4029-87b1-2fb1145eaeac"
+2026-06-09 22:30:12.287 -07:00 [INF] Queue item completed: "b32399ae-1b85-41a7-b897-05fd334f3525"
+2026-06-09 22:30:12.288 -07:00 [WRN] OpenAI rate limit reached. Deferring remaining queue items.
+2026-06-09 22:30:39.304 -07:00 [INF] Found 2 analyses without predictions. Starting prediction generation.
+2026-06-09 22:30:39.307 -07:00 [INF] Generating prediction for Analysis "c9bac14d-1384-4d38-b388-21857e3581e5", Market "68b5be93-cf79-4bb6-afd0-52f4ada690c0"
+2026-06-09 22:30:39.307 -07:00 [INF] Generating real AI prediction for market "68b5be93-cf79-4bb6-afd0-52f4ada690c0"
+2026-06-09 22:30:40.320 -07:00 [INF] Prediction "56c30b20-7eee-4077-b101-2b87bf2ee7fd" created and activated for Analysis "c9bac14d-1384-4d38-b388-21857e3581e5", Market "68b5be93-cf79-4bb6-afd0-52f4ada690c0" with Outcome 'No' and Confidence 90. Cost: $0.004080, Latency: 1009ms
+2026-06-09 22:30:40.322 -07:00 [INF] Generating prediction for Analysis "26ddf952-074e-4944-b19c-f87b8b490a9e", Market "38d973e5-94a7-4574-9f19-53a88d63fac8"
+2026-06-09 22:30:40.322 -07:00 [INF] Generating real AI prediction for market "38d973e5-94a7-4574-9f19-53a88d63fac8"
+2026-06-09 22:30:41.372 -07:00 [INF] Prediction "1b169092-3dd1-4af8-b718-7aec1dd8a937" created and activated for Analysis "26ddf952-074e-4944-b19c-f87b8b490a9e", Market "38d973e5-94a7-4574-9f19-53a88d63fac8" with Outcome 'No' and Confidence 85. Cost: $0.004050, Latency: 1047ms
+2026-06-09 22:31:00.306 -07:00 [INF] Queue item picked: "2da7fbf7-946a-4bbb-bb84-f9d7bc2ff80a"
+2026-06-09 22:31:00.308 -07:00 [INF] Queue item started: "2da7fbf7-946a-4bbb-bb84-f9d7bc2ff80a"
+2026-06-09 22:31:00.309 -07:00 [INF] Starting AI analysis for market "5619bf88-4ac3-4d4d-91b5-483a6dfc3925".
+2026-06-09 22:31:00.309 -07:00 [INF] Generating real AI analysis for market "5619bf88-4ac3-4d4d-91b5-483a6dfc3925"
+2026-06-09 22:31:02.536 -07:00 [INF] AI analysis completed successfully for market "5619bf88-4ac3-4d4d-91b5-483a6dfc3925". Edge: 1%, Confidence: 70%, Cost: $0.005780, Latency: 2223ms
+2026-06-09 22:31:02.540 -07:00 [INF] AI analysis saved: "62d6c1f8-9422-4fe2-bc38-009b513978e3"
+2026-06-09 22:31:02.540 -07:00 [INF] Queue item completed: "2da7fbf7-946a-4bbb-bb84-f9d7bc2ff80a"
+2026-06-09 22:31:02.541 -07:00 [INF] Queue item picked: "bdb408c4-d91c-45b7-984a-b1d59f216c50"
+2026-06-09 22:31:02.543 -07:00 [INF] Queue item started: "bdb408c4-d91c-45b7-984a-b1d59f216c50"
+2026-06-09 22:31:02.545 -07:00 [INF] Starting AI analysis for market "17ee4ced-9a1e-4c34-81b3-93f16f050bbe".
+2026-06-09 22:31:02.545 -07:00 [INF] Generating real AI analysis for market "17ee4ced-9a1e-4c34-81b3-93f16f050bbe"
+2026-06-09 22:31:04.483 -07:00 [INF] AI analysis completed successfully for market "17ee4ced-9a1e-4c34-81b3-93f16f050bbe". Edge: 2%, Confidence: 85%, Cost: $0.005600, Latency: 1935ms
+2026-06-09 22:31:04.487 -07:00 [INF] AI analysis saved: "3ba1376d-bbe2-426b-9151-82ecaff309d0"
+2026-06-09 22:31:04.487 -07:00 [INF] Queue item completed: "bdb408c4-d91c-45b7-984a-b1d59f216c50"
+2026-06-09 22:31:04.488 -07:00 [INF] Queue item picked: "c14ea766-53d4-4dec-a594-0fdaacffca8f"
+2026-06-09 22:31:04.490 -07:00 [INF] Queue item started: "c14ea766-53d4-4dec-a594-0fdaacffca8f"
+2026-06-09 22:31:04.491 -07:00 [INF] Starting AI analysis for market "06af8a9f-22ba-473f-9a62-fd98bcda6471".
+2026-06-09 22:31:04.491 -07:00 [INF] Generating real AI analysis for market "06af8a9f-22ba-473f-9a62-fd98bcda6471"
+2026-06-09 22:31:06.729 -07:00 [INF] AI analysis completed successfully for market "06af8a9f-22ba-473f-9a62-fd98bcda6471". Edge: 1%, Confidence: 85%, Cost: $0.006140, Latency: 2234ms
+2026-06-09 22:31:06.732 -07:00 [INF] AI analysis saved: "76d0f2f3-0f92-49b5-a973-dd211a5f2d6f"
+2026-06-09 22:31:06.732 -07:00 [INF] Queue item completed: "c14ea766-53d4-4dec-a594-0fdaacffca8f"
+2026-06-09 22:31:06.733 -07:00 [INF] Queue item picked: "c4ab45c8-4fef-4bab-8657-c4e2dbf4b148"
+2026-06-09 22:31:06.736 -07:00 [INF] Queue item started: "c4ab45c8-4fef-4bab-8657-c4e2dbf4b148"
+2026-06-09 22:31:06.737 -07:00 [INF] Starting AI analysis for market "8e455544-fac9-492e-963a-219e8d19318c".
+2026-06-09 22:31:06.737 -07:00 [INF] Generating real AI analysis for market "8e455544-fac9-492e-963a-219e8d19318c"
+2026-06-09 22:31:09.199 -07:00 [INF] AI analysis completed successfully for market "8e455544-fac9-492e-963a-219e8d19318c". Edge: 15%, Confidence: 70%, Cost: $0.006320, Latency: 2458ms
+2026-06-09 22:31:09.202 -07:00 [INF] AI analysis saved: "346f2393-7bb3-4135-bf96-ad407327a110"
+2026-06-09 22:31:09.202 -07:00 [INF] Queue item completed: "c4ab45c8-4fef-4bab-8657-c4e2dbf4b148"
+2026-06-09 22:31:09.204 -07:00 [INF] Queue item picked: "c70ce59a-5c4b-4b6d-98b0-f20a30ee8226"
+2026-06-09 22:31:09.206 -07:00 [INF] Queue item started: "c70ce59a-5c4b-4b6d-98b0-f20a30ee8226"
+2026-06-09 22:31:09.207 -07:00 [INF] Starting AI analysis for market "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c".
+2026-06-09 22:31:09.207 -07:00 [INF] Generating real AI analysis for market "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c"
+2026-06-09 22:31:11.133 -07:00 [INF] AI analysis completed successfully for market "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c". Edge: 3%, Confidence: 70%, Cost: $0.005600, Latency: 1922ms
+2026-06-09 22:31:11.137 -07:00 [INF] AI analysis saved: "47102e14-7b78-4326-89bf-bd5d0d05e66e"
+2026-06-09 22:31:11.137 -07:00 [INF] Queue item completed: "c70ce59a-5c4b-4b6d-98b0-f20a30ee8226"
+2026-06-09 22:31:11.138 -07:00 [WRN] OpenAI rate limit reached. Deferring remaining queue items.
+2026-06-09 22:31:11.402 -07:00 [INF] Found 5 analyses without predictions. Starting prediction generation.
+2026-06-09 22:31:11.405 -07:00 [INF] Generating prediction for Analysis "9c253424-22f5-4055-be95-f55574e258c7", Market "5619bf88-4ac3-4d4d-91b5-483a6dfc3925"
+2026-06-09 22:31:11.405 -07:00 [INF] Generating real AI prediction for market "5619bf88-4ac3-4d4d-91b5-483a6dfc3925"
+2026-06-09 22:31:12.961 -07:00 [INF] Prediction "341141b6-9c4b-49f6-835d-d4775d285605" created and activated for Analysis "9c253424-22f5-4055-be95-f55574e258c7", Market "5619bf88-4ac3-4d4d-91b5-483a6dfc3925" with Outcome 'No' and Confidence 70. Cost: $0.004210, Latency: 1552ms
+2026-06-09 22:31:12.963 -07:00 [INF] Generating prediction for Analysis "da2b107f-21a2-48e5-9b6a-97f226f1ed13", Market "17ee4ced-9a1e-4c34-81b3-93f16f050bbe"
+2026-06-09 22:31:12.963 -07:00 [INF] Generating real AI prediction for market "17ee4ced-9a1e-4c34-81b3-93f16f050bbe"
+2026-06-09 22:31:14.113 -07:00 [INF] Prediction "9c7600d4-92b9-4499-9643-c517d8d73089" created and activated for Analysis "da2b107f-21a2-48e5-9b6a-97f226f1ed13", Market "17ee4ced-9a1e-4c34-81b3-93f16f050bbe" with Outcome 'No' and Confidence 85. Cost: $0.004140, Latency: 1146ms
+2026-06-09 22:31:14.115 -07:00 [INF] Generating prediction for Analysis "ac0218b9-0166-431c-a52d-7a167d0f8c67", Market "06af8a9f-22ba-473f-9a62-fd98bcda6471"
+2026-06-09 22:31:14.115 -07:00 [INF] Generating real AI prediction for market "06af8a9f-22ba-473f-9a62-fd98bcda6471"
+2026-06-09 22:31:15.508 -07:00 [INF] Prediction "32b98fa2-c1ee-4858-bf42-832ef1b0dc05" created and activated for Analysis "ac0218b9-0166-431c-a52d-7a167d0f8c67", Market "06af8a9f-22ba-473f-9a62-fd98bcda6471" with Outcome 'No' and Confidence 85. Cost: $0.003830, Latency: 1388ms
+2026-06-09 22:31:15.511 -07:00 [INF] Generating prediction for Analysis "3a49e54d-9b91-483e-ab70-0063819fdc6d", Market "8e455544-fac9-492e-963a-219e8d19318c"
+2026-06-09 22:31:15.511 -07:00 [INF] Generating real AI prediction for market "8e455544-fac9-492e-963a-219e8d19318c"
+2026-06-09 22:31:16.768 -07:00 [INF] Prediction "6e124ca8-4d10-4bcf-9c82-be04ee467e81" created and activated for Analysis "3a49e54d-9b91-483e-ab70-0063819fdc6d", Market "8e455544-fac9-492e-963a-219e8d19318c" with Outcome 'Yes' and Confidence 70. Cost: $0.004270, Latency: 1252ms
+2026-06-09 22:31:16.770 -07:00 [INF] Generating prediction for Analysis "10641fbb-d1bb-4e2d-9dc5-b073f7fe16cd", Market "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c"
+2026-06-09 22:31:16.770 -07:00 [INF] Generating real AI prediction for market "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c"
+2026-06-09 22:31:18.469 -07:00 [INF] Prediction "ed1d35ad-e6f8-4db6-ad7c-00b3ea2b85c6" created and activated for Analysis "10641fbb-d1bb-4e2d-9dc5-b073f7fe16cd", Market "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c" with Outcome 'No' and Confidence 70. Cost: $0.00400, Latency: 1694ms
+2026-06-09 22:32:00.165 -07:00 [INF] Queue item picked: "cbc70019-d3b9-4627-b427-55481bca5d40"
+2026-06-09 22:32:00.168 -07:00 [INF] Queue item started: "cbc70019-d3b9-4627-b427-55481bca5d40"
+2026-06-09 22:32:00.169 -07:00 [INF] Starting AI analysis for market "88b6cc1d-27ea-47e8-8bba-23af8fbb3326".
+2026-06-09 22:32:00.169 -07:00 [INF] Generating real AI analysis for market "88b6cc1d-27ea-47e8-8bba-23af8fbb3326"
+2026-06-09 22:32:01.924 -07:00 [INF] AI analysis completed successfully for market "88b6cc1d-27ea-47e8-8bba-23af8fbb3326". Edge: 1%, Confidence: 85%, Cost: $0.006380, Latency: 1751ms
+2026-06-09 22:32:01.927 -07:00 [INF] AI analysis saved: "b6a9e726-aefe-41ef-8fee-835fb35230f7"
+2026-06-09 22:32:01.927 -07:00 [INF] Queue item completed: "cbc70019-d3b9-4627-b427-55481bca5d40"
+2026-06-09 22:32:01.928 -07:00 [INF] Queue item picked: "d107c7a9-e76b-416c-b957-1c9b6b706131"
+2026-06-09 22:32:01.930 -07:00 [INF] Queue item started: "d107c7a9-e76b-416c-b957-1c9b6b706131"
+2026-06-09 22:32:01.931 -07:00 [INF] Starting AI analysis for market "18b038f9-2e7c-4dc8-8b35-c471b49a706e".
+2026-06-09 22:32:01.932 -07:00 [INF] Generating real AI analysis for market "18b038f9-2e7c-4dc8-8b35-c471b49a706e"
+2026-06-09 22:32:03.743 -07:00 [INF] AI analysis completed successfully for market "18b038f9-2e7c-4dc8-8b35-c471b49a706e". Edge: 0%, Confidence: 95%, Cost: $0.005660, Latency: 1807ms
+2026-06-09 22:32:03.746 -07:00 [INF] AI analysis saved: "2412913e-ca2e-4327-bdf1-f3f1a03bb1f5"
+2026-06-09 22:32:03.746 -07:00 [INF] Queue item completed: "d107c7a9-e76b-416c-b957-1c9b6b706131"
+2026-06-09 22:32:03.747 -07:00 [INF] Queue item picked: "d413597a-651c-494a-a5b3-b8fc98b11003"
+2026-06-09 22:32:03.749 -07:00 [INF] Queue item started: "d413597a-651c-494a-a5b3-b8fc98b11003"
+2026-06-09 22:32:03.750 -07:00 [INF] Starting AI analysis for market "c4226d4d-146d-44ce-a0a5-15d3cbf20654".
+2026-06-09 22:32:03.750 -07:00 [INF] Generating real AI analysis for market "c4226d4d-146d-44ce-a0a5-15d3cbf20654"
+2026-06-09 22:32:05.600 -07:00 [INF] AI analysis completed successfully for market "c4226d4d-146d-44ce-a0a5-15d3cbf20654". Edge: 8%, Confidence: 70%, Cost: $0.005570, Latency: 1846ms
+2026-06-09 22:32:05.603 -07:00 [INF] AI analysis saved: "5eeb5f0a-7e32-4310-b30a-076ed8c0508b"
+2026-06-09 22:32:05.603 -07:00 [INF] Queue item completed: "d413597a-651c-494a-a5b3-b8fc98b11003"
+2026-06-09 22:32:05.604 -07:00 [INF] Queue item picked: "d680de28-d998-4640-a73b-4f18da9938ca"
+2026-06-09 22:32:05.606 -07:00 [INF] Queue item started: "d680de28-d998-4640-a73b-4f18da9938ca"
+2026-06-09 22:32:05.607 -07:00 [INF] Starting AI analysis for market "59400af6-2c0a-4d9f-8fb3-84b8e5287272".
+2026-06-09 22:32:05.607 -07:00 [INF] Generating real AI analysis for market "59400af6-2c0a-4d9f-8fb3-84b8e5287272"
+2026-06-09 22:32:12.063 -07:00 [INF] AI analysis completed successfully for market "59400af6-2c0a-4d9f-8fb3-84b8e5287272". Edge: 2%, Confidence: 85%, Cost: $0.005680, Latency: 6452ms
+2026-06-09 22:32:12.066 -07:00 [INF] AI analysis saved: "613263d1-2ef4-4a1d-81e1-30453ccd8185"
+2026-06-09 22:32:12.066 -07:00 [INF] Queue item completed: "d680de28-d998-4640-a73b-4f18da9938ca"
+2026-06-09 22:32:12.068 -07:00 [INF] Queue item picked: "d6c5bd1e-bc27-4a0d-9695-2cea8bd9ca73"
+2026-06-09 22:32:12.070 -07:00 [INF] Queue item started: "d6c5bd1e-bc27-4a0d-9695-2cea8bd9ca73"
+2026-06-09 22:32:12.071 -07:00 [INF] Starting AI analysis for market "0dc82206-bff6-42f0-a9bd-b5eabc36135f".
+2026-06-09 22:32:12.071 -07:00 [INF] Generating real AI analysis for market "0dc82206-bff6-42f0-a9bd-b5eabc36135f"
+2026-06-09 22:32:14.251 -07:00 [INF] AI analysis completed successfully for market "0dc82206-bff6-42f0-a9bd-b5eabc36135f". Edge: 8%, Confidence: 70%, Cost: $0.006440, Latency: 2176ms
+2026-06-09 22:32:14.254 -07:00 [INF] AI analysis saved: "59178338-a9a9-41ac-a761-9765b2390cb7"
+2026-06-09 22:32:14.254 -07:00 [INF] Queue item completed: "d6c5bd1e-bc27-4a0d-9695-2cea8bd9ca73"
+2026-06-09 22:32:14.256 -07:00 [WRN] OpenAI rate limit reached. Deferring remaining queue items.
+2026-06-09 22:32:18.498 -07:00 [INF] Found 5 analyses without predictions. Starting prediction generation.
+2026-06-09 22:32:18.500 -07:00 [INF] Generating prediction for Analysis "33de0526-8d67-4eeb-99fd-df79964c488e", Market "88b6cc1d-27ea-47e8-8bba-23af8fbb3326"
+2026-06-09 22:32:18.500 -07:00 [INF] Generating real AI prediction for market "88b6cc1d-27ea-47e8-8bba-23af8fbb3326"
+2026-06-09 22:32:19.446 -07:00 [INF] Prediction "99ffa8b1-542b-4c65-aeee-a0c140ba7048" created and activated for Analysis "33de0526-8d67-4eeb-99fd-df79964c488e", Market "88b6cc1d-27ea-47e8-8bba-23af8fbb3326" with Outcome 'No' and Confidence 85. Cost: $0.003890, Latency: 941ms
+2026-06-09 22:32:19.448 -07:00 [INF] Generating prediction for Analysis "2dff7432-2c80-4352-bbd8-10f24efe24ed", Market "18b038f9-2e7c-4dc8-8b35-c471b49a706e"
+2026-06-09 22:32:19.448 -07:00 [INF] Generating real AI prediction for market "18b038f9-2e7c-4dc8-8b35-c471b49a706e"
+2026-06-09 22:32:21.045 -07:00 [INF] Prediction "ff465f5a-454a-47e7-90c4-1cc5ecf4e38e" created and activated for Analysis "2dff7432-2c80-4352-bbd8-10f24efe24ed", Market "18b038f9-2e7c-4dc8-8b35-c471b49a706e" with Outcome 'No' and Confidence 95. Cost: $0.003640, Latency: 1594ms
+2026-06-09 22:32:21.047 -07:00 [INF] Generating prediction for Analysis "a3f194fe-07f9-4132-985a-d996dcbc9678", Market "c4226d4d-146d-44ce-a0a5-15d3cbf20654"
+2026-06-09 22:32:21.047 -07:00 [INF] Generating real AI prediction for market "c4226d4d-146d-44ce-a0a5-15d3cbf20654"
+2026-06-09 22:32:22.795 -07:00 [INF] Prediction "15dfc26c-6c08-43f1-ab69-64721bf7ea53" created and activated for Analysis "a3f194fe-07f9-4132-985a-d996dcbc9678", Market "c4226d4d-146d-44ce-a0a5-15d3cbf20654" with Outcome 'No' and Confidence 70. Cost: $0.004110, Latency: 1744ms
+2026-06-09 22:32:22.797 -07:00 [INF] Generating prediction for Analysis "f40f90da-734e-4fea-8f18-799817aa7e35", Market "59400af6-2c0a-4d9f-8fb3-84b8e5287272"
+2026-06-09 22:32:22.797 -07:00 [INF] Generating real AI prediction for market "59400af6-2c0a-4d9f-8fb3-84b8e5287272"
+2026-06-09 22:32:23.998 -07:00 [INF] Prediction "8c8be70c-dcf6-4f6d-b19c-2db8f33184a7" created and activated for Analysis "f40f90da-734e-4fea-8f18-799817aa7e35", Market "59400af6-2c0a-4d9f-8fb3-84b8e5287272" with Outcome 'No' and Confidence 85. Cost: $0.004200, Latency: 1197ms
+2026-06-09 22:32:24.000 -07:00 [INF] Generating prediction for Analysis "6867fef8-9fb1-4fa2-b85c-84e273f41714", Market "0dc82206-bff6-42f0-a9bd-b5eabc36135f"
+2026-06-09 22:32:24.001 -07:00 [INF] Generating real AI prediction for market "0dc82206-bff6-42f0-a9bd-b5eabc36135f"
+2026-06-09 22:32:25.638 -07:00 [INF] Prediction "631e87f8-4e18-46ef-8b3a-0e82053d4792" created and activated for Analysis "6867fef8-9fb1-4fa2-b85c-84e273f41714", Market "0dc82206-bff6-42f0-a9bd-b5eabc36135f" with Outcome 'No' and Confidence 70. Cost: $0.004180, Latency: 1633ms
+2026-06-09 22:33:00.273 -07:00 [INF] Queue item picked: "d90e3772-0da2-400d-8e4e-8f712a1f0d47"
+2026-06-09 22:33:00.275 -07:00 [INF] Queue item started: "d90e3772-0da2-400d-8e4e-8f712a1f0d47"
+2026-06-09 22:33:00.276 -07:00 [INF] Starting AI analysis for market "536eb2c9-5ad6-4685-8abb-b3f3a55efef1".
+2026-06-09 22:33:00.276 -07:00 [INF] Generating real AI analysis for market "536eb2c9-5ad6-4685-8abb-b3f3a55efef1"
+2026-06-09 22:33:02.211 -07:00 [INF] AI analysis completed successfully for market "536eb2c9-5ad6-4685-8abb-b3f3a55efef1". Edge: 1%, Confidence: 85%, Cost: $0.005850, Latency: 1931ms
+2026-06-09 22:33:02.214 -07:00 [INF] AI analysis saved: "3a752b27-c257-4114-9dc7-9cac8efb2404"
+2026-06-09 22:33:02.214 -07:00 [INF] Queue item completed: "d90e3772-0da2-400d-8e4e-8f712a1f0d47"
+2026-06-09 22:33:02.216 -07:00 [INF] Queue item picked: "d9a35518-92a9-4f5f-b16b-d198d7481390"
+2026-06-09 22:33:02.218 -07:00 [INF] Queue item started: "d9a35518-92a9-4f5f-b16b-d198d7481390"
+2026-06-09 22:33:02.219 -07:00 [INF] Starting AI analysis for market "f608629e-f9da-4514-9406-22873da497f7".
+2026-06-09 22:33:02.219 -07:00 [INF] Generating real AI analysis for market "f608629e-f9da-4514-9406-22873da497f7"
+2026-06-09 22:33:04.857 -07:00 [INF] AI analysis completed successfully for market "f608629e-f9da-4514-9406-22873da497f7". Edge: 1%, Confidence: 85%, Cost: $0.005930, Latency: 2631ms
+2026-06-09 22:33:04.861 -07:00 [INF] AI analysis saved: "02e69546-abe9-47a9-b245-a3edbe99341e"
+2026-06-09 22:33:04.861 -07:00 [INF] Queue item completed: "d9a35518-92a9-4f5f-b16b-d198d7481390"
+2026-06-09 22:33:04.863 -07:00 [INF] Queue item picked: "db716f4c-153c-44e1-9f59-3f2c6e33d7b1"
+2026-06-09 22:33:04.865 -07:00 [INF] Queue item started: "db716f4c-153c-44e1-9f59-3f2c6e33d7b1"
+2026-06-09 22:33:04.866 -07:00 [INF] Starting AI analysis for market "7ede308a-92aa-4b45-81b1-437d9e7b9e18".
+2026-06-09 22:33:04.866 -07:00 [INF] Generating real AI analysis for market "7ede308a-92aa-4b45-81b1-437d9e7b9e18"
+2026-06-09 22:33:07.106 -07:00 [INF] AI analysis completed successfully for market "7ede308a-92aa-4b45-81b1-437d9e7b9e18". Edge: 1%, Confidence: 85%, Cost: $0.005630, Latency: 2236ms
+2026-06-09 22:33:07.108 -07:00 [INF] AI analysis saved: "4cec25af-7518-4b99-81d7-4dbb1b5ab9e1"
+2026-06-09 22:33:07.109 -07:00 [INF] Queue item completed: "db716f4c-153c-44e1-9f59-3f2c6e33d7b1"
+2026-06-09 22:33:07.109 -07:00 [INF] Queue item picked: "dca606eb-4c2c-449f-9958-c237176b269d"
+2026-06-09 22:33:07.111 -07:00 [INF] Queue item started: "dca606eb-4c2c-449f-9958-c237176b269d"
+2026-06-09 22:33:07.112 -07:00 [INF] Starting AI analysis for market "b1aca895-198d-48f7-ad9f-308beab650f0".
+2026-06-09 22:33:07.112 -07:00 [INF] Generating real AI analysis for market "b1aca895-198d-48f7-ad9f-308beab650f0"
+2026-06-09 22:33:09.999 -07:00 [INF] AI analysis completed successfully for market "b1aca895-198d-48f7-ad9f-308beab650f0". Edge: 1%, Confidence: 90%, Cost: $0.005610, Latency: 2883ms
+2026-06-09 22:33:10.002 -07:00 [INF] AI analysis saved: "3e61a71c-e4ab-4a68-bd05-2e817d451916"
+2026-06-09 22:33:10.002 -07:00 [INF] Queue item completed: "dca606eb-4c2c-449f-9958-c237176b269d"
+2026-06-09 22:33:10.003 -07:00 [INF] Queue item picked: "e258278f-e448-43a1-92a0-90bcf96ce9a5"
+2026-06-09 22:33:10.005 -07:00 [INF] Queue item started: "e258278f-e448-43a1-92a0-90bcf96ce9a5"
+2026-06-09 22:33:10.006 -07:00 [INF] Starting AI analysis for market "8c443f80-a467-449f-a803-79613919134a".
+2026-06-09 22:33:10.006 -07:00 [INF] Generating real AI analysis for market "8c443f80-a467-449f-a803-79613919134a"
+2026-06-09 22:33:12.443 -07:00 [INF] AI analysis completed successfully for market "8c443f80-a467-449f-a803-79613919134a". Edge: 10%, Confidence: 70%, Cost: $0.006620, Latency: 2433ms
+2026-06-09 22:33:12.448 -07:00 [INF] AI analysis saved: "7439398f-63cf-47f9-a10b-4c658c3a30d1"
+2026-06-09 22:33:12.448 -07:00 [INF] Queue item completed: "e258278f-e448-43a1-92a0-90bcf96ce9a5"
+2026-06-09 22:33:12.450 -07:00 [WRN] OpenAI rate limit reached. Deferring remaining queue items.
+2026-06-09 22:33:25.668 -07:00 [INF] Found 5 analyses without predictions. Starting prediction generation.
+2026-06-09 22:33:25.670 -07:00 [INF] Generating prediction for Analysis "7d72189f-9600-4f1d-a3ba-7d2861fb19e1", Market "536eb2c9-5ad6-4685-8abb-b3f3a55efef1"
+2026-06-09 22:33:25.670 -07:00 [INF] Generating real AI prediction for market "536eb2c9-5ad6-4685-8abb-b3f3a55efef1"
+2026-06-09 22:33:26.827 -07:00 [INF] Prediction "14d5c03b-24df-42e6-b254-2afae80e4d5c" created and activated for Analysis "7d72189f-9600-4f1d-a3ba-7d2861fb19e1", Market "536eb2c9-5ad6-4685-8abb-b3f3a55efef1" with Outcome 'No' and Confidence 85. Cost: $0.004040, Latency: 1154ms
+2026-06-09 22:33:26.829 -07:00 [INF] Generating prediction for Analysis "f0bef22e-3dff-4c33-9522-aee5bc427a32", Market "f608629e-f9da-4514-9406-22873da497f7"
+2026-06-09 22:33:26.829 -07:00 [INF] Generating real AI prediction for market "f608629e-f9da-4514-9406-22873da497f7"
+2026-06-09 22:33:28.313 -07:00 [INF] Prediction "69e9857e-284f-40b8-a4a0-8c4e27acec74" created and activated for Analysis "f0bef22e-3dff-4c33-9522-aee5bc427a32", Market "f608629e-f9da-4514-9406-22873da497f7" with Outcome 'No' and Confidence 85. Cost: $0.004280, Latency: 1479ms
+2026-06-09 22:33:28.315 -07:00 [INF] Generating prediction for Analysis "635238ab-8328-4b06-9629-7b216f734657", Market "7ede308a-92aa-4b45-81b1-437d9e7b9e18"
+2026-06-09 22:33:28.316 -07:00 [INF] Generating real AI prediction for market "7ede308a-92aa-4b45-81b1-437d9e7b9e18"
+2026-06-09 22:33:29.906 -07:00 [INF] Prediction "c70b9986-a0fc-4244-a32b-340ee7a5a6ff" created and activated for Analysis "635238ab-8328-4b06-9629-7b216f734657", Market "7ede308a-92aa-4b45-81b1-437d9e7b9e18" with Outcome 'No' and Confidence 85. Cost: $0.003830, Latency: 1587ms
+2026-06-09 22:33:29.908 -07:00 [INF] Generating prediction for Analysis "12aae03a-162f-4b7e-bd00-74d6f111cdd2", Market "b1aca895-198d-48f7-ad9f-308beab650f0"
+2026-06-09 22:33:29.908 -07:00 [INF] Generating real AI prediction for market "b1aca895-198d-48f7-ad9f-308beab650f0"
+2026-06-09 22:33:31.067 -07:00 [INF] Prediction "6ea2c90b-42c8-44f9-ba3c-0557e1694a24" created and activated for Analysis "12aae03a-162f-4b7e-bd00-74d6f111cdd2", Market "b1aca895-198d-48f7-ad9f-308beab650f0" with Outcome 'No' and Confidence 95. Cost: $0.003990, Latency: 1155ms
+2026-06-09 22:33:31.070 -07:00 [INF] Generating prediction for Analysis "51457667-56ee-418f-862e-af837b08220c", Market "8c443f80-a467-449f-a803-79613919134a"
+2026-06-09 22:33:31.070 -07:00 [INF] Generating real AI prediction for market "8c443f80-a467-449f-a803-79613919134a"
+2026-06-09 22:33:33.271 -07:00 [INF] Prediction "df33fbd1-ddb3-45ad-903b-3570c306ec26" created and activated for Analysis "51457667-56ee-418f-862e-af837b08220c", Market "8c443f80-a467-449f-a803-79613919134a" with Outcome 'No' and Confidence 70. Cost: $0.004390, Latency: 2197ms
+2026-06-09 22:34:00.469 -07:00 [INF] Queue item picked: "e2c0de9d-4b96-4585-8089-0bed5aead3e8"
+2026-06-09 22:34:00.471 -07:00 [INF] Queue item started: "e2c0de9d-4b96-4585-8089-0bed5aead3e8"
+2026-06-09 22:34:00.472 -07:00 [INF] Starting AI analysis for market "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293".
+2026-06-09 22:34:00.472 -07:00 [INF] Generating real AI analysis for market "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293"
+2026-06-09 22:34:02.735 -07:00 [INF] AI analysis completed successfully for market "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293". Edge: 2%, Confidence: 70%, Cost: $0.006080, Latency: 2259ms
+2026-06-09 22:34:02.739 -07:00 [INF] AI analysis saved: "1e3b07cf-b61a-41d6-acb7-add8653ceef3"
+2026-06-09 22:34:02.739 -07:00 [INF] Queue item completed: "e2c0de9d-4b96-4585-8089-0bed5aead3e8"
+2026-06-09 22:34:02.740 -07:00 [INF] Queue item picked: "eeecea61-1a27-4b44-b7cb-3bf606b5039a"
+2026-06-09 22:34:02.743 -07:00 [INF] Queue item started: "eeecea61-1a27-4b44-b7cb-3bf606b5039a"
+2026-06-09 22:34:02.744 -07:00 [INF] Starting AI analysis for market "0e62b7be-e842-4b70-b605-24537997079c".
+2026-06-09 22:34:02.744 -07:00 [INF] Generating real AI analysis for market "0e62b7be-e842-4b70-b605-24537997079c"
+2026-06-09 22:34:03.301 -07:00 [INF] Found 1 analyses without predictions. Starting prediction generation.
+2026-06-09 22:34:03.303 -07:00 [INF] Generating prediction for Analysis "a60a26b6-40d9-4409-a4f5-135843903fda", Market "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293"
+2026-06-09 22:34:03.303 -07:00 [INF] Generating real AI prediction for market "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293"
+2026-06-09 22:34:04.586 -07:00 [INF] Prediction "7ef9554a-0e04-41cf-8478-4dd93e9b6fa8" created and activated for Analysis "a60a26b6-40d9-4409-a4f5-135843903fda", Market "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293" with Outcome 'No' and Confidence 85. Cost: $0.004060, Latency: 1278ms
+2026-06-09 22:34:04.622 -07:00 [INF] AI analysis completed successfully for market "0e62b7be-e842-4b70-b605-24537997079c". Edge: 5%, Confidence: 60%, Cost: $0.005590, Latency: 1874ms
+2026-06-09 22:34:04.625 -07:00 [INF] AI analysis saved: "f5e79ae9-e504-4a66-9090-155303822132"
+2026-06-09 22:34:04.625 -07:00 [INF] Queue item completed: "eeecea61-1a27-4b44-b7cb-3bf606b5039a"
+2026-06-09 22:34:04.627 -07:00 [INF] Queue item picked: "f8bfea17-9123-4e64-8e6b-31cd7be48939"
+2026-06-09 22:34:04.629 -07:00 [INF] Queue item started: "f8bfea17-9123-4e64-8e6b-31cd7be48939"
+2026-06-09 22:34:04.630 -07:00 [INF] Starting AI analysis for market "bf471033-2f74-4ccf-b541-53e422e08c3d".
+2026-06-09 22:34:04.630 -07:00 [INF] Generating real AI analysis for market "bf471033-2f74-4ccf-b541-53e422e08c3d"
+2026-06-09 22:34:07.689 -07:00 [INF] AI analysis completed successfully for market "bf471033-2f74-4ccf-b541-53e422e08c3d". Edge: 1%, Confidence: 90%, Cost: $0.006450, Latency: 3056ms
+2026-06-09 22:34:07.692 -07:00 [INF] AI analysis saved: "92455883-3517-411a-bef3-48f78690adc4"
+2026-06-09 22:34:07.692 -07:00 [INF] Queue item completed: "f8bfea17-9123-4e64-8e6b-31cd7be48939"
+2026-06-09 22:34:07.693 -07:00 [INF] Queue item picked: "fbca0708-3cf2-46ca-a0f3-0209f414a6a7"
+2026-06-09 22:34:07.695 -07:00 [INF] Queue item started: "fbca0708-3cf2-46ca-a0f3-0209f414a6a7"
+2026-06-09 22:34:07.696 -07:00 [INF] Starting AI analysis for market "15fb2700-3449-44ee-9dae-e2160b38c9ac".
+2026-06-09 22:34:07.696 -07:00 [INF] Generating real AI analysis for market "15fb2700-3449-44ee-9dae-e2160b38c9ac"
+2026-06-09 22:34:10.104 -07:00 [INF] AI analysis completed successfully for market "15fb2700-3449-44ee-9dae-e2160b38c9ac". Edge: 1%, Confidence: 85%, Cost: $0.006140, Latency: 2404ms
+2026-06-09 22:34:10.107 -07:00 [INF] AI analysis saved: "d9b3b00b-3b54-455d-b527-5381b842fb52"
+2026-06-09 22:34:10.107 -07:00 [INF] Queue item completed: "fbca0708-3cf2-46ca-a0f3-0209f414a6a7"
+2026-06-09 22:34:16.542 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-09 22:34:16.544 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-09 22:34:34.635 -07:00 [INF] Found 3 analyses without predictions. Starting prediction generation.
+2026-06-09 22:34:34.639 -07:00 [INF] Generating prediction for Analysis "a2020509-f804-43f2-92ba-504b224320e7", Market "0e62b7be-e842-4b70-b605-24537997079c"
+2026-06-09 22:34:34.639 -07:00 [INF] Generating real AI prediction for market "0e62b7be-e842-4b70-b605-24537997079c"
+2026-06-09 22:34:35.707 -07:00 [INF] Prediction "2f4fc1c1-3af6-4054-9fc5-49af9affe74e" created and activated for Analysis "a2020509-f804-43f2-92ba-504b224320e7", Market "0e62b7be-e842-4b70-b605-24537997079c" with Outcome 'No' and Confidence 60. Cost: $0.003940, Latency: 1063ms
+2026-06-09 22:34:35.710 -07:00 [INF] Generating prediction for Analysis "b6e3b324-2bf8-4e54-bedb-0b52d0178c0c", Market "bf471033-2f74-4ccf-b541-53e422e08c3d"
+2026-06-09 22:34:35.710 -07:00 [INF] Generating real AI prediction for market "bf471033-2f74-4ccf-b541-53e422e08c3d"
+2026-06-09 22:34:36.697 -07:00 [INF] Prediction "924bdec5-c779-42eb-acbf-df06b5c2e27b" created and activated for Analysis "b6e3b324-2bf8-4e54-bedb-0b52d0178c0c", Market "bf471033-2f74-4ccf-b541-53e422e08c3d" with Outcome 'No' and Confidence 95. Cost: $0.003880, Latency: 983ms
+2026-06-09 22:34:36.699 -07:00 [INF] Generating prediction for Analysis "1e2eb0cf-e51e-4d15-9a1d-9c6c39b86275", Market "15fb2700-3449-44ee-9dae-e2160b38c9ac"
+2026-06-09 22:34:36.699 -07:00 [INF] Generating real AI prediction for market "15fb2700-3449-44ee-9dae-e2160b38c9ac"
+2026-06-09 22:34:37.653 -07:00 [INF] Prediction "252e6f3d-8c2a-40cc-bc67-6c05158f9bcc" created and activated for Analysis "1e2eb0cf-e51e-4d15-9a1d-9c6c39b86275", Market "15fb2700-3449-44ee-9dae-e2160b38c9ac" with Outcome 'No' and Confidence 85. Cost: $0.004190, Latency: 950ms
+2026-06-09 22:39:16.398 -07:00 [INF] Starting prediction resolution cycle.
+2026-06-09 22:39:16.400 -07:00 [INF] Prediction resolution completed. No new markets resolved.
+2026-06-09 22:39:16.553 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-09 22:39:16.556 -07:00 [INF] Unevaluated predictions detected for resolved MarketId="15fb2700-3449-44ee-9dae-e2160b38c9ac"
+2026-06-09 22:39:16.558 -07:00 [INF] Prediction evaluated.
+
+Market: Will Australia win the 2026 FIFA World Cup?
+Prediction: No
+Actual Outcome: No
+Correct: true
+Confidence: 85.00%
+Brier Score: 0.0225
+2026-06-09 22:39:16.566 -07:00 [INF] Prediction evaluation cycle completed. MarketsEvaluated: 1, CurrentAccuracyPercentage: 50.0%, AverageBrierScore: 0.3446
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "7f0e3999-edfb-42f5-b328-9b1ec2e91579". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "0e62b7be-e842-4b70-b605-24537997079c". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "f3f6c390-2369-4604-8424-6cfc73a26947". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "fcc80371-1ca6-4069-bbff-f769616d7183". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "59400af6-2c0a-4d9f-8fb3-84b8e5287272". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "60c9c61d-b105-457f-bd40-4601d69e53ff". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "c4226d4d-146d-44ce-a0a5-15d3cbf20654". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "8e455544-fac9-492e-963a-219e8d19318c". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "3ae0682f-3085-491e-b4a1-929f4eec3c6c". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "a57620c4-f3e0-4d4a-b7da-bad2c36f508b". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "0dc82206-bff6-42f0-a9bd-b5eabc36135f". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "56e5dd69-87d5-40ff-82ec-814167845696". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "ef593b1a-3f5b-4e23-8cc9-416f233af9fb". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "3030365e-ba27-454e-b6dc-7c79b405268c". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "88b6cc1d-27ea-47e8-8bba-23af8fbb3326". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "78c1f4a3-1734-4249-92b4-96a0ea15d4f4". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "79dc4638-a249-4eac-a70d-3c65dfdee9ab". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.606 -07:00 [INF] Skipping analysis for market "205205bc-3365-41c9-8863-35b2ee3bc59a". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "e763e172-2c5b-44bd-8be4-34cd4562a98e". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "8c443f80-a467-449f-a803-79613919134a". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "a27b7902-573a-433a-be4e-e9a60aea3bd6". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "18b038f9-2e7c-4dc8-8b35-c471b49a706e". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "06af8a9f-22ba-473f-9a62-fd98bcda6471". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "c037021c-7219-40cf-91e0-5acdf037178e". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "a0df8fea-96a4-460a-8af9-501083b7a5b1". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "15fb2700-3449-44ee-9dae-e2160b38c9ac". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "7ede308a-92aa-4b45-81b1-437d9e7b9e18". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "38d973e5-94a7-4574-9f19-53a88d63fac8". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "44399ad0-e6b7-4855-b34a-87e32dc1e366". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "bf471033-2f74-4ccf-b541-53e422e08c3d". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "b207c376-fb60-4322-aa35-1a70f33a94a2". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "1848b239-f3ca-45d0-82a8-cf298ebcb924". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "96871bb6-af33-4047-965d-d7755e550d12". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "5619bf88-4ac3-4d4d-91b5-483a6dfc3925". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "f608629e-f9da-4514-9406-22873da497f7". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "3069734a-aeac-48a2-a8bf-ed5929cd8c09". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "d634f666-e232-4e60-8d67-754334683546". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "68b5be93-cf79-4bb6-afd0-52f4ada690c0". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.607 -07:00 [INF] Skipping analysis for market "5d71ef14-1522-40a1-8941-906b91d35eae". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.608 -07:00 [INF] Skipping analysis for market "b1aca895-198d-48f7-ad9f-308beab650f0". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.608 -07:00 [INF] Skipping analysis for market "37cb5cee-1db9-4338-b8b9-03d1bf49226c". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.608 -07:00 [INF] Skipping analysis for market "43c0b754-0562-4628-96eb-649b9ec10949". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.608 -07:00 [INF] Skipping analysis for market "b98b415b-6c2f-4e26-a417-94f316cf0eb5". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.608 -07:00 [INF] Skipping analysis for market "faead2d6-6492-41da-a72b-4ee73bc96679". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.608 -07:00 [INF] Skipping analysis for market "3d100871-4422-494c-9ceb-3da7eefc9d5a". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.608 -07:00 [INF] Skipping analysis for market "2e7cc400-9916-4c26-a95e-46904d9c33fe". Last analysis age: 0.2 hours.
+2026-06-09 22:39:16.608 -07:00 [INF] Skipping analysis for market "17ee4ced-9a1e-4c34-81b3-93f16f050bbe". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.608 -07:00 [INF] Skipping analysis for market "536eb2c9-5ad6-4685-8abb-b3f3a55efef1". Last analysis age: 0.1 hours.
+2026-06-09 22:39:16.608 -07:00 [INF] QueueWorker: Eligible=54, ExistingActive=0, ToQueue=0
+2026-06-09 22:39:16.608 -07:00 [INF] First few eligible IDs: 7f0e3999-edfb-42f5-b328-9b1ec2e91579, 0e62b7be-e842-4b70-b605-24537997079c, f3f6c390-2369-4604-8424-6cfc73a26947
+2026-06-09 22:39:16.612 -07:00 [INF] Queue status:
+Pending=0
+Processing=0
+Completed=321
+Failed=10
+AI analyses created today: 54
+OpenAI calls today: 54
+2026-06-09 22:44:16.582 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-09 22:44:16.586 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-09 22:49:16.604 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-09 22:49:16.608 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-09 22:54:16.410 -07:00 [INF] Starting prediction resolution cycle.
+2026-06-09 22:54:16.413 -07:00 [INF] Prediction resolution completed. No new markets resolved.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "7f0e3999-edfb-42f5-b328-9b1ec2e91579". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "0e62b7be-e842-4b70-b605-24537997079c". Last analysis age: 0.3 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "f3f6c390-2369-4604-8424-6cfc73a26947". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "fcc80371-1ca6-4069-bbff-f769616d7183". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "59400af6-2c0a-4d9f-8fb3-84b8e5287272". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "60c9c61d-b105-457f-bd40-4601d69e53ff". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "c4226d4d-146d-44ce-a0a5-15d3cbf20654". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "8e455544-fac9-492e-963a-219e8d19318c". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "3ae0682f-3085-491e-b4a1-929f4eec3c6c". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "a57620c4-f3e0-4d4a-b7da-bad2c36f508b". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "0dc82206-bff6-42f0-a9bd-b5eabc36135f". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "56e5dd69-87d5-40ff-82ec-814167845696". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293". Last analysis age: 0.3 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "ef593b1a-3f5b-4e23-8cc9-416f233af9fb". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "3030365e-ba27-454e-b6dc-7c79b405268c". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "88b6cc1d-27ea-47e8-8bba-23af8fbb3326". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "78c1f4a3-1734-4249-92b4-96a0ea15d4f4". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "79dc4638-a249-4eac-a70d-3c65dfdee9ab". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "205205bc-3365-41c9-8863-35b2ee3bc59a". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "e763e172-2c5b-44bd-8be4-34cd4562a98e". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "8c443f80-a467-449f-a803-79613919134a". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "a27b7902-573a-433a-be4e-e9a60aea3bd6". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "18b038f9-2e7c-4dc8-8b35-c471b49a706e". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "06af8a9f-22ba-473f-9a62-fd98bcda6471". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "c037021c-7219-40cf-91e0-5acdf037178e". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "a0df8fea-96a4-460a-8af9-501083b7a5b1". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "15fb2700-3449-44ee-9dae-e2160b38c9ac". Last analysis age: 0.3 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "7ede308a-92aa-4b45-81b1-437d9e7b9e18". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "38d973e5-94a7-4574-9f19-53a88d63fac8". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "44399ad0-e6b7-4855-b34a-87e32dc1e366". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "bf471033-2f74-4ccf-b541-53e422e08c3d". Last analysis age: 0.3 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "b207c376-fb60-4322-aa35-1a70f33a94a2". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "1848b239-f3ca-45d0-82a8-cf298ebcb924". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "96871bb6-af33-4047-965d-d7755e550d12". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "5619bf88-4ac3-4d4d-91b5-483a6dfc3925". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "f608629e-f9da-4514-9406-22873da497f7". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "3069734a-aeac-48a2-a8bf-ed5929cd8c09". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "d634f666-e232-4e60-8d67-754334683546". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "68b5be93-cf79-4bb6-afd0-52f4ada690c0". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "5d71ef14-1522-40a1-8941-906b91d35eae". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "b1aca895-198d-48f7-ad9f-308beab650f0". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "37cb5cee-1db9-4338-b8b9-03d1bf49226c". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "43c0b754-0562-4628-96eb-649b9ec10949". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "b98b415b-6c2f-4e26-a417-94f316cf0eb5". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "faead2d6-6492-41da-a72b-4ee73bc96679". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "3d100871-4422-494c-9ceb-3da7eefc9d5a". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "2e7cc400-9916-4c26-a95e-46904d9c33fe". Last analysis age: 0.5 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "17ee4ced-9a1e-4c34-81b3-93f16f050bbe". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] Skipping analysis for market "536eb2c9-5ad6-4685-8abb-b3f3a55efef1". Last analysis age: 0.4 hours.
+2026-06-09 22:54:16.632 -07:00 [INF] QueueWorker: Eligible=54, ExistingActive=0, ToQueue=0
+2026-06-09 22:54:16.632 -07:00 [INF] First few eligible IDs: 7f0e3999-edfb-42f5-b328-9b1ec2e91579, 0e62b7be-e842-4b70-b605-24537997079c, f3f6c390-2369-4604-8424-6cfc73a26947
+2026-06-09 22:54:16.636 -07:00 [INF] Queue status:
+Pending=0
+Processing=0
+Completed=321
+Failed=10
+AI analyses created today: 54
+OpenAI calls today: 54
+2026-06-09 22:54:16.641 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-09 22:54:16.647 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-09 22:59:16.658 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-09 22:59:16.661 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-09 23:04:16.672 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-09 23:04:16.676 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-09 23:09:16.425 -07:00 [INF] Starting prediction resolution cycle.
+2026-06-09 23:09:16.428 -07:00 [INF] Prediction resolution completed. No new markets resolved.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "7f0e3999-edfb-42f5-b328-9b1ec2e91579". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "0e62b7be-e842-4b70-b605-24537997079c". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "f3f6c390-2369-4604-8424-6cfc73a26947". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "fcc80371-1ca6-4069-bbff-f769616d7183". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "59400af6-2c0a-4d9f-8fb3-84b8e5287272". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "60c9c61d-b105-457f-bd40-4601d69e53ff". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "c4226d4d-146d-44ce-a0a5-15d3cbf20654". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "8e455544-fac9-492e-963a-219e8d19318c". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "3ae0682f-3085-491e-b4a1-929f4eec3c6c". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "a57620c4-f3e0-4d4a-b7da-bad2c36f508b". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "0dc82206-bff6-42f0-a9bd-b5eabc36135f". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "56e5dd69-87d5-40ff-82ec-814167845696". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "ef593b1a-3f5b-4e23-8cc9-416f233af9fb". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "3030365e-ba27-454e-b6dc-7c79b405268c". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "88b6cc1d-27ea-47e8-8bba-23af8fbb3326". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "78c1f4a3-1734-4249-92b4-96a0ea15d4f4". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "79dc4638-a249-4eac-a70d-3c65dfdee9ab". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "205205bc-3365-41c9-8863-35b2ee3bc59a". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "e763e172-2c5b-44bd-8be4-34cd4562a98e". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "8c443f80-a467-449f-a803-79613919134a". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "a27b7902-573a-433a-be4e-e9a60aea3bd6". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "18b038f9-2e7c-4dc8-8b35-c471b49a706e". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "06af8a9f-22ba-473f-9a62-fd98bcda6471". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "c037021c-7219-40cf-91e0-5acdf037178e". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "a0df8fea-96a4-460a-8af9-501083b7a5b1". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "15fb2700-3449-44ee-9dae-e2160b38c9ac". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "7ede308a-92aa-4b45-81b1-437d9e7b9e18". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "38d973e5-94a7-4574-9f19-53a88d63fac8". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "44399ad0-e6b7-4855-b34a-87e32dc1e366". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "bf471033-2f74-4ccf-b541-53e422e08c3d". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "b207c376-fb60-4322-aa35-1a70f33a94a2". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "1848b239-f3ca-45d0-82a8-cf298ebcb924". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "96871bb6-af33-4047-965d-d7755e550d12". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "5619bf88-4ac3-4d4d-91b5-483a6dfc3925". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "f608629e-f9da-4514-9406-22873da497f7". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "3069734a-aeac-48a2-a8bf-ed5929cd8c09". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "d634f666-e232-4e60-8d67-754334683546". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "68b5be93-cf79-4bb6-afd0-52f4ada690c0". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "5d71ef14-1522-40a1-8941-906b91d35eae". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "b1aca895-198d-48f7-ad9f-308beab650f0". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "37cb5cee-1db9-4338-b8b9-03d1bf49226c". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.663 -07:00 [INF] Skipping analysis for market "43c0b754-0562-4628-96eb-649b9ec10949". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.664 -07:00 [INF] Skipping analysis for market "b98b415b-6c2f-4e26-a417-94f316cf0eb5". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.664 -07:00 [INF] Skipping analysis for market "faead2d6-6492-41da-a72b-4ee73bc96679". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.664 -07:00 [INF] Skipping analysis for market "3d100871-4422-494c-9ceb-3da7eefc9d5a". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.664 -07:00 [INF] Skipping analysis for market "2e7cc400-9916-4c26-a95e-46904d9c33fe". Last analysis age: 0.7 hours.
+2026-06-09 23:09:16.664 -07:00 [INF] Skipping analysis for market "17ee4ced-9a1e-4c34-81b3-93f16f050bbe". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.664 -07:00 [INF] Skipping analysis for market "536eb2c9-5ad6-4685-8abb-b3f3a55efef1". Last analysis age: 0.6 hours.
+2026-06-09 23:09:16.664 -07:00 [INF] QueueWorker: Eligible=54, ExistingActive=0, ToQueue=0
+2026-06-09 23:09:16.664 -07:00 [INF] First few eligible IDs: 7f0e3999-edfb-42f5-b328-9b1ec2e91579, 0e62b7be-e842-4b70-b605-24537997079c, f3f6c390-2369-4604-8424-6cfc73a26947
+2026-06-09 23:09:16.667 -07:00 [INF] Queue status:
+Pending=0
+Processing=0
+Completed=321
+Failed=10
+AI analyses created today: 54
+OpenAI calls today: 54
+2026-06-09 23:09:16.739 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-09 23:09:16.757 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-09 23:49:56.530 -07:00 [INF] Queue processor enabled
+2026-06-09 23:49:56.567 -07:00 [INF] Queue creator enabled
+2026-06-09 23:49:56.567 -07:00 [INF] Legacy analysis workers disabled
+2026-06-09 23:49:56.568 -07:00 [INF] Registered Hosted Services:
+2026-06-09 23:49:56.573 -07:00 [INF] - DailyAnalyticsWorker
+2026-06-09 23:49:56.574 -07:00 [INF] - MarketCollectorWorker
+2026-06-09 23:49:56.574 -07:00 [INF] - MarketAnalysisQueueWorker
+2026-06-09 23:49:56.574 -07:00 [INF] - MarketAnalysisProcessorWorker
+2026-06-09 23:49:56.574 -07:00 [INF] - MarketMaintenanceWorker
+2026-06-09 23:49:56.574 -07:00 [INF] - PredictionWorker
+2026-06-09 23:49:56.574 -07:00 [INF] - PredictionResolutionWorker
+2026-06-09 23:49:56.574 -07:00 [INF] - PredictionEvaluationWorker
+2026-06-09 23:49:56.574 -07:00 [INF] - PredictionQualityWorker
+2026-06-09 23:49:56.574 -07:00 [INF] - SystemHealthWorker
+2026-06-09 23:49:56.574 -07:00 [INF] - PredictionAnalyticsWorker
+2026-06-09 23:49:56.588 -07:00 [INF] DailyAnalyticsWorker started at: "2026-06-10T06:49:56.5884482+00:00"
+2026-06-09 23:49:56.594 -07:00 [INF] Generating daily analytics snapshots...
+2026-06-09 23:49:57.921 -07:00 [INF] Market collector worker started with interval "01:00:00".
+2026-06-09 23:49:57.925 -07:00 [INF] MarketAnalysisQueueWorker starting.
+2026-06-09 23:49:57.930 -07:00 [INF] MarketAnalysisProcessorWorker starting.
+2026-06-09 23:49:57.954 -07:00 [INF] PredictionAnalyticsWorker started, running every "01:00:00".
+2026-06-09 23:49:57.955 -07:00 [INF] MarketMaintenanceWorker starting.
+2026-06-09 23:49:57.957 -07:00 [INF] PredictionWorker starting.
+2026-06-09 23:49:57.974 -07:00 [INF] PredictionResolutionWorker starting with interval "00:15:00".
+2026-06-09 23:49:58.002 -07:00 [INF] PredictionQualityWorker starting.
+2026-06-09 23:49:58.002 -07:00 [INF] PredictionEvaluationWorker starting with interval "00:05:00".
+2026-06-09 23:49:58.002 -07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-09 23:49:58.002 -07:00 [INF] Hosting environment: Development
+2026-06-09 23:49:58.002 -07:00 [INF] Content root path: e:\work\BinaryPrediction\src\BinaryPrediction.Worker
+2026-06-09 23:49:58.002 -07:00 [INF] SystemHealthWorker starting.
+2026-06-09 23:49:58.242 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-09 23:49:58.244 -07:00 [INF] Starting prediction resolution cycle.
+2026-06-09 23:49:58.248 -07:00 [INF] Starting Polymarket market collection.
+2026-06-09 23:49:58.273 -07:00 [INF] Prediction resolution completed. No new markets resolved.
+2026-06-09 23:49:58.293 -07:00 [INF] PredictionQualityWorker sleeping for 17.2 hours until next snapshot.
+2026-06-09 23:49:58.371 -07:00 [INF] Inserted 4 calibration snapshots.
+2026-06-09 23:49:58.391 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-09 23:49:58.397 -07:00 [INF] Skipping analysis for market "0e62b7be-e842-4b70-b605-24537997079c". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.401 -07:00 [INF] Skipping analysis for market "f3f6c390-2369-4604-8424-6cfc73a26947". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.401 -07:00 [INF] Skipping analysis for market "fcc80371-1ca6-4069-bbff-f769616d7183". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.401 -07:00 [INF] Skipping analysis for market "59400af6-2c0a-4d9f-8fb3-84b8e5287272". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.401 -07:00 [INF] Skipping analysis for market "60c9c61d-b105-457f-bd40-4601d69e53ff". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.401 -07:00 [INF] Skipping analysis for market "c4226d4d-146d-44ce-a0a5-15d3cbf20654". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.401 -07:00 [INF] Skipping analysis for market "8e455544-fac9-492e-963a-219e8d19318c". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.401 -07:00 [INF] Skipping analysis for market "3ae0682f-3085-491e-b4a1-929f4eec3c6c". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.401 -07:00 [INF] Skipping analysis for market "a57620c4-f3e0-4d4a-b7da-bad2c36f508b". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.401 -07:00 [INF] Skipping analysis for market "7fb34e7c-a627-4dbe-8bdc-7fb407e3d5ed". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "5fdc6b5c-85c7-44b8-8bbc-93b4f5b6cd9c". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "0dc82206-bff6-42f0-a9bd-b5eabc36135f". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "1d1b72eb-219c-4f4d-95fc-fe21ca6f699f". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "56e5dd69-87d5-40ff-82ec-814167845696". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "66f1ac3a-e7a2-435c-b0bf-dde2f35c2293". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "ef593b1a-3f5b-4e23-8cc9-416f233af9fb". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "3030365e-ba27-454e-b6dc-7c79b405268c". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "88b6cc1d-27ea-47e8-8bba-23af8fbb3326". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "78c1f4a3-1734-4249-92b4-96a0ea15d4f4". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "79dc4638-a249-4eac-a70d-3c65dfdee9ab". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "205205bc-3365-41c9-8863-35b2ee3bc59a". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "e763e172-2c5b-44bd-8be4-34cd4562a98e". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "8c443f80-a467-449f-a803-79613919134a". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "7f0e3999-edfb-42f5-b328-9b1ec2e91579". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "a27b7902-573a-433a-be4e-e9a60aea3bd6". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "18b038f9-2e7c-4dc8-8b35-c471b49a706e". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "06af8a9f-22ba-473f-9a62-fd98bcda6471". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "c037021c-7219-40cf-91e0-5acdf037178e". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "8e6bdd2c-379b-4d24-9b98-d0f83d3f2302". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "fd2d2ddf-dd4f-49a5-a641-c17985a9fb8e". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "a0df8fea-96a4-460a-8af9-501083b7a5b1". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "15fb2700-3449-44ee-9dae-e2160b38c9ac". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "7ede308a-92aa-4b45-81b1-437d9e7b9e18". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "38d973e5-94a7-4574-9f19-53a88d63fac8". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "44399ad0-e6b7-4855-b34a-87e32dc1e366". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "bf471033-2f74-4ccf-b541-53e422e08c3d". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.402 -07:00 [INF] Skipping analysis for market "b207c376-fb60-4322-aa35-1a70f33a94a2". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.403 -07:00 [INF] Skipping analysis for market "1848b239-f3ca-45d0-82a8-cf298ebcb924". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "96871bb6-af33-4047-965d-d7755e550d12". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "5619bf88-4ac3-4d4d-91b5-483a6dfc3925". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "f608629e-f9da-4514-9406-22873da497f7". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "3069734a-aeac-48a2-a8bf-ed5929cd8c09". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "d634f666-e232-4e60-8d67-754334683546". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "68b5be93-cf79-4bb6-afd0-52f4ada690c0". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "5d71ef14-1522-40a1-8941-906b91d35eae". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "b1aca895-198d-48f7-ad9f-308beab650f0". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "37cb5cee-1db9-4338-b8b9-03d1bf49226c". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "43c0b754-0562-4628-96eb-649b9ec10949". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "b98b415b-6c2f-4e26-a417-94f316cf0eb5". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "faead2d6-6492-41da-a72b-4ee73bc96679". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "3d100871-4422-494c-9ceb-3da7eefc9d5a". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "2e7cc400-9916-4c26-a95e-46904d9c33fe". Last analysis age: 1.4 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "17ee4ced-9a1e-4c34-81b3-93f16f050bbe". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] Skipping analysis for market "536eb2c9-5ad6-4685-8abb-b3f3a55efef1". Last analysis age: 1.3 hours.
+2026-06-09 23:49:58.407 -07:00 [INF] QueueWorker: Eligible=54, ExistingActive=0, ToQueue=0
+2026-06-09 23:49:58.410 -07:00 [INF] First few eligible IDs: 0e62b7be-e842-4b70-b605-24537997079c, f3f6c390-2369-4604-8424-6cfc73a26947, fcc80371-1ca6-4069-bbff-f769616d7183
+2026-06-09 23:49:58.429 -07:00 [INF] Queue status:
+Pending=0
+Processing=0
+Completed=321
+Failed=10
+AI analyses created today: 54
+OpenAI calls today: 54
+2026-06-09 23:49:58.489 -07:00 [INF] Health Snapshot Created. Markets: 100, Predictions: 321, Accuracy: 50.0%, Avg Brier: 0.3446, Queue Pending: 0, Queue Failed: 10
+2026-06-09 23:49:58.724 -07:00 [INF] Daily analytics snapshots generated at: "2026-06-10T06:49:58.7246252+00:00"
+2026-06-09 23:49:58.774 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:58.783 -07:00 [INF] Daily analytics snapshots generated at: "2026-06-10T06:49:58.7834229+00:00"
+2026-06-09 23:49:58.787 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-09 23:49:58.818 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:58.819 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-09 23:49:58.826 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:58.828 -07:00 [INF] Market evaluated: category="Other" score=90 eligible=false reason=Market category could not be determined.
+2026-06-09 23:49:58.835 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:58.837 -07:00 [INF] Market evaluated: category="Politics" score=80 eligible=true reason=null
+2026-06-09 23:49:58.845 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:58.847 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-09 23:49:58.854 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:58.856 -07:00 [INF] Market evaluated: category="Crypto" score=90 eligible=true reason=null
+2026-06-09 23:49:58.863 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:58.865 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-09 23:49:58.871 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:58.873 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-09 23:49:58.880 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:58.882 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-09 23:49:58.890 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:58.892 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-09 23:49:58.902 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:58.937 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-09 23:49:58.965 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:58.966 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-09 23:49:58.973 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:58.973 -07:00 [INF] Sports category inferred from base keyword: stanley cup
+2026-06-09 23:49:58.975 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.006 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.006 -07:00 [INF] Sports category inferred from base keyword: stanley cup
+2026-06-09 23:49:59.009 -07:00 [INF] Market evaluated: category="Sports" score=100 eligible=true reason=null
+2026-06-09 23:49:59.020 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.020 -07:00 [INF] Sports category inferred from base keyword: finals
+2026-06-09 23:49:59.021 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.030 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.030 -07:00 [INF] Sports category inferred from base keyword: finals
+2026-06-09 23:49:59.032 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.038 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.040 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-09 23:49:59.048 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.048 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.050 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.058 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.058 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.059 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.067 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.067 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.068 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.075 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.075 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.077 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.084 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.084 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.085 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.093 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.093 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.094 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.102 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.102 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.103 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.110 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.110 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.111 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.121 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.121 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.122 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.129 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.129 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.131 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.139 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.139 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.140 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.149 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.149 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.150 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.157 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.158 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.159 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.167 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.167 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.168 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.176 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.176 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.178 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.189 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.189 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.191 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.202 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.202 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.204 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.223 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.223 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.225 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.274 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.275 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.277 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.287 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.287 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.289 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.311 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.311 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.314 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.324 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.324 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.325 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.338 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.338 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.339 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.350 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.350 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.352 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.361 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.361 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.363 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.373 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.373 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.375 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.386 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.386 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.387 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.398 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.398 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.400 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.409 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.409 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.410 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.420 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.420 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.422 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.431 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.432 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.433 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.443 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.443 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.444 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.454 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.454 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.456 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.464 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.465 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.466 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.474 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.474 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.475 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.485 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.485 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.487 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.505 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.505 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.506 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.521 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.521 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.522 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.540 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.540 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.541 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.558 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.558 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.559 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.574 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.575 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.576 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.589 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.589 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.590 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.605 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.605 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.606 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.621 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.621 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.623 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.637 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.637 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.639 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.653 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.654 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.655 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.669 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.669 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.670 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.685 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.685 -07:00 [INF] Sports category inferred from base keyword: world cup
+2026-06-09 23:49:59.686 -07:00 [INF] Market evaluated: category="Sports" score=90 eligible=true reason=null
+2026-06-09 23:49:59.702 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.703 -07:00 [INF] Market evaluated: category="Other" score=90 eligible=false reason=Market category could not be determined.
+2026-06-09 23:49:59.717 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.718 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.734 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.735 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.751 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.752 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.767 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.768 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.783 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.784 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.800 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.801 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.817 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.818 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.835 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.836 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.852 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.854 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.868 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.870 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.886 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.887 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.905 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.906 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.922 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.924 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.940 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.941 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.958 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.959 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.976 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.977 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:49:59.994 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:49:59.995 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.015 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.017 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.035 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.037 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.062 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.064 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.084 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.085 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.104 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.105 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.125 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.127 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.148 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.150 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.177 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.178 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.199 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.200 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.221 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.222 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.244 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.245 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.268 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.269 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.286 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.287 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.305 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.306 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.323 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.324 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.341 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.342 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.363 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-09 23:50:00.365 -07:00 [INF] Market evaluated: category="Politics" score=90 eligible=false reason=Market end date is too far in the future.
+2026-06-09 23:50:00.382 -07:00 [INF] Polymarket synchronization completed. Synced 100 markets and skipped 0.
+2026-06-09 23:50:00.382 -07:00 [INF] Finished Polymarket market collection.
