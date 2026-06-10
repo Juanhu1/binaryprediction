@@ -4,6 +4,7 @@ namespace BinaryPrediction.Core.Interfaces;
 
 public interface IPredictionRepository
 {
+    Task<Prediction?> GetByIdAsync(Guid predictionId, CancellationToken cancellationToken = default);
     Task AddAsync(Prediction prediction, CancellationToken cancellationToken = default);
     Task<IEnumerable<Prediction>> GetByMarketIdAsync(Guid marketId, CancellationToken cancellationToken = default);
     Task<Prediction?> GetLatestByMarketIdAsync(Guid marketId, CancellationToken cancellationToken = default);

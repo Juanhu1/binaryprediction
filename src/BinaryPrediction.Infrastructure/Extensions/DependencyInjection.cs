@@ -83,7 +83,8 @@ public static class DependencyInjection
         services.AddHttpClient<IOpenAiAnalysisService, OpenAiAnalysisService>();
         
         services.AddScoped<IPredictionRepository, PredictionRepository>();
-        services.AddScoped<IPredictionService, PredictionService>();
+        services.AddScoped<IPredictionOpportunityRepository, PredictionOpportunityRepository>();
+        services.AddScoped<IEdgeDetectionService, EdgeDetectionService>();
         services.AddScoped<IMarketResolutionService, MarketResolutionService>();
         services.AddScoped<IPredictionEvaluationService, PredictionEvaluationService>();
         services.AddScoped<IPredictionStatisticsService, PredictionStatisticsService>();

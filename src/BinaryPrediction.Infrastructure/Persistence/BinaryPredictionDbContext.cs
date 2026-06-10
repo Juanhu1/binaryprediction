@@ -33,9 +33,11 @@ public class BinaryPredictionDbContext : DbContext
     // Analytics entities
     public DbSet<PredictionCategory> PredictionCategories { get; set; } = null!;
     public DbSet<PredictionCalibrationSnapshot> PredictionCalibrationSnapshots { get; set; } = null!;
-    public DbSet<PredictionPerformanceSnapshot> PredictionPerformanceSnapshots { get; set; } = null!;
-    public DbSet<CategoryPerformanceSnapshot> CategoryPerformanceSnapshots { get; set; } = null!;
-    public DbSet<CalibrationTrendSnapshot> CalibrationTrendSnapshots { get; set; } = null!;
+    public DbSet<PredictionPerformanceSnapshot> PredictionPerformanceSnapshots => Set<PredictionPerformanceSnapshot>();
+    public DbSet<CategoryPerformanceSnapshot> CategoryPerformanceSnapshots => Set<CategoryPerformanceSnapshot>();
+    public DbSet<CalibrationTrendSnapshot> CalibrationTrendSnapshots => Set<CalibrationTrendSnapshot>();
+    public DbSet<PredictionOpportunity> PredictionOpportunities => Set<PredictionOpportunity>();
+    public DbSet<OpportunityAnalyticsSnapshot> OpportunityAnalyticsSnapshots => Set<OpportunityAnalyticsSnapshot>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -46,6 +48,22 @@ public class BinaryPredictionDbContext : DbContext
         modelBuilder.Entity<EligibleMarketView>()
             .HasNoKey()
             .ToView("eligible_markets_view");
+
+        // PredictionOpportunity indexes
+        modelBuilder.Entity<PredictionOpportunity>(entity =>
+        {
+            entity.HasIndex(e => e.MarketId);
+            entity.HasIndex(e => e.PredictionId).IsUnique(); // Prevent duplicates per prediction
+            entity.HasIndex(e => e.HasEdge);
+            entity.HasIndex(e => e.ProbabilityGap);
+            entity.HasIndex(e => e.DetectedAtUtc);
+        });
+
+        // OpportunityAnalyticsSnapshot indexes
+        modelBuilder.Entity<OpportunityAnalyticsSnapshot>(entity =>
+        {
+            entity.HasIndex(e => e.SnapshotDateUtc).IsUnique();
+        });
     }
 
     public override int SaveChanges()

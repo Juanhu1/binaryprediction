@@ -90,4 +90,11 @@ public class PredictionRepository : IPredictionRepository
     {
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
+
+    // Retrieves a prediction by its primary key
+    public async Task<Prediction?> GetByIdAsync(Guid predictionId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Predictions
+            .FirstOrDefaultAsync(p => p.Id == predictionId, cancellationToken);
+    }
 }

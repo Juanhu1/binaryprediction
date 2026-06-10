@@ -9,13 +9,16 @@ public class PredictionEvaluationService : IPredictionEvaluationService
 {
     private readonly IPredictionRepository _predictionRepository;
     private readonly ILogger<PredictionEvaluationService> _logger;
+    private readonly IEdgeDetectionService _edgeDetectionService;
 
     public PredictionEvaluationService(
         IPredictionRepository predictionRepository,
-        ILogger<PredictionEvaluationService> logger)
+        ILogger<PredictionEvaluationService> logger,
+        IEdgeDetectionService edgeDetectionService)
     {
         _predictionRepository = predictionRepository;
         _logger = logger;
+        _edgeDetectionService = edgeDetectionService;
     }
 
     public async Task EvaluateMarketPredictionsAsync(Market market, string actualOutcome, CancellationToken cancellationToken)
@@ -46,6 +49,8 @@ public class PredictionEvaluationService : IPredictionEvaluationService
                 _logger.LogWarning("Prediction {PredictionId} has unknown outcome {Outcome}. Skipping.", prediction.Id, prediction.PredictedOutcome);
                 continue;
             }
+            // Run edge detection after evaluation fields are set
+            await _edgeDetectionService.DetectOpportunityAsync(prediction.Id, cancellationToken);
 
             prediction.ActualOutcome = normalizedActualOutcome;
             prediction.WasCorrect = normalizedPredictedOutcome == normalizedActualOutcome;
