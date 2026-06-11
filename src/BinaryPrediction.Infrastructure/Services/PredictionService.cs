@@ -9,6 +9,7 @@ public class PredictionService : IPredictionService
     private readonly IOpenAiAnalysisService _openAiService;
     private readonly IPredictionRepository _predictionRepository;
     private readonly ILogger<PredictionService> _logger;
+private readonly IEdgeDetectionService _edgeDetectionService;
     private readonly BinaryPrediction.Infrastructure.Persistence.BinaryPredictionDbContext _dbContext;
     private readonly BinaryPrediction.Core.Common.OpenAiSettings _openAiSettings;
 
@@ -16,6 +17,7 @@ public class PredictionService : IPredictionService
         IOpenAiAnalysisService openAiService,
         IPredictionRepository predictionRepository,
         ILogger<PredictionService> logger,
+        IEdgeDetectionService edgeDetectionService,
         BinaryPrediction.Infrastructure.Persistence.BinaryPredictionDbContext dbContext,
         Microsoft.Extensions.Options.IOptions<BinaryPrediction.Core.Common.OpenAiSettings> openAiOptions)
     {
@@ -83,6 +85,21 @@ public class PredictionService : IPredictionService
             await _predictionRepository.AddAsync(prediction, cancellationToken);
             _dbContext.Set<AiUsageRecord>().Add(usageRecord);
             await _predictionRepository.SaveChangesAsync(cancellationToken);
+
+            try
+            {
+                _logger.LogInformation(
+                    "EDGE TEST BEFORE CALL {PredictionId}",
+                    prediction.Id);
+                await _edgeDetectionService.DetectOpportunityAsync(prediction.Id, cancellationToken);
+                _logger.LogInformation(
+                    "EDGE TEST AFTER CALL {PredictionId}",
+                    prediction.Id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to perform edge detection for prediction {PredictionId}", prediction.Id);
+            }
 
             _logger.LogInformation("Prediction {PredictionId} created and activated for Analysis {AnalysisId}, Market {MarketId} with Outcome '{Outcome}' and Confidence {Confidence}. Cost: ${Cost}, Latency: {LatencyMs}ms", 
                 prediction.Id, analysis.Id, market.Id, prediction.PredictedOutcome, prediction.ConfidencePercentage, usageRecord.EstimatedCostUsd, usageRecord.LatencyMs);

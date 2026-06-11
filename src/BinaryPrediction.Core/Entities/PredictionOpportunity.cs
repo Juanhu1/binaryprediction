@@ -2,6 +2,8 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+using BinaryPrediction.Core.Enums;
+
 namespace BinaryPrediction.Core.Entities;
 
 /// <summary>
@@ -33,7 +35,7 @@ public class PredictionOpportunity
     /// Direction of the gap: AI_BULLISH when AI > Market, AI_BEARISH when AI < Market.
     /// </summary>
     [MaxLength(20)]
-    public string GapDirection { get; set; } = string.Empty;
+    public GapDirection GapDirection { get; set; }
 
     /// <summary>Configured threshold that determines whether this is considered an edge.</summary>
     public decimal EdgeThresholdPercentage { get; set; }
@@ -43,4 +45,5 @@ public class PredictionOpportunity
 
     public DateTimeOffset DetectedAtUtc { get; set; }
     public DateTimeOffset CreatedAtUtc { get; set; }
+    public DateTimeOffset UpdatedAtUtc { get; set; }
 }

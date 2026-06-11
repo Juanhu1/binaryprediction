@@ -1,0 +1,13 @@
+2026-06-10 20:10:46.026 -07:00 [ERR] Failed executing DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE prediction_opportunities ALTER COLUMN gap_direction TYPE integer;
+2026-06-10 20:15:47.683 -07:00 [ERR] Failed executing DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE prediction_opportunities ALTER COLUMN gap_direction TYPE integer;
+2026-06-10 20:19:41.125 -07:00 [ERR] Failed executing DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE prediction_opportunities ALTER COLUMN gap_direction TYPE integer;
+2026-06-10 20:22:05.075 -07:00 [ERR] Failed executing DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE prediction_opportunities ALTER COLUMN gap_direction TYPE integer;
+2026-06-10 20:23:59.549 -07:00 [ERR] An error occurred using the connection to database 'binaryprediction' on server 'tcp://localhost:5432'.
+2026-06-10 20:24:01.012 -07:00 [ERR] Failed executing DbCommand (7ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE prediction_opportunities ALTER COLUMN gap_direction TYPE integer;
+2026-06-10 20:36:12.457 -07:00 [ERR] Failed executing DbCommand (8ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+ALTER TABLE prediction_opportunities ALTER COLUMN gap_direction TYPE integer;

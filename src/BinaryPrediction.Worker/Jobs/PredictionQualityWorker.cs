@@ -79,8 +79,21 @@ public class PredictionQualityWorker : BackgroundService
                 if (delay.TotalMilliseconds > 0)
                 {
                     _logger.LogInformation("PredictionQualityWorker sleeping for {Hours} hours until next snapshot.", Math.Round(delay.TotalHours, 1));
-                    await Task.Delay(delay, cancellationToken);
+                    try
+                    {
+                        await Task.Delay(delay, CancellationToken.None);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        _logger.LogInformation("PredictionQualityWorker cancellation requested – exiting loop gracefully.");
+                        break;
+                    }
                 }
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogInformation("PredictionQualityWorker cancellation requested – exiting loop gracefully.");
+                break;
             }
             catch (Exception ex)
             {
@@ -92,7 +105,7 @@ public class PredictionQualityWorker : BackgroundService
                     await heartbeatService.LogHeartbeatAsync(nameof(PredictionQualityWorker), "Error", ex.Message, cancellationToken);
                 }
                 catch { }
-                await Task.Delay(TimeSpan.FromHours(1), cancellationToken); // Retry in 1 hour if it fails
+                await Task.Delay(TimeSpan.FromHours(1), CancellationToken.None); // Retry in 1 hour if it fails
             }
         }
     }

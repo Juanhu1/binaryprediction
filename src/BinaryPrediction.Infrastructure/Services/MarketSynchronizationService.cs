@@ -8,6 +8,8 @@ using BinaryPrediction.Infrastructure.External.Polymarket.DTOs;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BinaryPrediction.Infrastructure.Services;
 
@@ -47,6 +49,7 @@ public class MarketSynchronizationService : IMarketSynchronizationService
 
     public async Task SynchronizeActiveMarketsAsync(CancellationToken cancellationToken = default)
     {
+        _logger.LogInformation("Starting market synchronization.");
         var polymarketMarkets = await _polymarketClient.GetActiveMarketsAsync(cancellationToken);
         var synchronizedCount = 0;
         var skippedCount = 0;
@@ -60,6 +63,9 @@ public class MarketSynchronizationService : IMarketSynchronizationService
                 skippedCount++;
                 continue;
             }
+
+            // Log raw market data received from Polymarket
+            _logger.LogInformation("Market {Question} probability={Probability}", mappedMarket.Question, probability);
 
             var existingMarket = await _marketRepository.FirstOrDefaultAsync(
                 market => market.Slug == mappedMarket.Slug,
@@ -97,14 +103,14 @@ public class MarketSynchronizationService : IMarketSynchronizationService
             market.Category = category;
             // Ensure PredictionCategory exists and assign its Id
             var normalizedName = category.ToString().ToLower();
-var pc = await _dbContext.PredictionCategories
-    .FirstOrDefaultAsync(c => c.Name.ToLower() == normalizedName, cancellationToken);
-if (pc == null)
-{
-    pc = new PredictionCategory { Id = Guid.NewGuid(), Name = category.ToString(), CreatedAtUtc = DateTimeOffset.UtcNow };
-    _dbContext.PredictionCategories.Add(pc);
-    await _dbContext.SaveChangesAsync(cancellationToken);
-}
+            var pc = await _dbContext.PredictionCategories
+                .FirstOrDefaultAsync(c => c.Name.ToLower() == normalizedName, cancellationToken);
+            if (pc == null)
+            {
+                pc = new PredictionCategory { Id = Guid.NewGuid(), Name = category.ToString(), CreatedAtUtc = DateTimeOffset.UtcNow };
+                _dbContext.PredictionCategories.Add(pc);
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
             market.PredictionCategoryId = pc.Id;
             market.LastQualityEvaluationUtc = DateTimeOffset.UtcNow;
 

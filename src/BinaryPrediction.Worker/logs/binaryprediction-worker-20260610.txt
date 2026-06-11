@@ -716,3 +716,119 @@ OpenAI calls today: 54
 2026-06-10 00:15:01.635 -07:00 [INF] Finished Polymarket market collection.
 2026-06-10 00:19:59.790 -07:00 [INF] Starting prediction evaluation cycle.
 2026-06-10 00:19:59.798 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-10 21:36:51.495 -07:00 [INF] Queue processor enabled
+2026-06-10 21:36:51.528 -07:00 [INF] Queue creator enabled
+2026-06-10 21:36:51.528 -07:00 [INF] Legacy analysis workers disabled
+2026-06-10 21:36:51.529 -07:00 [INF] Registered Hosted Services:
+2026-06-10 21:36:51.533 -07:00 [INF] - DailyAnalyticsWorker
+2026-06-10 21:36:51.534 -07:00 [INF] - MarketCollectorWorker
+2026-06-10 21:36:51.534 -07:00 [INF] - MarketAnalysisQueueWorker
+2026-06-10 21:36:51.534 -07:00 [INF] - MarketAnalysisProcessorWorker
+2026-06-10 21:36:51.534 -07:00 [INF] - MarketMaintenanceWorker
+2026-06-10 21:36:51.534 -07:00 [INF] - PredictionWorker
+2026-06-10 21:36:51.534 -07:00 [INF] - PredictionResolutionWorker
+2026-06-10 21:36:51.534 -07:00 [INF] - PredictionEvaluationWorker
+2026-06-10 21:36:51.534 -07:00 [INF] - PredictionQualityWorker
+2026-06-10 21:36:51.534 -07:00 [INF] - SystemHealthWorker
+2026-06-10 21:36:51.534 -07:00 [INF] - PredictionAnalyticsWorker
+2026-06-10 21:36:51.549 -07:00 [INF] DailyAnalyticsWorker started at: "2026-06-11T04:36:51.5488601+00:00"
+2026-06-10 21:36:51.552 -07:00 [INF] Generating daily analytics snapshots...
+2026-06-10 21:36:52.701 -07:00 [INF] Market collector worker started with interval "01:00:00".
+2026-06-10 21:36:52.708 -07:00 [INF] MarketAnalysisQueueWorker starting.
+2026-06-10 21:36:52.716 -07:00 [INF] MarketAnalysisProcessorWorker starting.
+2026-06-10 21:36:52.718 -07:00 [INF] MarketMaintenanceWorker starting.
+2026-06-10 21:36:52.720 -07:00 [INF] PredictionWorker starting.
+2026-06-10 21:36:52.730 -07:00 [INF] PredictionAnalyticsWorker started, running every "01:00:00".
+2026-06-10 21:36:52.734 -07:00 [INF] PredictionResolutionWorker starting with interval "00:15:00".
+2026-06-10 21:36:52.801 -07:00 [INF] PredictionQualityWorker starting.
+2026-06-10 21:36:52.801 -07:00 [INF] SystemHealthWorker starting.
+2026-06-10 21:36:52.801 -07:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-10 21:36:52.801 -07:00 [INF] Hosting environment: Development
+2026-06-10 21:36:52.801 -07:00 [INF] Content root path: E:\work\BinaryPrediction\src\BinaryPrediction.Worker
+2026-06-10 21:36:52.801 -07:00 [INF] PredictionEvaluationWorker starting with interval "00:05:00".
+2026-06-10 21:36:53.030 -07:00 [INF] Starting prediction resolution cycle.
+2026-06-10 21:36:53.033 -07:00 [INF] Starting Polymarket market collection.
+2026-06-10 21:36:53.056 -07:00 [INF] Starting prediction evaluation cycle.
+2026-06-10 21:36:53.089 -07:00 [INF] No predictions found for calibration at this run.
+2026-06-10 21:36:53.095 -07:00 [INF] Prediction resolution completed. No new markets resolved.
+2026-06-10 21:36:53.106 -07:00 [INF] Found 10 analyses without predictions. Starting prediction generation.
+2026-06-10 21:36:53.125 -07:00 [INF] PredictionQualityWorker sleeping for 19.4 hours until next snapshot.
+2026-06-10 21:36:53.193 -07:00 [INF] Prediction evaluation cycle completed. No pending evaluations.
+2026-06-10 21:36:53.196 -07:00 [INF] Skipping analysis for market "e21a611d-141f-4e21-94d8-479bfd7ded60". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "1d063b5b-0c7d-4233-a79f-70b220c07955". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "8b0cb234-1438-4b8a-bca3-eabbef7f9910". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "eb456793-1c3c-4caa-b4e9-aa480981b002". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "0bbaeae1-4f0d-4420-a884-fe6788dd6b99". Last analysis age: 0.5 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "6ac735f0-4c3b-4933-8c22-dbef7d35f80e". Last analysis age: 0.5 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "b5e1f486-4df1-4543-b758-6c930347c807". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "4958f895-0783-4ced-b503-bdfe01594832". Last analysis age: 0.5 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "228249f0-6433-4ed1-ab5f-b108a7a77915". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "096e7b07-913d-4907-80b6-c1ba70c2eab5". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "fe219b9e-bf3a-48df-bf37-d92d1ea90b89". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "9da3bb97-6b6a-49a3-b2dc-ce965f13ee78". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "e603cd55-5fda-430f-808c-1107a13010cb". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "0846e15c-f079-4f4c-bd7f-560e8be50e75". Last analysis age: 0.5 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "c1ca7694-bfff-42e0-946b-febde9604dd8". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "d7763c9c-faad-4579-b528-ad6a97c837e9". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "f5f02361-740a-4fa3-a68c-dfc2beca756e". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "07254f65-ce8f-4c3a-9c9a-d4bf89c75336". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "b13750ed-54ab-4b99-a542-4fa19d5c39ce". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.200 -07:00 [INF] Skipping analysis for market "d3f9cc65-3afd-4577-8c0f-71ae7b46050e". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "7836afef-d14a-4ffa-99e4-c45236df51de". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "fc85353f-fa9e-4939-9114-14f5c6f18d61". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "56e53bbd-b602-41b0-bf54-481183328d56". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "b8d13666-9cc9-4843-97f3-7f191df22306". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "dac7af5d-6032-43b7-a3aa-d6c526478040". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "bdbe41de-8cfb-4b63-aa20-592b640e4618". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "b383624b-a809-4d75-ad22-f26fa115067e". Last analysis age: 0.5 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "ecea04ca-cbfc-4e53-8e71-67104fcaf1dd". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "e83cc14f-d4ce-418a-8aeb-5ea86ad33bba". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "e52214ff-9c23-4360-8ec4-797b70b42395". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "6990437a-1c88-430e-bf4d-22e1756c08b9". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "bd220df8-30a2-483c-92cc-34b70412c89e". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "7e3d283d-1cba-49b8-9fcb-b642d62bf59f". Last analysis age: 0.5 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "2d6742ba-d388-4e7d-b929-12408ba1a550". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "3856df55-fb0d-4131-b179-d41b4bcb7df5". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "4ea717de-51b7-4579-87aa-9406c97b7f15". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "2d2c79db-7eef-4cbc-a361-1b560984f906". Last analysis age: 0.5 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "10202576-baba-4a24-8335-c6647448578c". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "389d28af-d78b-4e18-b72f-a0ca81bf6e0e". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "96909d94-2bfd-4289-9c0d-fa44bead6867". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "5b362512-cd0b-4321-aa63-c9e677528ccb". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "78ed2ac2-efb6-49fe-9b47-83bd04d25d97". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "c85c4fe5-c2eb-4745-b665-acf5994f922a". Last analysis age: 0.5 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "41283125-0204-4419-a61c-11674a7a8163". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "81f86103-a55c-4630-b2e7-9bf8e6e4f76f". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "6813c6e5-1e32-4106-a881-91097205b063". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.201 -07:00 [INF] Skipping analysis for market "599ebe8a-d131-4cfe-b160-d25653adfb7e". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.202 -07:00 [INF] Skipping analysis for market "72cdb508-ccf6-4797-b085-ef44671cfbd0". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.202 -07:00 [INF] Skipping analysis for market "2427fca8-fca5-40eb-8ef6-1e64d141019f". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.202 -07:00 [INF] Skipping analysis for market "821d9f2b-b1de-4803-a7f2-018c05344cee". Last analysis age: 0.6 hours.
+2026-06-10 21:36:53.202 -07:00 [INF] Skipping analysis for market "7c1b8f67-419a-47f8-a32d-c4272222fa2c". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.202 -07:00 [INF] Skipping analysis for market "719fece4-fab6-4a27-86a5-b8ae8e048432". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.202 -07:00 [INF] Skipping analysis for market "397fe53c-037b-4b64-98ac-502a588e207b". Last analysis age: 0.5 hours.
+2026-06-10 21:36:53.202 -07:00 [INF] Skipping analysis for market "1226ccb2-bb27-471d-8d84-30165e546819". Last analysis age: 0.7 hours.
+2026-06-10 21:36:53.202 -07:00 [INF] QueueWorker: Eligible=54, ExistingActive=0, ToQueue=0
+2026-06-10 21:36:53.213 -07:00 [INF] First few eligible IDs: e21a611d-141f-4e21-94d8-479bfd7ded60, 1d063b5b-0c7d-4233-a79f-70b220c07955, 8b0cb234-1438-4b8a-bca3-eabbef7f9910
+2026-06-10 21:36:53.223 -07:00 [INF] Generating prediction for Analysis "5f4e9330-2a24-4e95-ae56-3179f1583e55", Market "fc85353f-fa9e-4939-9114-14f5c6f18d61"
+2026-06-10 21:36:53.224 -07:00 [INF] Generating real AI prediction for market "fc85353f-fa9e-4939-9114-14f5c6f18d61"
+2026-06-10 21:36:53.237 -07:00 [INF] Queue status:
+Pending=0
+Processing=0
+Completed=54
+Failed=0
+AI analyses created today: 54
+OpenAI calls today: 54
+2026-06-10 21:36:53.291 -07:00 [INF] Health Snapshot Created. Markets: 100, Predictions: 0, Accuracy: 0%, Avg Brier: 0, Queue Pending: 0, Queue Failed: 0
+2026-06-10 21:36:53.302 -07:00 [INF] Daily analytics snapshots generated at: "2026-06-11T04:36:53.3028724+00:00"
+2026-06-10 21:36:53.337 -07:00 [INF] Daily analytics snapshots generated at: "2026-06-11T04:36:53.3377440+00:00"
+2026-06-10 21:36:58.237 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-10 21:36:58.252 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.
+2026-06-10 21:36:58.313 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-10 21:36:58.315 -07:00 [INF] Market evaluated: category="Other" score=70 eligible=false reason=Market category could not be determined.
+2026-06-10 21:36:58.326 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-10 21:36:58.328 -07:00 [INF] Market evaluated: category="Other" score=90 eligible=false reason=Market category could not be determined.
+2026-06-10 21:36:58.337 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-10 21:36:58.339 -07:00 [INF] Market evaluated: category="Politics" score=80 eligible=true reason=null
+2026-06-10 21:36:58.348 -07:00 [INF] Resolution date resolved from explicit API date.
+2026-06-10 21:36:58.352 -07:00 [INF] Market evaluated: category="Other" score=80 eligible=false reason=Market category could not be determined.

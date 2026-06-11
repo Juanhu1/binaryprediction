@@ -47,6 +47,12 @@ public class PredictionOpportunityRepository : IPredictionOpportunityRepository
         await _dbContext.PredictionOpportunities.AddAsync(opportunity, cancellationToken);
     }
 
+    public Task UpdateAsync(PredictionOpportunity opportunity, CancellationToken cancellationToken = default)
+    {
+        _dbContext.PredictionOpportunities.Update(opportunity);
+        return Task.CompletedTask;
+    }
+
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         await _dbContext.SaveChangesAsync(cancellationToken);

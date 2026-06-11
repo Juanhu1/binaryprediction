@@ -13,10 +13,12 @@ namespace BinaryPrediction.Api.Controllers;
 public class OpportunityController : ControllerBase
 {
     private readonly IPredictionOpportunityRepository _repo;
+    private readonly IEdgeDetectionService _edgeDetectionService;
 
-    public OpportunityController(IPredictionOpportunityRepository repo)
+    public OpportunityController(IPredictionOpportunityRepository repo, IEdgeDetectionService edgeDetectionService)
     {
         _repo = repo;
+        _edgeDetectionService = edgeDetectionService;
     }
 
     [HttpGet]
@@ -35,4 +37,18 @@ public class OpportunityController : ControllerBase
         }).ToList();
         return Ok(dtos);
     }
+
+    // Temporary diagnostic endpoint for Day 16
+    [HttpPost("test/{predictionId:guid}")]
+    public async Task<ActionResult<object>> TestEdgeDetection([FromRoute] Guid predictionId, CancellationToken cancellationToken)
+    {
+        await _edgeDetectionService.DetectOpportunityAsync(predictionId, cancellationToken);
+        return Ok(new
+        {
+            success = true,
+            predictionId = predictionId,
+            message = "Edge detection executed."
+        });
+    }
 }
+

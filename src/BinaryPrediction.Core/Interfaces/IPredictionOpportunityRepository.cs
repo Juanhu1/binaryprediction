@@ -15,5 +15,6 @@ public interface IPredictionOpportunityRepository
     Task<IReadOnlyList<PredictionOpportunity>> GetActiveAsync(CancellationToken cancellationToken = default);
     Task<IReadOnlyList<PredictionOpportunity>> GetAllAsync(CancellationToken cancellationToken = default);
     Task AddAsync(PredictionOpportunity opportunity, CancellationToken cancellationToken = default);
+    Task UpdateAsync(PredictionOpportunity opportunity, CancellationToken cancellationToken = default);
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }

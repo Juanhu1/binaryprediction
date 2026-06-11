@@ -21,8 +21,11 @@ public class WorkerHeartbeatService : IWorkerHeartbeatService
     {
         try
         {
+            // Use a non‑cancellable token for the EF queries so that a worker shutdown does not abort the heartbeat logging.
+            var ct = CancellationToken.None;
+
             var heartbeat = await _dbContext.WorkerHeartbeats
-                .FirstOrDefaultAsync(h => h.WorkerName == workerName, cancellationToken);
+                .FirstOrDefaultAsync(h => h.WorkerName == workerName, ct);
 
             if (heartbeat == null)
             {
@@ -42,7 +45,7 @@ public class WorkerHeartbeatService : IWorkerHeartbeatService
                 heartbeat.LastErrorMessage = errorMessage;
             }
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            await _dbContext.SaveChangesAsync(ct);
         }
         catch (Exception ex)
         {

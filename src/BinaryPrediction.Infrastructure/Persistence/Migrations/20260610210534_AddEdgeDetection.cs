@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -37,7 +37,7 @@ namespace BinaryPrediction.Infrastructure.Persistence.Migrations
                     market_probability = table.Column<decimal>(type: "numeric", nullable: false),
                     ai_probability = table.Column<decimal>(type: "numeric", nullable: false),
                     probability_gap = table.Column<decimal>(type: "numeric", nullable: false),
-                    gap_direction = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    gap_direction = table.Column<int>(type: "integer", nullable: false),
                     edge_threshold_percentage = table.Column<decimal>(type: "numeric", nullable: false),
                     has_edge = table.Column<bool>(type: "boolean", nullable: false),
                     detected_at_utc = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),

@@ -88,10 +88,23 @@ public class PredictionWorker : BackgroundService
                 {
                     // If no items were processed, wait a bit before polling again
                     _logger.LogDebug("PredictionWorker found 0 eligible analyses. Sleeping for 30s.");
-                    await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken);
+                    try
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(30), CancellationToken.None);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        _logger.LogInformation("PredictionWorker cancellation requested – exiting loop gracefully.");
+                        break;
+                    }
                 }
-                
+
                 await heartbeatService.LogHeartbeatAsync(nameof(PredictionWorker), "Healthy", null, cancellationToken);
+            }
+            catch (OperationCanceledException)
+            {
+                _logger.LogInformation("PredictionWorker cancellation requested – exiting loop gracefully.");
+                break;
             }
             catch (Exception ex)
             {
@@ -103,7 +116,7 @@ public class PredictionWorker : BackgroundService
                     await heartbeatService.LogHeartbeatAsync(nameof(PredictionWorker), "Error", ex.Message, cancellationToken);
                 }
                 catch { }
-                await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken);
+                await Task.Delay(TimeSpan.FromSeconds(30), CancellationToken.None);
             }
         }
     }

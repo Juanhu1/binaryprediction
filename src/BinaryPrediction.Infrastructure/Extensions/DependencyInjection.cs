@@ -93,6 +93,7 @@ public static class DependencyInjection
         services.AddScoped<IConfidenceBandService, ConfidenceBandService>();
         services.AddScoped<IMarketCategoryPerformanceService, MarketCategoryPerformanceService>();
         services.AddScoped<IPredictionQualityService, PredictionQualityService>();
+            services.AddScoped<IPredictionService, PredictionService>();
         services.AddScoped<IPredictionsImprovementService, PredictionsImprovementService>();
 
         // Repositories
