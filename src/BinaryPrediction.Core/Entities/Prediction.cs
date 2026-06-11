@@ -15,6 +15,8 @@ public class Prediction : BaseEntity
     public bool? WasCorrect { get; set; }
     public DateTimeOffset? EvaluatedAtUtc { get; set; }
     public decimal? BrierScore { get; set; }
+    // Added property for AI probability used in admin dashboards
+    public decimal AiProbability { get; set; }
 
     public string PromptVersionUsed { get; set; } = string.Empty;
 

@@ -1,4 +1,4 @@
-namespace BinaryPrediction.Core.DTOs;
+namespace BinaryPrediction.Api.DTOs;
 
 public class DashboardSummaryDto
 {
@@ -15,10 +15,4 @@ public class DashboardSummaryDto
     public DateTimeOffset? LastMarketPullUtc { get; set; }
     public DateTimeOffset? LastAnalysisUtc { get; set; }
     public DateTimeOffset? LastPredictionUtc { get; set; }
-    // New properties required by PredictionDashboardService
-    public int ResolvedMarkets { get; set; }
-    public int EvaluatedPredictions { get; set; }
-    public decimal AverageConfidencePercentage { get; set; }
-    public ConfidenceBandPerformanceDto? BestConfidenceBand { get; set; }
-    public ConfidenceBandPerformanceDto? WorstConfidenceBand { get; set; }
 }

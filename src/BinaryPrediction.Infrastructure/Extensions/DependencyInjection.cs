@@ -1,6 +1,10 @@
 using BinaryPrediction.Core.Interfaces;
 using BinaryPrediction.Core.Repositories;
 using BinaryPrediction.Core.Services;
+using BinaryPrediction.Infrastructure.Repositories;
+using BinaryPrediction.Infrastructure.Services;
+using BinaryPrediction.Core.Repositories;
+using BinaryPrediction.Core.Services;
 using BinaryPrediction.Core.Common;
 using BinaryPrediction.Infrastructure.External.Polymarket;
 using BinaryPrediction.Infrastructure.Persistence;
@@ -94,6 +98,9 @@ public static class DependencyInjection
         services.AddScoped<IMarketCategoryPerformanceService, MarketCategoryPerformanceService>();
         services.AddScoped<IPredictionQualityService, PredictionQualityService>();
             services.AddScoped<IPredictionService, PredictionService>();
+            // Admin Dashboard
+            services.AddScoped<IAdminDashboardRepository, AdminDashboardRepository>();
+            services.AddScoped<IAdminDashboardService, AdminDashboardService>();
         services.AddScoped<IPredictionsImprovementService, PredictionsImprovementService>();
 
         // Repositories
