@@ -14,6 +14,7 @@ public class PredictionPerformanceSnapshotConfiguration : IEntityTypeConfigurati
             .HasConversion(
                 v => DateTime.SpecifyKind(v.ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc),
                 v => DateOnly.FromDateTime(v))
+            .HasColumnType("date")
             .IsRequired();
         builder.HasIndex(p => p.SnapshotDateUtc).IsUnique();
         builder.Property(p => p.CreatedAtUtc).IsRequired();

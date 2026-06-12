@@ -28,6 +28,7 @@ public static class DependencyInjection
         }).AddMvc();
 
         services.AddHealthChecks();
+            services.AddScoped<BinaryPrediction.Core.Interfaces.IPredictionResolutionService, BinaryPrediction.Infrastructure.Services.PredictionResolutionService>();
 
         services.AddCors(options =>
         {

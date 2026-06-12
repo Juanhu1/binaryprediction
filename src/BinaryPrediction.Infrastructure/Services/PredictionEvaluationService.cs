@@ -1,78 +1,104 @@
-using BinaryPrediction.Core.Common;
 using BinaryPrediction.Core.Entities;
 using BinaryPrediction.Core.Interfaces;
+using BinaryPrediction.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BinaryPrediction.Infrastructure.Services;
 
 public class PredictionEvaluationService : IPredictionEvaluationService
 {
-    private readonly IPredictionRepository _predictionRepository;
+    private readonly BinaryPredictionDbContext _dbContext;
     private readonly ILogger<PredictionEvaluationService> _logger;
-    private readonly IEdgeDetectionService _edgeDetectionService;
 
-    public PredictionEvaluationService(
-        IPredictionRepository predictionRepository,
-        ILogger<PredictionEvaluationService> logger,
-        IEdgeDetectionService edgeDetectionService)
+    public PredictionEvaluationService(BinaryPredictionDbContext dbContext, ILogger<PredictionEvaluationService> logger)
     {
-        _predictionRepository = predictionRepository;
+        _dbContext = dbContext;
         _logger = logger;
-        _edgeDetectionService = edgeDetectionService;
     }
 
-    public async Task EvaluateMarketPredictionsAsync(Market market, string actualOutcome, CancellationToken cancellationToken)
+    public async Task EvaluateMarketPredictionsAsync(Market market, string actualOutcome, CancellationToken cancellationToken = default)
     {
-        var normalizedActualOutcome = OutcomeNormalizer.Normalize(actualOutcome);
-
-        if (normalizedActualOutcome == "Unknown")
+        if (market == null) throw new ArgumentNullException(nameof(market));
+        if (string.IsNullOrWhiteSpace(actualOutcome))
         {
-            _logger.LogWarning("Evaluation skipped for market {MarketId} because actual outcome is Unknown.", market.Id);
-            return;
-        }
-
-        var predictions = await _predictionRepository.GetUnevaluatedPredictionsByMarketIdAsync(market.Id, cancellationToken);
-
-        if (!predictions.Any())
-        {
+            _logger.LogWarning("Actual outcome is empty for market {MarketId}; skipping evaluation.", market.Id);
             return;
         }
 
         var now = DateTimeOffset.UtcNow;
+        var normalizedActual = actualOutcome?.Trim() ?? string.Empty;
+        var actualYesValue = normalizedActual.Equals("Yes", StringComparison.OrdinalIgnoreCase) ? 1m : 0m;
+
+        var predictions = await _dbContext.Predictions
+            .Where(p => p.MarketId == market.Id && p.EvaluatedAtUtc == null)
+            .ToListAsync(cancellationToken);
+
+        if (!predictions.Any())
+        {
+            _logger.LogInformation("No unevaluated predictions found for market {MarketId}.", market.Id);
+            return;
+        }
 
         foreach (var prediction in predictions)
         {
-            var normalizedPredictedOutcome = OutcomeNormalizer.Normalize(prediction.PredictedOutcome);
-
-            if (normalizedPredictedOutcome == "Unknown")
-            {
-                _logger.LogWarning("Prediction {PredictionId} has unknown outcome {Outcome}. Skipping.", prediction.Id, prediction.PredictedOutcome);
-                continue;
-            }
-            // Run edge detection after evaluation fields are set
-            await _edgeDetectionService.DetectOpportunityAsync(prediction.Id, cancellationToken);
-
-            prediction.ActualOutcome = normalizedActualOutcome;
-            prediction.WasCorrect = normalizedPredictedOutcome == normalizedActualOutcome;
-            
-            // Calculate Brier Score
-            // Assuming confidence is 50-100, convert to 0-1
-            var confidenceProbability = prediction.ConfidencePercentage / 100m;
-            
-            // For Brier Score: 
-            // If predicted "Yes" with confidence P: outcome Yes -> (P - 1)^2, outcome No -> (P - 0)^2
-            // If predicted "No" with confidence P: it's equal to predicting "Yes" with confidence (1 - P)
-            var probabilityOfYes = normalizedPredictedOutcome == "Yes" ? confidenceProbability : (1m - confidenceProbability);
-            
-            var actualYesValue = normalizedActualOutcome == "Yes" ? 1m : 0m;
-
-            prediction.BrierScore = (probabilityOfYes - actualYesValue) * (probabilityOfYes - actualYesValue);
-            prediction.EvaluatedAtUtc = now;
-
-            _logger.LogInformation("Prediction evaluated.\n\nMarket: {Question}\nPrediction: {PredictedOutcome}\nActual Outcome: {ActualOutcome}\nCorrect: {WasCorrect}\nConfidence: {ConfidencePercentage}%\nBrier Score: {BrierScore}",
-                market.Question, normalizedPredictedOutcome, normalizedActualOutcome, prediction.WasCorrect, prediction.ConfidencePercentage, prediction.BrierScore);
+            EvaluateSinglePrediction(prediction, normalizedActual, actualYesValue, now, market);
         }
 
-        await _predictionRepository.SaveChangesAsync(cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        _logger.LogInformation("Evaluated {Count} predictions for market {MarketId}.", predictions.Count, market.Id);
     }
+
+    public void EvaluateSinglePrediction(Prediction prediction, string actualOutcome, decimal actualYesValue, DateTimeOffset evaluationTime, Market market)
+    {
+        var confidenceProbability = prediction.ConfidencePercentage / 100m;
+        var predictedYesProbability = confidenceProbability >= 0.5m ? confidenceProbability : (1m - confidenceProbability);
+        var predictedOutcome = confidenceProbability >= 0.5m ? "Yes" : "No";
+        var wasCorrect = predictedOutcome.Equals(actualOutcome, StringComparison.OrdinalIgnoreCase);
+        
+        var brierScore = (predictedYesProbability - actualYesValue) * (predictedYesProbability - actualYesValue);
+        var absoluteError = Math.Abs(predictedYesProbability - actualYesValue);
+
+        prediction.BrierScore = brierScore;
+        prediction.PredictionError = absoluteError;
+        
+        var history = new PredictionResolutionHistory
+        {
+            Id = Guid.NewGuid(),
+            PredictionId = prediction.Id,
+            MarketId = prediction.MarketId,
+            ConfidencePercentage = prediction.ConfidencePercentage,
+            ActualOutcome = market.ActualOutcome,
+            WasCorrect = wasCorrect,
+            BrierScore = brierScore,
+            ResolvedAtUtc = market.ResolvedAtUtc,
+            CreatedAtUtc = DateTimeOffset.UtcNow
+        };
+        _dbContext.PredictionResolutionHistories.Add(history);
+        
+        prediction.ActualOutcome = actualOutcome;
+        prediction.WasCorrect = wasCorrect;
+        prediction.EvaluatedAtUtc = evaluationTime;
+        prediction.ResolutionSource = "PredictionEvaluationService";
+    }
+
+    // Helper to compute metrics used by evaluation and back‑fill
+    public (decimal BrierScore, decimal PredictionError, bool WasCorrect) CalculateMetrics(string actualOutcome, decimal confidencePercentage)
+    {
+        var normalizedActual = actualOutcome?.Trim() ?? string.Empty;
+        var actualYesValue = normalizedActual.Equals("Yes", StringComparison.OrdinalIgnoreCase) ? 1m : 0m;
+        var confidenceProbability = confidencePercentage / 100m;
+        var predictedYesProbability = confidenceProbability >= 0.5m ? confidenceProbability : (1m - confidenceProbability);
+        var predictedOutcome = confidenceProbability >= 0.5m ? "Yes" : "No";
+        var wasCorrect = predictedOutcome.Equals(normalizedActual, StringComparison.OrdinalIgnoreCase);
+        var brierScore = (predictedYesProbability - actualYesValue) * (predictedYesProbability - actualYesValue);
+        var predictionError = Math.Abs(predictedYesProbability - actualYesValue);
+        return (brierScore, predictionError, wasCorrect);
+    }
+
 }

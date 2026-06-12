@@ -21,6 +21,7 @@ namespace BinaryPrediction.Infrastructure.Repositories
 
         public async Task<DashboardSummaryDto> GetDashboardSummaryAsync(CancellationToken cancellationToken = default)
         {
+            var pendingEval = await _dbContext.Predictions.CountAsync(p => p.EvaluatedAtUtc == null, cancellationToken);
             var resolvedCount = await _dbContext.Predictions.CountAsync(p => p.EvaluatedAtUtc != null, cancellationToken);
             var correctCount = await _dbContext.Predictions.CountAsync(p => p.EvaluatedAtUtc != null && p.WasCorrect == true, cancellationToken);
             var accuracyPercentage = resolvedCount == 0 ? 0m : (decimal)correctCount * 100m / resolvedCount;
@@ -37,6 +38,7 @@ namespace BinaryPrediction.Infrastructure.Repositories
                 TotalAnalyses = await _dbContext.AiAnalyses.CountAsync(cancellationToken),
                 TotalPredictions = await _dbContext.Predictions.CountAsync(cancellationToken),
                 ResolvedPredictions = resolvedCount,
+                PendingEvaluationPredictions = pendingEval,
                 AccuracyPercentage = accuracyPercentage,
                 AverageBrierScore = averageBrierScore,
                 TotalOpportunities = await _dbContext.PredictionOpportunities.CountAsync(cancellationToken),
@@ -46,6 +48,7 @@ namespace BinaryPrediction.Infrastructure.Repositories
                 LastPredictionUtc = await _dbContext.Predictions.MaxAsync(p => p.CreatedAtUtc, cancellationToken)
             };
             return summary;
+
         }
 
         public async Task<(IReadOnlyList<MarketAdminDto> Items, int Total)> GetMarketsAsync(int page, int pageSize, string? status, string? search, CancellationToken cancellationToken = default)

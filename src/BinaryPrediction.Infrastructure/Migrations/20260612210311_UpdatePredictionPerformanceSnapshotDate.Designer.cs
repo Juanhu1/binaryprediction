@@ -3,6 +3,7 @@ using System;
 using BinaryPrediction.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BinaryPrediction.Infrastructure.Migrations
 {
     [DbContext(typeof(BinaryPredictionDbContext))]
-    partial class BinaryPredictionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260612210311_UpdatePredictionPerformanceSnapshotDate")]
+    partial class UpdatePredictionPerformanceSnapshotDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -62,6 +62,8 @@ public class PerformanceSnapshotService : IPerformanceSnapshotService
         var categories = await db.PredictionCategories.ToListAsync();
         foreach (var cat in categories)
         {
+            // Category snapshot date handling
+            // Use outer 'today' variable
             if (await db.CategoryPerformanceSnapshots.AnyAsync(c => c.PredictionCategoryId == cat.Id && c.SnapshotDateUtc == today))
                 continue;
 

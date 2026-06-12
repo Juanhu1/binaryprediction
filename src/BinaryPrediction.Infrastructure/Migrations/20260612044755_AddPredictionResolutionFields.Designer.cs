@@ -3,6 +3,7 @@ using System;
 using BinaryPrediction.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BinaryPrediction.Infrastructure.Migrations
 {
     [DbContext(typeof(BinaryPredictionDbContext))]
-    partial class BinaryPredictionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260612044755_AddPredictionResolutionFields")]
+    partial class AddPredictionResolutionFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -698,10 +701,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasColumnType("character varying(255)")
                         .HasColumnName("predicted_outcome");
 
-                    b.Property<decimal?>("PredictionError")
-                        .HasColumnType("numeric")
-                        .HasColumnName("prediction_error");
-
                     b.Property<string>("PromptVersionUsed")
                         .IsRequired()
                         .HasColumnType("text")
@@ -745,9 +744,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
 
                     b.HasIndex("MarketId")
                         .HasDatabaseName("ix_predictions_market_id");
-
-                    b.HasIndex("ResolvedAtUtc")
-                        .HasDatabaseName("ix_predictions_resolved_at_utc");
 
                     b.HasIndex("WasCorrect")
                         .HasDatabaseName("ix_predictions_was_correct");
@@ -981,14 +977,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("average_brier_score");
 
-                    b.Property<decimal>("AverageConfidence")
-                        .HasColumnType("numeric")
-                        .HasColumnName("average_confidence");
-
-                    b.Property<decimal>("AveragePredictionError")
-                        .HasColumnType("numeric")
-                        .HasColumnName("average_prediction_error");
-
                     b.Property<int>("CorrectPredictions")
                         .HasColumnType("integer")
                         .HasColumnName("correct_predictions");
@@ -997,12 +985,8 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at_utc");
 
-                    b.Property<int>("IncorrectPredictions")
-                        .HasColumnType("integer")
-                        .HasColumnName("incorrect_predictions");
-
                     b.Property<DateTime>("SnapshotDateUtc")
-                        .HasColumnType("date")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("snapshot_date_utc");
 
                     b.Property<int>("TotalPredictions")
@@ -1011,9 +995,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_prediction_performance_snapshots");
-
-                    b.HasIndex("CreatedAtUtc")
-                        .HasDatabaseName("ix_prediction_performance_snapshots_created_at_utc");
 
                     b.HasIndex("SnapshotDateUtc")
                         .IsUnique()
@@ -1070,51 +1051,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasDatabaseName("ix_prediction_quality_snapshots_snapshot_date_utc");
 
                     b.ToTable("prediction_quality_snapshots", (string)null);
-                });
-
-            modelBuilder.Entity("BinaryPrediction.Core.Entities.PredictionResolutionHistory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("ActualOutcome")
-                        .HasColumnType("text")
-                        .HasColumnName("actual_outcome");
-
-                    b.Property<decimal?>("BrierScore")
-                        .HasColumnType("numeric")
-                        .HasColumnName("brier_score");
-
-                    b.Property<decimal>("ConfidencePercentage")
-                        .HasColumnType("numeric")
-                        .HasColumnName("confidence_percentage");
-
-                    b.Property<DateTimeOffset>("CreatedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at_utc");
-
-                    b.Property<Guid>("MarketId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("market_id");
-
-                    b.Property<Guid>("PredictionId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("prediction_id");
-
-                    b.Property<DateTimeOffset?>("ResolvedAtUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("resolved_at_utc");
-
-                    b.Property<bool?>("WasCorrect")
-                        .HasColumnType("boolean")
-                        .HasColumnName("was_correct");
-
-                    b.HasKey("Id")
-                        .HasName("pk_prediction_resolution_histories");
-
-                    b.ToTable("prediction_resolution_histories", (string)null);
                 });
 
             modelBuilder.Entity("BinaryPrediction.Core.Entities.PromptVersion", b =>

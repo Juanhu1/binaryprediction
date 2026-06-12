@@ -9,6 +9,7 @@ public class PredictionService : IPredictionService
     private readonly IOpenAiAnalysisService _openAiService;
     private readonly IPredictionRepository _predictionRepository;
     private readonly ILogger<PredictionService> _logger;
+
 private readonly IEdgeDetectionService _edgeDetectionService;
     private readonly BinaryPrediction.Infrastructure.Persistence.BinaryPredictionDbContext _dbContext;
     private readonly BinaryPrediction.Core.Common.OpenAiSettings _openAiSettings;
@@ -24,6 +25,7 @@ private readonly IEdgeDetectionService _edgeDetectionService;
         _openAiService = openAiService;
         _predictionRepository = predictionRepository;
         _logger = logger;
+        _edgeDetectionService = edgeDetectionService;
         _dbContext = dbContext;
         _openAiSettings = openAiOptions.Value;
     }

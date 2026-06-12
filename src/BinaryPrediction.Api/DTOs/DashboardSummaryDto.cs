@@ -8,6 +8,7 @@ public class DashboardSummaryDto
     public int TotalAnalyses { get; set; }
     public int TotalPredictions { get; set; }
     public int ResolvedPredictions { get; set; }
+    public int PendingEvaluationPredictions { get; set; }
     public decimal AccuracyPercentage { get; set; }
     public decimal AverageBrierScore { get; set; }
     public int TotalOpportunities { get; set; }

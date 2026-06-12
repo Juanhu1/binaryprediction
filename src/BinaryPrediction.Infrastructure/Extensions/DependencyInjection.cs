@@ -1,22 +1,18 @@
 using BinaryPrediction.Core.Interfaces;
 using BinaryPrediction.Core.Repositories;
 using BinaryPrediction.Core.Services;
+using BinaryPrediction.Infrastructure.Services.Classification;
 using BinaryPrediction.Infrastructure.Repositories;
 using BinaryPrediction.Infrastructure.Services;
-using BinaryPrediction.Core.Repositories;
-using BinaryPrediction.Core.Services;
 using BinaryPrediction.Core.Common;
+using BinaryPrediction.Infrastructure.Persistence.Repositories;
 using BinaryPrediction.Infrastructure.External.Polymarket;
 using BinaryPrediction.Infrastructure.Persistence;
-using BinaryPrediction.Infrastructure.Repositories;
-using BinaryPrediction.Infrastructure.Services;
-using BinaryPrediction.Infrastructure.Services.Classification;
-using BinaryPrediction.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+// Duplicate using removed
 using Microsoft.Extensions.Options;
-
 namespace BinaryPrediction.Infrastructure.Extensions;
 
 public static class DependencyInjection
@@ -87,7 +83,7 @@ public static class DependencyInjection
         services.AddHttpClient<IOpenAiAnalysisService, OpenAiAnalysisService>();
         
         services.AddScoped<IPredictionRepository, PredictionRepository>();
-        services.AddScoped<IPredictionOpportunityRepository, PredictionOpportunityRepository>();
+        services.AddScoped<BinaryPrediction.Core.Interfaces.IPredictionPerformanceRepository, BinaryPrediction.Infrastructure.Persistence.Repositories.PredictionPerformanceRepository>();
             // Opportunity lifecycle
             services.AddScoped<IOpportunityLifecycleService, OpportunityLifecycleService>();
             services.AddScoped<IOpportunityStatusHistoryRepository, OpportunityStatusHistoryRepository>();
@@ -95,12 +91,16 @@ public static class DependencyInjection
         services.AddScoped<IEdgeDetectionService, EdgeDetectionService>();
         services.AddScoped<IMarketResolutionService, MarketResolutionService>();
         services.AddScoped<IPredictionEvaluationService, PredictionEvaluationService>();
+            services.AddScoped<PredictionEvaluationService>();
+        services.AddScoped<IPredictionResolutionService, PredictionResolutionService>();
+            services.AddScoped<IPredictionBackfillService, PredictionBackfillService>();
         services.AddScoped<IPredictionStatisticsService, PredictionStatisticsService>();
         services.AddScoped<IPredictionBenchmarkService, PredictionBenchmarkService>();
         services.AddScoped<IPredictionDashboardService, PredictionDashboardService>();
         services.AddScoped<IConfidenceBandService, ConfidenceBandService>();
         services.AddScoped<IMarketCategoryPerformanceService, MarketCategoryPerformanceService>();
         services.AddScoped<IPredictionQualityService, PredictionQualityService>();
+            services.AddScoped<IPredictionPerformanceService, PredictionPerformanceService>();
             services.AddScoped<IPredictionService, PredictionService>();
             // Admin Dashboard
             services.AddScoped<IAdminDashboardRepository, AdminDashboardRepository>();
@@ -108,8 +108,10 @@ public static class DependencyInjection
         services.AddScoped<IPredictionsImprovementService, PredictionsImprovementService>();
 
         // Repositories
+        services.AddScoped<IPredictionOpportunityRepository, PredictionOpportunityRepository>();
         services.AddScoped<IPredictionRepository, PredictionRepository>();
-        services.AddScoped<IPredictionPerformanceRepository, PredictionPerformanceRepository>();
+        services.AddScoped<BinaryPrediction.Core.Interfaces.IPredictionPerformanceRepository, BinaryPrediction.Infrastructure.Persistence.Repositories.PredictionPerformanceRepository>();
+        services.AddScoped<IPredictionResolutionRepository, PredictionResolutionRepository>();
 
         // System Monitoring Services
         services.AddScoped<IWorkerHeartbeatService, WorkerHeartbeatService>();

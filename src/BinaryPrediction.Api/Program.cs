@@ -3,8 +3,10 @@ using BinaryPrediction.Api.Middleware;
 using BinaryPrediction.Infrastructure.Extensions;
 using BinaryPrediction.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using BinaryPrediction.Core.Interfaces;
+using BinaryPrediction.Infrastructure.Services;
 using Serilog;
-
+using Serilog.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Serilog
@@ -18,6 +20,7 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
 // Add services to the container.
 builder.Services.AddApiServices();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddScoped<IPredictionPerformanceService, PredictionPerformanceService>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

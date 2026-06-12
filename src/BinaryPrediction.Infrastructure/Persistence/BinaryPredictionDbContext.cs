@@ -22,7 +22,8 @@ public class BinaryPredictionDbContext : DbContext
 
     public DbSet<AiUsageRecord> AiUsageRecords { get; set; } = null!;
     public DbSet<PromptVersion> PromptVersions { get; set; } = null!;
-    public DbSet<WorkerHeartbeat> WorkerHeartbeats => Set<WorkerHeartbeat>();
+    public DbSet<PredictionResolutionHistory> PredictionResolutionHistories { get; set; } = null!;
+    public DbSet<WorkerHeartbeat> WorkerHeartbeats { get; set; } = null!;
     public DbSet<SystemHealthSnapshot> SystemHealthSnapshots => Set<SystemHealthSnapshot>();
 
     public DbSet<Prediction> Predictions => Set<Prediction>();
@@ -50,6 +51,15 @@ public class BinaryPredictionDbContext : DbContext
             .HasNoKey()
             .ToView("eligible_markets_view");
 
+        // Indexes for analytics
+        modelBuilder.Entity<Prediction>()
+            .HasIndex(p => p.EvaluatedAtUtc);
+        modelBuilder.Entity<PredictionPerformanceSnapshot>()
+            .HasIndex(s => s.SnapshotDateUtc);
+        // CreatedAtUtc is part of BaseEntity; apply to each entity needing it
+        modelBuilder.Entity<Prediction>().HasIndex(p => p.CreatedAtUtc);
+        modelBuilder.Entity<PredictionPerformanceSnapshot>().HasIndex(s => s.CreatedAtUtc);
+
         // PredictionOpportunity indexes
         modelBuilder.Entity<PredictionOpportunity>(entity =>
         {
@@ -64,6 +74,11 @@ public class BinaryPredictionDbContext : DbContext
         modelBuilder.Entity<OpportunityAnalyticsSnapshot>(entity =>
         {
             entity.HasIndex(e => e.SnapshotDateUtc).IsUnique();
+            // Indexes for prediction resolution and evaluation timestamps
+            modelBuilder.Entity<Prediction>()
+                .HasIndex(p => p.ResolvedAtUtc);
+            modelBuilder.Entity<Prediction>()
+                .HasIndex(p => p.EvaluatedAtUtc);
         });
     }
 

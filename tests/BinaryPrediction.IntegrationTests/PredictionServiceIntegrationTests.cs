@@ -35,12 +35,14 @@ public class PredictionServiceIntegrationTests
         _mockOpenAiService = new Mock<IOpenAiAnalysisService>();
         
         var optionsMock = new Mock<Microsoft.Extensions.Options.IOptions<BinaryPrediction.Core.Common.OpenAiSettings>>();
+        var mockEdgeDetectionService = new Mock<IEdgeDetectionService>();
         optionsMock.Setup(x => x.Value).Returns(new BinaryPrediction.Core.Common.OpenAiSettings { Model = "test-model" });
 
         _predictionService = new PredictionService(
             _mockOpenAiService.Object,
             _predictionRepository,
             NullLogger<PredictionService>.Instance,
+            mockEdgeDetectionService.Object,
             _dbContext,
             optionsMock.Object
         );
