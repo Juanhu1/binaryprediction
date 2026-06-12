@@ -44,6 +44,12 @@ public class PredictionOpportunity
     public bool HasEdge { get; set; }
 
     public DateTimeOffset DetectedAtUtc { get; set; }
-    public DateTimeOffset CreatedAtUtc { get; set; }
-    public DateTimeOffset UpdatedAtUtc { get; set; }
+        public OpportunityStatus Status { get; set; }
+        public DateTimeOffset CreatedAtUtc { get; set; }
+        public DateTimeOffset LastStatusChangedAtUtc { get; set; }
+        public DateTimeOffset? IgnoredAtUtc { get; set; }
+        public DateTimeOffset? ExpiredAtUtc { get; set; }
+        public DateTimeOffset? ResolvedAtUtc { get; set; }
+        public ICollection<OpportunityStatusHistory> StatusHistory { get; set; } = new List<OpportunityStatusHistory>();
+
 }

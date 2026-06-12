@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BinaryPrediction.Core.Entities;
 using BinaryPrediction.Core.Interfaces;
+using BinaryPrediction.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace BinaryPrediction.Infrastructure.Repositories;
@@ -19,6 +20,12 @@ public class PredictionOpportunityRepository : IPredictionOpportunityRepository
     public PredictionOpportunityRepository(BinaryPrediction.Infrastructure.Persistence.BinaryPredictionDbContext dbContext)
     {
         _dbContext = dbContext;
+    }
+
+    public async Task<PredictionOpportunity?> GetByIdAsync(Guid opportunityId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.PredictionOpportunities
+            .FirstOrDefaultAsync(o => o.Id == opportunityId, cancellationToken);
     }
 
     public async Task<PredictionOpportunity?> GetByPredictionIdAsync(Guid predictionId, CancellationToken cancellationToken = default)
@@ -57,4 +64,11 @@ public class PredictionOpportunityRepository : IPredictionOpportunityRepository
     {
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
-}
+    public async Task<IReadOnlyList<PredictionOpportunity>> GetByStatusAsync(OpportunityStatus status, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.PredictionOpportunities
+            .Where(o => o.Status == status)
+            .OrderByDescending(o => o.ProbabilityGap)
+            .ToListAsync(cancellationToken);
+    }
+    }

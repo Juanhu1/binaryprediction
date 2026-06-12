@@ -3,6 +3,7 @@ using System;
 using BinaryPrediction.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BinaryPrediction.Infrastructure.Migrations
 {
     [DbContext(typeof(BinaryPredictionDbContext))]
-    partial class BinaryPredictionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260611205659_AddOpportunityLifecycle")]
+    partial class AddOpportunityLifecycle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -565,43 +568,6 @@ namespace BinaryPrediction.Infrastructure.Migrations
                         .HasDatabaseName("ix_opportunity_analytics_snapshots_snapshot_date_utc");
 
                     b.ToTable("opportunity_analytics_snapshots", (string)null);
-                });
-
-            modelBuilder.Entity("BinaryPrediction.Core.Entities.OpportunityLifecycleSnapshot", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<int>("ActiveCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("active_count");
-
-                    b.Property<int>("ExpiredCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("expired_count");
-
-                    b.Property<int>("IgnoredCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("ignored_count");
-
-                    b.Property<int>("OpenCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("open_count");
-
-                    b.Property<int>("ResolvedCount")
-                        .HasColumnType("integer")
-                        .HasColumnName("resolved_count");
-
-                    b.Property<DateTimeOffset>("SnapshotDateUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("snapshot_date_utc");
-
-                    b.HasKey("Id")
-                        .HasName("pk_opportunity_lifecycle_snapshots");
-
-                    b.ToTable("opportunity_lifecycle_snapshots", (string)null);
                 });
 
             modelBuilder.Entity("BinaryPrediction.Core.Entities.OpportunityStatusHistory", b =>

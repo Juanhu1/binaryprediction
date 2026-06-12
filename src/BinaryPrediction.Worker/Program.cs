@@ -26,6 +26,7 @@ builder.Services.AddHostedService<PredictionEvaluationWorker>();
 builder.Services.AddHostedService<PredictionQualityWorker>();
 builder.Services.AddHostedService<SystemHealthWorker>();
 builder.Services.AddHostedService<PredictionAnalyticsWorker>();
+builder.Services.AddHostedService<OpportunityLifecycleWorker>();
 
 var host = builder.Build();
 

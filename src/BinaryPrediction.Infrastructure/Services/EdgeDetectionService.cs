@@ -74,7 +74,8 @@ public class EdgeDetectionService : IEdgeDetectionService
                 HasEdge = hasEdge,
                 DetectedAtUtc = DateTimeOffset.UtcNow,
                 CreatedAtUtc = DateTimeOffset.UtcNow,
-                UpdatedAtUtc = DateTimeOffset.UtcNow
+                Status = OpportunityStatus.Open,
+                LastStatusChangedAtUtc = DateTimeOffset.UtcNow
             };
             _logger.LogInformation("EDGE TEST: Creating opportunity record");
             _logger.LogInformation("Creating opportunity for prediction {PredictionId}", predictionId);
@@ -91,7 +92,7 @@ public class EdgeDetectionService : IEdgeDetectionService
             existing.GapDirection = direction;
             existing.HasEdge = hasEdge;
             existing.DetectedAtUtc = DateTimeOffset.UtcNow;
-            existing.UpdatedAtUtc = DateTimeOffset.UtcNow;
+            existing.LastStatusChangedAtUtc = DateTimeOffset.UtcNow;
             await _opportunityRepository.SaveChangesAsync(cancellationToken);
             _logger.LogInformation("Edge detection: Updated opportunity for prediction {PredictionId} (Gap={Gap}, Edge={HasEdge}, Direction={Direction}).", predictionId, gap, hasEdge, direction);
         }

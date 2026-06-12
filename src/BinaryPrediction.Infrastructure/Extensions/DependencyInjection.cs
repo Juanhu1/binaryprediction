@@ -88,6 +88,10 @@ public static class DependencyInjection
         
         services.AddScoped<IPredictionRepository, PredictionRepository>();
         services.AddScoped<IPredictionOpportunityRepository, PredictionOpportunityRepository>();
+            // Opportunity lifecycle
+            services.AddScoped<IOpportunityLifecycleService, OpportunityLifecycleService>();
+            services.AddScoped<IOpportunityStatusHistoryRepository, OpportunityStatusHistoryRepository>();
+            services.AddScoped<IOpportunityLifecycleSnapshotRepository, OpportunityLifecycleSnapshotRepository>();
         services.AddScoped<IEdgeDetectionService, EdgeDetectionService>();
         services.AddScoped<IMarketResolutionService, MarketResolutionService>();
         services.AddScoped<IPredictionEvaluationService, PredictionEvaluationService>();

@@ -38,6 +38,7 @@ public class BinaryPredictionDbContext : DbContext
     public DbSet<CalibrationTrendSnapshot> CalibrationTrendSnapshots => Set<CalibrationTrendSnapshot>();
     public DbSet<PredictionOpportunity> PredictionOpportunities => Set<PredictionOpportunity>();
     public DbSet<OpportunityAnalyticsSnapshot> OpportunityAnalyticsSnapshots => Set<OpportunityAnalyticsSnapshot>();
+        public DbSet<OpportunityLifecycleSnapshot> OpportunityLifecycleSnapshots => Set<OpportunityLifecycleSnapshot>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
