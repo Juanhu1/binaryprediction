@@ -113,11 +113,64 @@
             margin-top: 10px;
             word-break: break-all;
         }
+
+        /* Navigation Header Styles */
+        header {
+            background-color: var(--panel-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--text-color);
+            font-weight: 600;
+            text-align: left;
+        }
+        nav {
+            display: flex;
+            gap: 10px;
+        }
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        nav a:hover {
+            color: var(--text-color);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        nav a.active {
+            color: var(--text-color);
+            background-color: var(--accent);
+        }
     </style>
 </head>
 <body>
-
+<header>
     <h1>Operations Dashboard</h1>
+    <nav>
+        <a href="index.html" class="active">Operations</a>
+        <a href="dashboard.html">Overview</a>
+        <a href="markets.html">Markets</a>
+        <a href="predictions.html">Predictions</a>
+        <a href="opportunities.html">Opportunities</a>
+        <a href="analytics.html">Analytics</a>
+        <a href="system.html">System</a>
+    </nav>
+</header>
 
     <div class="dashboard-grid">
         

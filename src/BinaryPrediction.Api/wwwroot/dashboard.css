@@ -1,0 +1,225 @@
+/* dashboard.css - premium dark theme with glassmorphism */
+
+:root {
+  --bg-color: #0d0d0d;
+  --primary-color: hsl(210, 70%, 55%);
+  --card-bg: rgba(255, 255, 255, 0.08);
+  --card-blur: 12px;
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --accent-gradient: linear-gradient(135deg, #1e90ff, #ff69b4);
+}
+
+body {
+  margin: 0;
+  font-family: 'Outfit', system-ui, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: var(--primary-color);
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* center both logo and nav */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+header h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.8rem;
+  margin-right: 2rem;
+}
+
+nav {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+nav a:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+nav a.active {
+  background: rgba(255,255,255,0.25);
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  padding: 2rem;
+}
+
+/* Card grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(var(--card-blur));
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+}
+
+.card h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
+
+.card p {
+  margin: 0.5rem 0 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Table styles */
+.table-wrapper {
+  overflow-x: auto;
+  background: var(--card-bg);
+  backdrop-filter: blur(var(--card-blur));
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+th, td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+th {
+  background: var(--primary-color);
+  color: #fff;
+  cursor: pointer;
+}
+
+td {
+  color: var(--text-secondary);
+}
+
+tr:hover td {
+  background: rgba(255,255,255,0.03);
+}
+
+.pagination {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.pagination button {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #1a73e8;
+}
+
+/* Modal for details */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.modal.open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  backdrop-filter: blur(var(--card-blur));
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: var(--primary-color);
+}
+
+.modal-header button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Row highlighting for predictions */
+tr.correct td { background: rgba(0, 200, 0, 0.1); }
+tr.incorrect td { background: rgba(200, 0, 0, 0.1); }
+tr.pending td { background: rgba(255, 255, 255, 0.05); }
+/* Media query for mobile responsive design */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  nav {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+}

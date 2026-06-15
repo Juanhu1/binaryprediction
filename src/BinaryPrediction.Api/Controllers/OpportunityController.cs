@@ -35,13 +35,19 @@ public class OpportunityController : ControllerBase
     public async Task<ActionResult<IReadOnlyList<OpportunityDto>>> Get(CancellationToken cancellationToken)
     {
         var opportunities = await _repo.GetActiveAsync(cancellationToken);
-        var dtos = opportunities.Select(o => new OpportunityDto
+        var dtos = opportunities.Select(o =>
+        new OpportunityDto
         {
+            Id = o.Id,
             PredictionId = o.PredictionId,
             MarketId = o.MarketId,
+            Question = o.Market?.Question ?? string.Empty,
+            Category = o.Market?.Category.ToString() ?? string.Empty,
+            MarketSlug = o.Market?.Slug ?? string.Empty,
             AiProbability = o.AiProbability,
-            MarketProbability = o.MarketProbability,
+            MarketProbability = o.Market?.Probability ?? 0m,
             ProbabilityGap = o.ProbabilityGap,
+            Direction = o.GapDirection.ToString(),
             HasEdge = o.HasEdge,
             DetectedAtUtc = o.DetectedAtUtc
         }).ToList();

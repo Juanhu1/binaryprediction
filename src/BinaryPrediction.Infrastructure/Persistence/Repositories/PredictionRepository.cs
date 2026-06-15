@@ -95,6 +95,7 @@ public class PredictionRepository : IPredictionRepository
     public async Task<Prediction?> GetByIdAsync(Guid predictionId, CancellationToken cancellationToken = default)
     {
         return await _dbContext.Predictions
+            .Include(p => p.Market)
             .FirstOrDefaultAsync(p => p.Id == predictionId, cancellationToken);
     }
 }

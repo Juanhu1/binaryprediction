@@ -47,13 +47,18 @@ public class EdgeDetectionService : IEdgeDetectionService
             return;
         }
 
-        var aiProb = prediction.ConfidencePercentage;
+        var aiProb = prediction.PredictedOutcome.Equals("Yes", StringComparison.OrdinalIgnoreCase)
+            ? prediction.ConfidencePercentage
+            : 100m - prediction.ConfidencePercentage;
         var marketProb = prediction.Market?.Probability ?? 0;
-        _logger.LogInformation("EDGE TEST: Market loaded. Probability={Probability}", marketProb);
-        var gap = Math.Abs(aiProb - marketProb);
+        var marketProbPct = marketProb * 100m;
+        // Persist AI probability on the Prediction entity for admin UI
+        prediction.AiProbability = aiProb;
+        _logger.LogInformation("EDGE TEST: Market loaded. Probability={Probability} (pct={Pct})", marketProb, marketProbPct);
+        var gap = Math.Abs(aiProb - marketProbPct);
         _logger.LogInformation("EDGE TEST: Gap={Gap}, Threshold={Threshold}", gap, _options.GapThresholdPercentage);
-        var direction = aiProb > marketProb ? GapDirection.AIHigher : GapDirection.AILower;
-        _logger.LogInformation("AI={AiProbability} Market={MarketProbability} Gap={Gap} Threshold={Threshold}", aiProb, marketProb, gap, _options.GapThresholdPercentage);
+        var direction = aiProb > marketProbPct ? GapDirection.AIHigher : GapDirection.AILower;
+        _logger.LogInformation("AI={AiProbability} Market={MarketProbabilityPct} Gap={Gap} Threshold={Threshold}", aiProb, marketProbPct, gap, _options.GapThresholdPercentage);
         var hasEdge = gap >= _options.GapThresholdPercentage;
         if (!hasEdge)
         {
@@ -68,7 +73,7 @@ public class EdgeDetectionService : IEdgeDetectionService
                 PredictionId = predictionId,
                 MarketId = prediction.MarketId,
                 AiProbability = aiProb,
-                MarketProbability = marketProb,
+                MarketProbability = marketProbPct,
                 ProbabilityGap = gap,
                 GapDirection = direction,
                 HasEdge = hasEdge,
@@ -87,7 +92,7 @@ public class EdgeDetectionService : IEdgeDetectionService
         else
         {
             existing.AiProbability = aiProb;
-            existing.MarketProbability = marketProb;
+            existing.MarketProbability = marketProbPct;
             existing.ProbabilityGap = gap;
             existing.GapDirection = direction;
             existing.HasEdge = hasEdge;

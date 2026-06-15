@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Markets - Binary Prediction</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script defer src="markets.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Markets</h1>
+        <nav>
+            <a href="index.html">Operations</a>
+            <a href="dashboard.html">Overview</a>
+            <a href="markets.html" class="active">Markets</a>
+            <a href="predictions.html">Predictions</a>
+            <a href="opportunities.html">Opportunities</a>
+            <a href="analytics.html">Analytics</a>
+            <a href="system.html">System</a>
+        </nav>
+    </header>
+    <main>
+        <section class="panel">
+            <h2>Markets</h2>
+            <div class="filter-bar" style="margin-bottom:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                <input type="text" id="search-input" placeholder="Search questions..." style="padding:0.4rem; flex:1; min-width:200px;">
+                <select id="category-filter" style="padding:0.4rem;">
+                    <option value="">All Categories</option>
+                </select>
+                <select id="status-filter" style="padding:0.4rem;">
+                    <option value="">All Statuses</option>
+                    <option value="Open">Open</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+                <button id="apply-filters" style="padding:0.4rem 0.8rem;">Apply</button>
+            </div>
+            <div class="table-wrapper">
+                <table id="markets-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="question">Question</th>
+                            <th data-sort="category">Category</th>
+                            <th data-sort="source">Source</th>
+                            <th data-sort="createddate">Created Date</th>
+                            <th data-sort="enddate">End Date</th>
+                            <th data-sort="resolutiondate">Resolved Date</th>
+                            <th data-sort="status">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="markets-body">
+                        <tr><td colspan="7">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination" id="pagination"></div>
+        </section>
+    </main>
+</body>
+</html>

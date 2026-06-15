@@ -14,6 +14,7 @@ public static class DependencyInjection
         services.Configure<OpenAiSettings>(configuration.GetSection("OpenAiSettings"));
         services.Configure<AnalysisSettings>(configuration.GetSection("AnalysisSettings"));
         services.AddScoped<IPerformanceSnapshotService, PerformanceSnapshotService>();
+        services.AddScoped<BinaryPrediction.Core.Interfaces.IPredictionResolutionService, BinaryPrediction.Infrastructure.Services.PredictionResolutionService>();
         services.AddHostedService<DailyAnalyticsWorker>();
         return services;
     }

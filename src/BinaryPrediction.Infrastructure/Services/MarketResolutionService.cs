@@ -34,14 +34,21 @@ public class MarketResolutionService : IMarketResolutionService
         
         // Find markets that have unevaluated predictions, and are potentially resolved
         var candidateMarkets = await _dbContext.Markets
-            .Where(m => (m.Closed || m.EndDate <= now) && 
-                        _dbContext.Predictions.Any(p => p.MarketId == m.Id && p.EvaluatedAtUtc == null))
+            .Where(m => (m.Closed || m.EndDate <= now) && _dbContext.Predictions.Any(p => p.MarketId == m.Id && p.EvaluatedAtUtc == null))
             .ToListAsync(cancellationToken);
 
         var resolvedMarkets = new List<Market>();
 
         foreach (var market in candidateMarkets)
         {
+            // Prevent premature resolution
+            if (market.EndDate.HasValue && market.EndDate.Value > now)
+            {
+                _logger.LogWarning("Market resolution blocked because end date has not been reached. MarketId={MarketId}, Question={Question}, EndDate={EndDate}, CurrentUtc={CurrentUtc}",
+                    market.Id, market.Question, market.EndDate, now);
+                continue;
+            }
+
             if (_settings.UseMockAnalysis)
             {
                 resolvedMarkets.Add(market);

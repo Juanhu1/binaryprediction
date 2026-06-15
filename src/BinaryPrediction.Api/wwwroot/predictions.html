@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Predictions - Binary Prediction</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="predictions.css">
+    <script defer src="predictions.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Predictions</h1>
+        <nav>
+            <a href="index.html">Operations</a>
+            <a href="dashboard.html">Overview</a>
+            <a href="markets.html">Markets</a>
+            <a href="predictions.html" class="active">Predictions</a>
+            <a href="opportunities.html">Opportunities</a>
+            <a href="analytics.html">Analytics</a>
+            <a href="system.html">System</a>
+        </nav>
+    </header>
+    <main>
+        <section class="panel">
+            <h2>Predictions</h2>
+            <div class="filter-bar" style="margin-bottom:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                <input type="text" id="search-input" placeholder="Search questions..." style="padding:0.4rem; flex:1; min-width:200px;">
+                <select id="category-filter" style="padding:0.4rem;">
+                    <option value="">All Categories</option>
+                </select>
+                <label style="display:flex; align-items:center; gap:0.3rem;">
+                    <input type="checkbox" id="pending-only"/> Pending
+                </label>
+                <label style="display:flex; align-items:center; gap:0.3rem;">
+                    <input type="checkbox" id="evaluated-only"/> Evaluated
+                </label>
+                <button id="apply-filters" style="padding:0.4rem 0.8rem;">Apply</button>
+            </div>
+            <div class="table-wrapper">
+                <table id="predictions-table">
+                    <thead>
+                        <tr>
+                            <th data-sort="question">Question</th>
+                            <th data-sort="category">Category</th>
+                            <th data-sort="predictedoutcome">Predicted Outcome</th>
+                            <th data-sort="confidence">Confidence %</th>
+                            <th data-sort="createddate">Created Date</th>
+                            <th data-sort="evaluateddate">Evaluated Date</th>
+                            <th data-sort="outcome">Outcome</th>
+                            <th data-sort="predictionerror">Prediction Error</th>
+                        </tr>
+                    </thead>
+                    <tbody id="predictions-body">
+                        <tr><td colspan="8">Loading...</td></tr>
+                    </tbody>
+                </table>
+            <div id="prediction-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="modal-close">&times;</span>
+                <h2>Prediction Details</h2>
+                <div id="modal-body">
+                    <!-- Details will be injected here -->
+                </div>
+            </div>
+        </div>
+            <div class="pagination" id="pagination"></div>
+        </section>
+    </main>
+</body>
+</html>

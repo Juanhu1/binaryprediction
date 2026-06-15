@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using BinaryPrediction.Core.Entities;
 using BinaryPrediction.Core.Interfaces;
 using BinaryPrediction.Core.Enums;
-using Microsoft.EntityFrameworkCore;
 
 namespace BinaryPrediction.Infrastructure.Repositories;
 
@@ -37,6 +37,7 @@ public class PredictionOpportunityRepository : IPredictionOpportunityRepository
     public async Task<IReadOnlyList<PredictionOpportunity>> GetActiveAsync(CancellationToken cancellationToken = default)
     {
         return await _dbContext.PredictionOpportunities
+            .Include(o => o.Market)
             .Where(o => o.HasEdge)
             .OrderByDescending(o => o.ProbabilityGap)
             .ToListAsync(cancellationToken);
@@ -45,6 +46,7 @@ public class PredictionOpportunityRepository : IPredictionOpportunityRepository
     public async Task<IReadOnlyList<PredictionOpportunity>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await _dbContext.PredictionOpportunities
+            .Include(o => o.Market)
             .OrderByDescending(o => o.ProbabilityGap)
             .ToListAsync(cancellationToken);
     }
@@ -54,19 +56,27 @@ public class PredictionOpportunityRepository : IPredictionOpportunityRepository
         await _dbContext.PredictionOpportunities.AddAsync(opportunity, cancellationToken);
     }
 
-    public Task UpdateAsync(PredictionOpportunity opportunity, CancellationToken cancellationToken = default)
+    public async Task DeleteAllAsync(CancellationToken cancellationToken = default)
+    {
+        _dbContext.PredictionOpportunities.RemoveRange(_dbContext.PredictionOpportunities);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task UpdateAsync(PredictionOpportunity opportunity, CancellationToken cancellationToken = default)
     {
         _dbContext.PredictionOpportunities.Update(opportunity);
-        return Task.CompletedTask;
+        await Task.CompletedTask;
     }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
+
     public async Task<IReadOnlyList<PredictionOpportunity>> GetByStatusAsync(OpportunityStatus status, CancellationToken cancellationToken = default)
     {
         return await _dbContext.PredictionOpportunities
+            .Include(o => o.Market)
             .Where(o => o.Status == status)
             .OrderByDescending(o => o.ProbabilityGap)
             .ToListAsync(cancellationToken);

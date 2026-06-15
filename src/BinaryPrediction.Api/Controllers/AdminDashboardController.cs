@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BinaryPrediction.Core.DTOs;
 using BinaryPrediction.Core.Services;
 using BinaryPrediction.Core.Interfaces;
+using BinaryPrediction.Infrastructure.Interfaces;
 
 namespace BinaryPrediction.Api.Controllers
 {
@@ -13,12 +15,18 @@ namespace BinaryPrediction.Api.Controllers
     public class AdminDashboardController : ControllerBase
     {
         private readonly IAdminDashboardService _adminService;
+        private readonly IDataRepairService _repairService;
         private readonly ISystemHealthService _systemHealthService;
+        private readonly IPerformanceSnapshotService _performanceSnapshotService;
 
-        public AdminDashboardController(IAdminDashboardService adminService, ISystemHealthService systemHealthService)
+        private readonly IMarketSynchronizationService _marketSyncService;
+        public AdminDashboardController(IAdminDashboardService adminService, ISystemHealthService systemHealthService, IDataRepairService repairService, IPerformanceSnapshotService performanceSnapshotService, IMarketSynchronizationService marketSyncService)
         {
             _adminService = adminService;
             _systemHealthService = systemHealthService;
+            _repairService = repairService;
+            _performanceSnapshotService = performanceSnapshotService;
+            _marketSyncService = marketSyncService;
         }
 
         // GET api/v1/admin/dashboard
@@ -71,6 +79,35 @@ namespace BinaryPrediction.Api.Controllers
         {
             var result = await _adminService.GetQueueStatisticsAsync();
             return Ok(result);
+        }
+
+        // POST api/admin/repair-opportunities
+        [HttpPost("repair-opportunities")]
+        public async Task<ActionResult> RepairOpportunities()
+        {
+            await _repairService.RecomputeAllOpportunitiesAsync();
+            return Ok(new { Message = "Opportunities repair completed." });
+        }
+
+        // POST api/admin/repair-data
+        
+        
+
+        // POST api/admin/synchronize-markets
+        [HttpPost("synchronize-markets")]
+        public async Task<ActionResult> SynchronizeMarkets()
+        {
+            await _marketSyncService.SynchronizeActiveMarketsAsync();
+            return Ok(new { Message = "Market synchronization completed successfully." });
+        }
+
+        // POST api/admin/rebuild-snapshots
+        [AllowAnonymous]
+        [HttpPost("rebuild-snapshots")]
+        public async Task<ActionResult> RebuildSnapshots()
+        {
+            await _performanceSnapshotService.RebuildAllSnapshotsAsync();
+            return Ok(new { Message = "Analytics snapshots rebuilt successfully." });
         }
     }
 }

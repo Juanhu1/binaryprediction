@@ -1,0 +1,17 @@
+.correct {
+  background-color: rgba(0, 200, 0, 0.15);
+}
+
+.incorrect {
+  background-color: rgba(200, 0, 0, 0.15);
+}
+
+.pending {
+  background-color: transparent;
+}
+
+/* Table styling enhancements */
+#predictions-table th {
+  cursor: pointer;
+  user-select: none;
+}

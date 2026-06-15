@@ -4,6 +4,7 @@ using BinaryPrediction.Infrastructure.Extensions;
 using BinaryPrediction.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using BinaryPrediction.Core.Interfaces;
+using BinaryPrediction.Infrastructure.Interfaces;
 using BinaryPrediction.Infrastructure.Services;
 using Serilog;
 using Serilog.AspNetCore;
@@ -20,6 +21,10 @@ builder.Host.UseSerilog((context, services, configuration) => configuration
 // Add services to the container.
 builder.Services.AddApiServices();
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddSwaggerGen(c =>
+{
+    c.CustomSchemaIds(type => type.FullName);
+});
 builder.Services.AddScoped<IPredictionPerformanceService, PredictionPerformanceService>();
 var app = builder.Build();
 
@@ -27,6 +32,10 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<BinaryPredictionDbContext>();
     dbContext.Database.Migrate();
+
+    // Run market integrity check at startup
+    var integrityChecker = scope.ServiceProvider.GetRequiredService<IMarketIntegrityChecker>();
+    var invalidMarkets = await integrityChecker.GetInvalidMarketsAsync();
 }
 
 // Configure the HTTP request pipeline.
@@ -51,3 +60,4 @@ app.MapControllers();
 app.MapHealthChecks("/health");
 
 app.Run();
+

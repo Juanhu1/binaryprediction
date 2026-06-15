@@ -130,6 +130,9 @@ public class MarketSynchronizationService : IMarketSynchronizationService
             _logger.LogInformation("Market evaluated: category={Category} score={Score} eligible={Eligible} reason={Reason}", 
                 market.Category, market.QualityScore, market.EligibleForAnalysis, market.RejectionReason);
 
+            // Ensure market probability is set before persisting changes
+            market.Probability = probability;
+
             if (existingMarket is null)
             {
                 await _marketRepository.AddAsync(market, cancellationToken);
@@ -139,12 +142,22 @@ public class MarketSynchronizationService : IMarketSynchronizationService
                 await _marketRepository.UpdateAsync(market, cancellationToken);
             }
 
+            // Update market probability with the latest snapshot value (redundant after above assignment)
+            // market.Probability = probability;
+
+            // Propagate updated market probability to any existing opportunities
+            var opps = _dbContext.PredictionOpportunities.Where(o => o.MarketId == market.Id);
+            await opps.ForEachAsync(o => o.MarketProbability = probability, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            // Insert snapshot (already below)
             await _snapshotRepository.AddAsync(new MarketSnapshot
             {
                 MarketId = market.Id,
                 Probability = probability,
                 Liquidity = market.Liquidity
             }, cancellationToken);
+
 
             synchronizedCount++;
         }

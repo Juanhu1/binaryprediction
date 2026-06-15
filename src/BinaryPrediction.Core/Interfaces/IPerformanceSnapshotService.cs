@@ -7,5 +7,9 @@ namespace BinaryPrediction.Core.Interfaces
         Task GenerateDailySnapshotAsync();
         Task GenerateCategorySnapshotsAsync();
         Task GenerateCalibrationSnapshotsAsync();
+        /// <summary>
+        /// Deletes all analytics snapshots and rebuilds them from the current predictions data.
+        /// </summary>
+        Task RebuildAllSnapshotsAsync();
     }
 }
