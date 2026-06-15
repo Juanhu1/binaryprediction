@@ -67,10 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     <td>${question}</td>
                     <td>${category}</td>
                     <td>${formatPercent(marketProb)}</td>
-                    <td>${formattedEndDate}</td>
                     <td>${formatPercent(aiProb)}</td>
                     <td>${formatPercent(gap)}</td>
-                    <td>${direction}</td>
+                    <td>${formattedEndDate}</td>
                     <td><a href="${url}" target="_blank">Open</a></td>
                     <td>${detected}</td>
                 </tr>`;

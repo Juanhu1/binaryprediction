@@ -21,4 +21,5 @@ public class OpportunityDto
     public bool HasEdge { get; set; }
     public DateTimeOffset DetectedAtUtc { get; set; }
     public string PolymarketUrl { get; set; } = string.Empty;
+    public DateTimeOffset? EndDate { get; set; }
 }

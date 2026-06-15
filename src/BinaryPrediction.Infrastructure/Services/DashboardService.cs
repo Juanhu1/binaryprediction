@@ -216,7 +216,8 @@ public class DashboardService : IDashboardService
                 Direction = o.GapDirection.ToString(),
                 HasEdge = o.HasEdge,
                 DetectedAtUtc = o.DetectedAtUtc,
-                PolymarketUrl = o.Market != null ? $"https://polymarket.com/market/{o.Market.Slug}" : string.Empty
+                PolymarketUrl = o.Market != null ? $"https://polymarket.com/market/{o.Market.Slug}" : string.Empty,
+                EndDate = o.Market != null ? o.Market.EndDate : null
             })
             .ToListAsync(ct);
 

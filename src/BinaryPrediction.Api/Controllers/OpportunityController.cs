@@ -49,7 +49,8 @@ public class OpportunityController : ControllerBase
             ProbabilityGap = o.ProbabilityGap,
             Direction = o.GapDirection.ToString(),
             HasEdge = o.HasEdge,
-            DetectedAtUtc = o.DetectedAtUtc
+            DetectedAtUtc = o.DetectedAtUtc,
+            EndDate = o.Market?.EndDate
         }).ToList();
         return Ok(dtos);
     }
