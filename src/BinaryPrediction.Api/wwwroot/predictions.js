@@ -97,10 +97,33 @@
 
   const renderPagination = (total) => {
     const totalPages = Math.ceil(total / pageSize);
+    if (totalPages <= 1) {
+      pagination.innerHTML = '';
+      return;
+    }
     let html = '';
-    for (let i = 1; i <= totalPages; i++) {
+    
+    // Always show first page
+    html += `<button ${1 === currentPage ? 'disabled' : ''} data-page="1">1</button>`;
+    
+    let start = Math.max(2, currentPage - 2);
+    let end = Math.min(totalPages - 1, currentPage + 2);
+    
+    if (start > 2) {
+      html += `<span style="align-self: center; padding: 0 0.2rem; opacity: 0.5;">...</span>`;
+    }
+    
+    for (let i = start; i <= end; i++) {
       html += `<button ${i === currentPage ? 'disabled' : ''} data-page="${i}">${i}</button>`;
     }
+    
+    if (end < totalPages - 1) {
+      html += `<span style="align-self: center; padding: 0 0.2rem; opacity: 0.5;">...</span>`;
+    }
+    
+    // Always show last page
+    html += `<button ${totalPages === currentPage ? 'disabled' : ''} data-page="${totalPages}">${totalPages}</button>`;
+    
     pagination.innerHTML = html;
     pagination.querySelectorAll('button').forEach(b => {
       b.addEventListener('click', () => {
