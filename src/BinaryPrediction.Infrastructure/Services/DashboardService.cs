@@ -179,44 +179,48 @@ public class DashboardService : IDashboardService
 
     public async Task<OpportunityQueryResult> GetOpportunitiesAsync(DashboardOpportunityQuery query, CancellationToken ct = default)
     {
-        // 1. Calculate status counts across all opportunities in the database
-        var statusCounts = await _dbContext.PredictionOpportunities.AsNoTracking()
+        // 1. Select the latest opportunity ID per market (overall)
+        var overallLatestIdsQuery = _dbContext.PredictionOpportunities.AsNoTracking()
+            .GroupBy(o => o.MarketId)
+            .Select(g => g.OrderByDescending(o => o.DetectedAtUtc).Select(o => o.Id).FirstOrDefault());
+
+        // 2. Calculate status counts across ONLY the latest opportunity per market
+        var latestStatusCounts = await _dbContext.PredictionOpportunities.AsNoTracking()
+            .Where(o => overallLatestIdsQuery.Contains(o.Id))
             .GroupBy(o => o.Status)
             .Select(g => new { Status = g.Key, Count = g.Count() })
             .ToListAsync(ct);
 
-        var openCount = statusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Open)?.Count ?? 0;
-        var activeCount = statusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Active)?.Count ?? 0;
-        var expiredCount = statusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Expired)?.Count ?? 0;
-        var ignoredCount = statusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Ignored)?.Count ?? 0;
-        var resolvedCount = statusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Resolved)?.Count ?? 0;
+        var openCount = latestStatusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Open)?.Count ?? 0;
+        var activeCount = latestStatusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Active)?.Count ?? 0;
+        var expiredCount = latestStatusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Expired)?.Count ?? 0;
+        var ignoredCount = latestStatusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Ignored)?.Count ?? 0;
+        var resolvedCount = latestStatusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Resolved)?.Count ?? 0;
 
-        // 2. Base query representing opportunities matching the status filter
-        IQueryable<PredictionOpportunity> baseQuery = _dbContext.PredictionOpportunities.AsNoTracking();
+        // 3. Calculate summary metrics
+        var totalOpportunityRecords = await _dbContext.PredictionOpportunities.CountAsync(ct);
+        var uniqueMarketsWithOpportunities = await _dbContext.PredictionOpportunities.Select(o => o.MarketId).Distinct().CountAsync(ct);
+        var currentActiveOpportunities = openCount + activeCount;
 
+        // 4. Base query: select only those overall latest opportunities
+        var q = _dbContext.PredictionOpportunities.AsNoTracking()
+            .Include(o => o.Market)
+            .Where(o => overallLatestIdsQuery.Contains(o.Id))
+            .AsQueryable();
+
+        // 5. Apply status filter on the latest opportunities
         if (!string.IsNullOrWhiteSpace(query.Status))
         {
             if (Enum.TryParse<OpportunityStatus>(query.Status, true, out var statusEnum))
             {
-                baseQuery = baseQuery.Where(o => o.Status == statusEnum);
+                q = q.Where(o => o.Status == statusEnum);
             }
         }
         else
         {
-            // By default (All Statuses), show only active ones (Open or Active)
-            baseQuery = baseQuery.Where(o => o.Status == OpportunityStatus.Open || o.Status == OpportunityStatus.Active);
+            // By default (All Active / Empty Status), show only active ones (Open or Active)
+            q = q.Where(o => o.Status == OpportunityStatus.Open || o.Status == OpportunityStatus.Active);
         }
-
-        // 3. Select only the latest opportunity ID per market from matching items
-        var latestIdsQuery = baseQuery
-            .GroupBy(o => o.MarketId)
-            .Select(g => g.OrderByDescending(o => o.DetectedAtUtc).Select(o => o.Id).FirstOrDefault());
-
-        // 4. Query the full DTOs for the latest opportunity IDs
-        var q = _dbContext.PredictionOpportunities.AsNoTracking()
-            .Include(o => o.Market)
-            .Where(o => latestIdsQuery.Contains(o.Id))
-            .AsQueryable();
 
         if (query.MinGap.HasValue)
             q = q.Where(o => o.ProbabilityGap >= query.MinGap.Value);
@@ -228,9 +232,11 @@ public class DashboardService : IDashboardService
         // Sorting
         q = (query.SortBy?.ToLower()) switch
         {
-            "gappercentage" => query.SortDesc ? q.OrderByDescending(o => o.ProbabilityGap) : q.OrderBy(o => o.ProbabilityGap),
+            "gap" or "gappercentage" => query.SortDesc ? q.OrderByDescending(o => o.ProbabilityGap) : q.OrderBy(o => o.ProbabilityGap),
+            "confidence" => query.SortDesc ? q.OrderByDescending(o => o.ConfidencePercentage) : q.OrderBy(o => o.ConfidencePercentage),
+            "edgescore" => query.SortDesc ? q.OrderByDescending(o => o.EdgeScore) : q.OrderBy(o => o.EdgeScore),
             "detecteddt" => query.SortDesc ? q.OrderByDescending(o => o.DetectedAtUtc) : q.OrderBy(o => o.DetectedAtUtc),
-            _ => q.OrderBy(o => o.Id)
+            _ => q.OrderByDescending(o => o.EdgeScore)
         };
 
         var total = await q.CountAsync(ct);
@@ -249,6 +255,8 @@ public class DashboardService : IDashboardService
                 ProbabilityGap = o.ProbabilityGap,
                 Direction = o.GapDirection.ToString(),
                 HasEdge = o.HasEdge,
+                ConfidencePercentage = o.ConfidencePercentage,
+                EdgeScore = o.EdgeScore,
                 DetectedAtUtc = o.DetectedAtUtc,
                 PolymarketUrl = o.Market != null ? $"https://polymarket.com/market/{o.Market.Slug}" : string.Empty,
                 EndDate = o.Market != null ? o.Market.EndDate : null
@@ -265,7 +273,10 @@ public class DashboardService : IDashboardService
             ActiveCount = activeCount,
             ExpiredCount = expiredCount,
             IgnoredCount = ignoredCount,
-            ResolvedCount = resolvedCount
+            ResolvedCount = resolvedCount,
+            TotalOpportunityRecords = totalOpportunityRecords,
+            UniqueMarketsWithOpportunities = uniqueMarketsWithOpportunities,
+            CurrentActiveOpportunities = currentActiveOpportunities
         };
     }
 

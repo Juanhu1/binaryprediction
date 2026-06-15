@@ -68,6 +68,8 @@ public class BinaryPredictionDbContext : DbContext
             entity.HasIndex(e => e.HasEdge);
             entity.HasIndex(e => e.ProbabilityGap);
             entity.HasIndex(e => e.DetectedAtUtc);
+            entity.HasIndex(e => e.ConfidencePercentage);
+            entity.HasIndex(e => e.EdgeScore);
         });
 
         // OpportunityAnalyticsSnapshot indexes

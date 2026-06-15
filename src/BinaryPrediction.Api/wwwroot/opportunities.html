@@ -44,6 +44,20 @@
                     <p id="count-resolved">-</p>
                 </div>
             </div>
+            <div class="grid" id="summary-metrics" style="margin-bottom:1.5rem; display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div class="card">
+                    <h3>Total Opportunity Records</h3>
+                    <p id="metric-total-records">-</p>
+                </div>
+                <div class="card">
+                    <h3>Unique Markets with Opportunities</h3>
+                    <p id="metric-unique-markets">-</p>
+                </div>
+                <div class="card">
+                    <h3>Current Active Opportunities</h3>
+                    <p id="metric-active-opportunities">-</p>
+                </div>
+            </div>
             <div class="filter-bar" style="margin-bottom:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
                 <input type="text" id="search-input" placeholder="Search..." style="padding:0.4rem; flex:1; min-width:200px;">
                 <select id="status-filter" style="padding:0.4rem;">
@@ -62,18 +76,21 @@
                 <table id="opportunities-table">
                     <thead>
                         <tr>
-                            <th data-sort="question">Question</th>
-                            <th data-sort="category">Category</th>
-                            <th data-sort="marketProbability">Market Prob.</th>
-                            <th data-sort="aiProbability">AI Prob.</th>
-                            <th data-sort="gappercentage">Gap %</th>
+                            <th>Question</th>
+                            <th>Category</th>
+                            <th>Market Probability</th>
+                            <th>AI Probability</th>
+                            <th data-sort="confidence">Confidence</th>
+                            <th data-sort="gappercentage">Probability Gap</th>
+                            <th>Gap Direction</th>
+                            <th data-sort="edgescore">Edge Score</th>
                             <th>End Date</th>
                             <th>Open</th>
-                            <th data-sort="detecteddt">Detected</th>
+                            <th data-sort="detecteddt">Detected At</th>
                         </tr>
                     </thead>
                     <tbody id="opportunities-body">
-                        <tr><td colspan="8">Loading...</td></tr>
+                        <tr><td colspan="11">Loading...</td></tr>
                     </tbody>
                 </table>
             </div>

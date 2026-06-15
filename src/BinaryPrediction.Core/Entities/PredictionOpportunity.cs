@@ -43,6 +43,12 @@ public class PredictionOpportunity
     /// <summary>True when ProbabilityGap >= EdgeThresholdPercentage.</summary>
     public bool HasEdge { get; set; }
 
+    /// <summary>AI confidence percentage (0-100) copied from prediction.</summary>
+    public decimal ConfidencePercentage { get; set; }
+
+    /// <summary>Calculated as ProbabilityGap * ConfidencePercentage.</summary>
+    public decimal EdgeScore { get; set; }
+
     public DateTimeOffset DetectedAtUtc { get; set; }
         public OpportunityStatus Status { get; set; }
         public DateTimeOffset CreatedAtUtc { get; set; }

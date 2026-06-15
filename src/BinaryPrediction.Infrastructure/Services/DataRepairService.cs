@@ -123,7 +123,7 @@ namespace BinaryPrediction.Infrastructure.Services
 
         public async Task RepairOpportunitiesScaleAsync(CancellationToken cancellationToken = default)
         {
-            var opportunities = await _dbContext.PredictionOpportunities.ToListAsync(cancellationToken);
+            var opportunities = await _dbContext.PredictionOpportunities.Include(o => o.Prediction).ToListAsync(cancellationToken);
             int updatedCount = 0;
             foreach (var o in opportunities)
             {
@@ -142,6 +142,21 @@ namespace BinaryPrediction.Infrastructure.Services
                 var newGap = Math.Abs(o.AiProbability - o.MarketProbability);
                 var newDirection = o.AiProbability > o.MarketProbability ? GapDirection.AIHigher : GapDirection.AILower;
                 var newHasEdge = newGap >= o.EdgeThresholdPercentage;
+
+                if (o.Prediction != null)
+                {
+                    if (o.ConfidencePercentage != o.Prediction.ConfidencePercentage)
+                    {
+                        o.ConfidencePercentage = o.Prediction.ConfidencePercentage;
+                        updated = true;
+                    }
+                    var expectedEdgeScore = newGap * o.ConfidencePercentage;
+                    if (o.EdgeScore != expectedEdgeScore)
+                    {
+                        o.EdgeScore = expectedEdgeScore;
+                        updated = true;
+                    }
+                }
 
                 if (o.ProbabilityGap != newGap || o.GapDirection != newDirection || o.HasEdge != newHasEdge || updated)
                 {

@@ -16,6 +16,8 @@ public class OpportunityDetailDto
     public decimal ProbabilityGap { get; set; }
     public GapDirection GapDirection { get; set; }
     public bool HasEdge { get; set; }
+    public decimal ConfidencePercentage { get; set; }
+    public decimal EdgeScore { get; set; }
     public DateTimeOffset DetectedAtUtc { get; set; }
     public OpportunityStatus Status { get; set; }
     public DateTimeOffset CreatedAtUtc { get; set; }

@@ -94,6 +94,8 @@ public class EdgeDetectionService : IEdgeDetectionService
                 GapDirection = direction,
                 EdgeThresholdPercentage = _options.GapThresholdPercentage,
                 HasEdge = hasEdge,
+                ConfidencePercentage = prediction.ConfidencePercentage,
+                EdgeScore = gap * prediction.ConfidencePercentage,
                 DetectedAtUtc = DateTimeOffset.UtcNow,
                 CreatedAtUtc = DateTimeOffset.UtcNow,
                 Status = OpportunityStatus.Open,
@@ -114,6 +116,8 @@ public class EdgeDetectionService : IEdgeDetectionService
             existing.GapDirection = direction;
             existing.EdgeThresholdPercentage = _options.GapThresholdPercentage;
             existing.HasEdge = hasEdge;
+            existing.ConfidencePercentage = prediction.ConfidencePercentage;
+            existing.EdgeScore = gap * prediction.ConfidencePercentage;
             existing.DetectedAtUtc = DateTimeOffset.UtcNow;
             existing.LastStatusChangedAtUtc = DateTimeOffset.UtcNow;
             await _opportunityRepository.SaveChangesAsync(cancellationToken);

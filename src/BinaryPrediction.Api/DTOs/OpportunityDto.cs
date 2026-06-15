@@ -19,6 +19,8 @@ public class OpportunityDto
     public decimal ProbabilityGap { get; set; }
     public string Direction { get; set; } = string.Empty;
     public bool HasEdge { get; set; }
+    public decimal ConfidencePercentage { get; set; }
+    public decimal EdgeScore { get; set; }
     public DateTimeOffset DetectedAtUtc { get; set; }
     public string PolymarketUrl { get; set; } = string.Empty;
     public DateTimeOffset? EndDate { get; set; }

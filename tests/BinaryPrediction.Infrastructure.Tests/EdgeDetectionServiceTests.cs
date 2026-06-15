@@ -78,5 +78,107 @@ public class EdgeDetectionServiceTests
         Assert.Equal(expectedGap, opportunity.ProbabilityGap, precision: 2);
         Assert.Equal(marketProbabilityRaw * 100m, opportunity.MarketProbability, precision: 2);
         Assert.Equal(aiConfidence, opportunity.AiProbability, precision: 2);
+        Assert.Equal(aiConfidence, opportunity.ConfidencePercentage);
+        Assert.Equal(expectedGap * aiConfidence, opportunity.EdgeScore);
+    }
+
+    [Fact]
+    public async Task GetOpportunitiesAsync_SupportsSorting()
+    {
+        // Arrange
+        var market1 = new Market { Id = Guid.NewGuid(), Question = "M1", Probability = 0.50m };
+        var market2 = new Market { Id = Guid.NewGuid(), Question = "M2", Probability = 0.50m };
+        var market3 = new Market { Id = Guid.NewGuid(), Question = "M3", Probability = 0.50m };
+        _dbContext.Markets.AddRange(market1, market2, market3);
+
+        var pred1 = new Prediction { Id = Guid.NewGuid(), MarketId = market1.Id, ConfidencePercentage = 60m, AiProbability = 60m, PromptVersionUsed = "v2" };
+        var pred2 = new Prediction { Id = Guid.NewGuid(), MarketId = market2.Id, ConfidencePercentage = 80m, AiProbability = 70m, PromptVersionUsed = "v2" };
+        var pred3 = new Prediction { Id = Guid.NewGuid(), MarketId = market3.Id, ConfidencePercentage = 70m, AiProbability = 80m, PromptVersionUsed = "v2" };
+        _dbContext.Predictions.AddRange(pred1, pred2, pred3);
+        await _dbContext.SaveChangesAsync();
+
+        await _service.DetectOpportunityAsync(pred1.Id);
+        await _service.DetectOpportunityAsync(pred2.Id);
+        await _service.DetectOpportunityAsync(pred3.Id);
+
+        var dashboardService = new DashboardService(_dbContext, new LoggerFactory().CreateLogger<DashboardService>());
+
+        // Act 1: default sort (edgescore desc)
+        var queryDefault = new BinaryPrediction.Core.DTOs.Dashboard.DashboardOpportunityQuery { Page = 1, PageSize = 10 };
+        var resultDefault = await dashboardService.GetOpportunitiesAsync(queryDefault);
+        
+        // Assert: order should be Opp3 (2100), Opp2 (1600), Opp1 (600)
+        Assert.Equal(3, resultDefault.Items.Count);
+        Assert.Equal(pred3.Id, resultDefault.Items[0].PredictionId);
+        Assert.Equal(pred2.Id, resultDefault.Items[1].PredictionId);
+        Assert.Equal(pred1.Id, resultDefault.Items[2].PredictionId);
+
+        // Act 2: sort by confidence desc
+        var queryConfidenceDesc = new BinaryPrediction.Core.DTOs.Dashboard.DashboardOpportunityQuery { SortBy = "confidence", SortDesc = true, Page = 1, PageSize = 10 };
+        var resultConfidenceDesc = await dashboardService.GetOpportunitiesAsync(queryConfidenceDesc);
+
+        // Assert: order should be Opp2 (80), Opp3 (70), Opp1 (60)
+        Assert.Equal(pred2.Id, resultConfidenceDesc.Items[0].PredictionId);
+        Assert.Equal(pred3.Id, resultConfidenceDesc.Items[1].PredictionId);
+        Assert.Equal(pred1.Id, resultConfidenceDesc.Items[2].PredictionId);
+
+        // Act 3: sort by gap asc
+        var queryGapAsc = new BinaryPrediction.Core.DTOs.Dashboard.DashboardOpportunityQuery { SortBy = "gap", SortDesc = false, Page = 1, PageSize = 10 };
+        var resultGapAsc = await dashboardService.GetOpportunitiesAsync(queryGapAsc);
+
+        // Assert: order should be Opp1 (10), Opp2 (20), Opp3 (30)
+        Assert.Equal(pred1.Id, resultGapAsc.Items[0].PredictionId);
+        Assert.Equal(pred2.Id, resultGapAsc.Items[1].PredictionId);
+        Assert.Equal(pred3.Id, resultGapAsc.Items[2].PredictionId);
+    }
+
+    [Fact]
+    public async Task GetOpportunitiesAsync_DeduplicatesAndReturnsLatestPerMarket_AndCalculatesSummaryMetrics()
+    {
+        // Arrange
+        var market = new Market { Id = Guid.NewGuid(), Question = "Duplicate Market Test", Probability = 0.50m };
+        _dbContext.Markets.Add(market);
+
+        var pred1 = new Prediction 
+        { 
+            Id = Guid.NewGuid(), 
+            MarketId = market.Id, 
+            ConfidencePercentage = 60m, 
+            AiProbability = 60m, 
+            PromptVersionUsed = "v2" 
+        };
+        _dbContext.Predictions.Add(pred1);
+        await _dbContext.SaveChangesAsync();
+
+        await _service.DetectOpportunityAsync(pred1.Id);
+
+        // Second prediction (newer opportunity)
+        var pred2 = new Prediction 
+        { 
+            Id = Guid.NewGuid(), 
+            MarketId = market.Id, 
+            ConfidencePercentage = 80m, 
+            AiProbability = 80m, 
+            PromptVersionUsed = "v2" 
+        };
+        _dbContext.Predictions.Add(pred2);
+        await _dbContext.SaveChangesAsync();
+
+        await _service.DetectOpportunityAsync(pred2.Id);
+
+        var dashboardService = new DashboardService(_dbContext, new LoggerFactory().CreateLogger<DashboardService>());
+
+        // Act
+        var query = new BinaryPrediction.Core.DTOs.Dashboard.DashboardOpportunityQuery { Page = 1, PageSize = 10 };
+        var result = await dashboardService.GetOpportunitiesAsync(query);
+
+        // Assert
+        Assert.Single(result.Items);
+        Assert.Equal(pred2.Id, result.Items[0].PredictionId);
+
+        // Verify summary metrics
+        Assert.Equal(2, result.TotalOpportunityRecords);
+        Assert.Equal(1, result.UniqueMarketsWithOpportunities);
+        Assert.Equal(1, result.CurrentActiveOpportunities);
     }
 }

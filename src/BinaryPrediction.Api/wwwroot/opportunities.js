@@ -16,14 +16,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentPage = 1;
   const pageSize = 10;
-  let sortBy = '';
-  let sortDesc = false;
+  let sortBy = 'edgescore';
+  let sortDesc = true;
 
   const countOpen = document.getElementById('count-open');
   const countActive = document.getElementById('count-active');
   const countExpired = document.getElementById('count-expired');
   const countIgnored = document.getElementById('count-ignored');
   const countResolved = document.getElementById('count-resolved');
+ 
+  const metricTotalRecords = document.getElementById('metric-total-records');
+  const metricUniqueMarkets = document.getElementById('metric-unique-markets');
+  const metricActiveOpportunities = document.getElementById('metric-active-opportunities');
 
   const updateCardSelection = () => {
     const currentStatus = statusFilter.value;
@@ -72,18 +76,22 @@ document.addEventListener('DOMContentLoaded', () => {
       if (countExpired) countExpired.textContent = data.expiredCount ?? 0;
       if (countIgnored) countIgnored.textContent = data.ignoredCount ?? 0;
       if (countResolved) countResolved.textContent = data.resolvedCount ?? 0;
+ 
+      if (metricTotalRecords) metricTotalRecords.textContent = data.totalOpportunityRecords ?? 0;
+      if (metricUniqueMarkets) metricUniqueMarkets.textContent = data.uniqueMarketsWithOpportunities ?? 0;
+      if (metricActiveOpportunities) metricActiveOpportunities.textContent = data.currentActiveOpportunities ?? 0;
 
       updateCardSelection();
       render(data.items);
       renderPagination(data.totalCount);
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="8" class="error-message">${e.message}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="11" class="error-message">${e.message}</td></tr>`;
     }
   };
 
     const render = (items) => {
         if (!items.length) {
-            tbody.innerHTML = `<tr><td colspan="8">No opportunities found.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="11">No opportunities found.</td></tr>`;
             return;
         }
         tbody.innerHTML = items.map(o => {
@@ -94,21 +102,30 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             const marketProb = (o.marketProbability ?? o.MarketProbability ?? 0);
             const aiProb = (o.aiProbability ?? o.AiProbability ?? 0);
+            const confidence = (o.confidencePercentage ?? o.ConfidencePercentage ?? 0);
             const gap = o.probabilityGap ?? o.ProbabilityGap ?? 0;
+            const edgeScore = o.edgeScore ?? o.EdgeScore ?? 0;
             const direction = o.direction ?? o.Direction ?? '';
+            let directionText = direction;
+            if (direction === 'AIHigher') directionText = 'AI Higher';
+            else if (direction === 'AILower') directionText = 'AI Lower';
             const question = o.question ?? o.Question ?? '';
             const category = o.category ?? o.Category ?? '';
             const url = o.polymarketUrl ?? o.PolymarketUrl ?? '#';
             const detected = (o.detectedAtUtc ?? o.DetectedAtUtc) ? new Date(o.detectedAtUtc ?? o.DetectedAtUtc).toLocaleDateString() : '';
             const endDate = (o.endDate ?? o.EndDate ?? o.market?.endDate ?? o.Market?.endDate ?? null);
             const formattedEndDate = endDate ? new Date(endDate).toLocaleDateString() : '';
+            const formattedEdgeScore = Number(edgeScore).toFixed(2);
             return `
                 <tr class="opportunity-row" data-id="${o.id ?? o.Id}" data-market-id="${o.marketId ?? o.MarketId}" data-question="${question}" data-category="${category}" data-slug="${o.marketSlug ?? o.MarketSlug}" data-enddate="${formattedEndDate}">
                     <td>${question}</td>
                     <td>${category}</td>
                     <td>${formatPercent(marketProb)}</td>
                     <td>${formatPercent(aiProb)}</td>
+                    <td>${formatPercent(confidence)}</td>
                     <td>${formatPercent(gap)}</td>
+                    <td>${directionText}</td>
+                    <td>${formattedEdgeScore}</td>
                     <td>${formattedEndDate}</td>
                     <td><a href="${url}" target="_blank">Open</a></td>
                     <td>${detected}</td>

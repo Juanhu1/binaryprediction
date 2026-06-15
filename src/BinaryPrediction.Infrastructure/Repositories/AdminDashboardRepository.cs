@@ -127,6 +127,8 @@ namespace BinaryPrediction.Infrastructure.Repositories
                     ProbabilityGap = o.ProbabilityGap,
                     GapDirection = o.GapDirection.ToString(),
                     HasEdge = o.HasEdge,
+                    ConfidencePercentage = o.ConfidencePercentage,
+                    EdgeScore = o.EdgeScore,
                     DetectedAtUtc = o.DetectedAtUtc
                 })
                 .ToListAsync(cancellationToken);

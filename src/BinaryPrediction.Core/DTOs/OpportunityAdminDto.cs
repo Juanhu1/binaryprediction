@@ -11,6 +11,8 @@ namespace BinaryPrediction.Core.DTOs
         public decimal ProbabilityGap { get; set; }
         public string GapDirection { get; set; } = string.Empty;
         public bool HasEdge { get; set; }
+        public decimal ConfidencePercentage { get; set; }
+        public decimal EdgeScore { get; set; }
         public DateTimeOffset DetectedAtUtc { get; set; }
     }
 }
