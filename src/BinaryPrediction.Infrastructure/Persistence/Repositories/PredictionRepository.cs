@@ -1,20 +1,28 @@
 using BinaryPrediction.Core.Entities;
 using BinaryPrediction.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace BinaryPrediction.Infrastructure.Persistence.Repositories;
 
 public class PredictionRepository : IPredictionRepository
 {
     private readonly BinaryPredictionDbContext _dbContext;
+    private readonly ILogger<PredictionRepository>? _logger;
 
-    public PredictionRepository(BinaryPredictionDbContext dbContext)
+    public PredictionRepository(
+        BinaryPredictionDbContext dbContext,
+        ILogger<PredictionRepository>? logger = null)
     {
         _dbContext = dbContext;
+        _logger = logger;
     }
 
     public async Task AddAsync(Prediction prediction, CancellationToken cancellationToken = default)
     {
+        _logger?.LogInformation("[PIPELINE_TRACE] PredictionRepository.AddAsync: AnalysisId={AnalysisId}, EventProbability={EventProbability}, ConfidencePercentage={ConfidencePercentage}, PredictedOutcome={PredictedOutcome}, PromptVersionUsed={PromptVersionUsed}",
+            prediction.AnalysisId, prediction.AiProbability, prediction.ConfidencePercentage, prediction.PredictedOutcome, prediction.PromptVersionUsed);
+
         await _dbContext.Predictions.AddAsync(prediction, cancellationToken);
     }
 

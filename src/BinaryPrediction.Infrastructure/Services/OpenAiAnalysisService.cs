@@ -165,10 +165,57 @@ public class OpenAiAnalysisService : IOpenAiAnalysisService
             var result = JsonSerializer.Deserialize<AiPredictionResultDto>(contentString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             if (result == null) throw new InvalidOperationException("Failed to deserialize prediction JSON.");
 
-            // Strict validation rules
-            if (result.ConfidencePercentage < 50 || result.ConfidencePercentage > 100)
+            result.PromptVersionUsed = "v2";
+
+            // Parse response dynamically to support legacy JSON properties from DB-configured templates
+            using (var doc = JsonDocument.Parse(contentString))
             {
-                throw new InvalidOperationException($"Invalid confidence: {result.ConfidencePercentage}. Must be between 50 and 100.");
+                var root = doc.RootElement;
+                if (root.TryGetProperty("confidencePercentage", out var legacyConfProp) && result.ConfidencePercentage == 0)
+                {
+                    result.ConfidencePercentage = legacyConfProp.GetDecimal();
+                }
+                if (root.TryGetProperty("reasoningSummary", out var legacyReasonProp) && string.IsNullOrEmpty(result.ReasoningSummary))
+                {
+                    result.ReasoningSummary = legacyReasonProp.GetString() ?? string.Empty;
+                }
+
+                // Check case-insensitively if "eventProbability" or "event_probability" exists and is not null/undefined
+                bool hasEventProbability = false;
+                foreach (var prop in root.EnumerateObject())
+                {
+                    if (prop.Name.Equals("eventProbability", StringComparison.OrdinalIgnoreCase) ||
+                        prop.Name.Equals("event_probability", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (prop.Value.ValueKind != JsonValueKind.Null && prop.Value.ValueKind != JsonValueKind.Undefined)
+                        {
+                            hasEventProbability = true;
+                        }
+                        break;
+                    }
+                }
+
+                if (!hasEventProbability)
+                {
+                    result.EventProbability = result.PredictedOutcome.Equals("Yes", StringComparison.OrdinalIgnoreCase)
+                        ? result.ConfidencePercentage
+                        : 100m - result.ConfidencePercentage;
+                    result.PromptVersionUsed = "v1";
+                }
+            }
+
+            // Force PredictedOutcome from EventProbability >= 50, not from the model's returned predictedOutcome
+            result.PredictedOutcome = result.EventProbability >= 50m ? "Yes" : "No";
+
+            // Strict validation rules
+            if (result.EventProbability < 0 || result.EventProbability > 100)
+            {
+                throw new InvalidOperationException($"Invalid event probability: {result.EventProbability}. Must be between 0 and 100.");
+            }
+
+            if (result.ConfidencePercentage < 0 || result.ConfidencePercentage > 100)
+            {
+                throw new InvalidOperationException($"Invalid confidence: {result.ConfidencePercentage}. Must be between 0 and 100.");
             }
 
             if (result.PredictedOutcome != "Yes" && result.PredictedOutcome != "No")
@@ -182,6 +229,9 @@ public class OpenAiAnalysisService : IOpenAiAnalysisService
                 result.CompletionTokens = usageProp.TryGetProperty("completion_tokens", out var c) ? c.GetInt32() : 0;
                 result.TotalTokens = usageProp.TryGetProperty("total_tokens", out var t) ? t.GetInt32() : 0;
             }
+
+            _logger.LogInformation("[PIPELINE_TRACE] OpenAiAnalysisService.GeneratePredictionAsync: AnalysisId={AnalysisId}, EventProbability={EventProbability}, ConfidencePercentage={ConfidencePercentage}, PredictedOutcome={PredictedOutcome}, PromptVersionUsed={PromptVersionUsed}",
+                analysis.Id, result.EventProbability, result.ConfidencePercentage, result.PredictedOutcome, result.PromptVersionUsed);
 
             return result;
         }, cancellationToken);

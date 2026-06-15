@@ -47,12 +47,22 @@ public class PredictionResolutionService : IPredictionResolutionService
             var actualOutcomeNormalized = OutcomeNormalizer.Normalize(market.ActualOutcome ?? string.Empty);
             var actualYesValue = actualOutcomeNormalized.Equals("Yes", StringComparison.OrdinalIgnoreCase) ? 1m : 0m;
 
-            // Determine predicted probability of Yes based on confidence.
-            var confidenceProbability = prediction.ConfidencePercentage / 100m;
-            var predictedYesProbability = confidenceProbability >= 0.5m ? confidenceProbability : (1m - confidenceProbability);
+            // Determine predicted probability of Yes and outcome based on methodology version.
+            decimal predictedYesProbability;
+            string predictedOutcome;
+            if (prediction.PromptVersionUsed == "v2")
+            {
+                predictedYesProbability = prediction.AiProbability / 100m;
+                predictedOutcome = prediction.PredictedOutcome;
+            }
+            else
+            {
+                var confidenceProbability = prediction.ConfidencePercentage / 100m;
+                predictedYesProbability = confidenceProbability >= 0.5m ? confidenceProbability : (1m - confidenceProbability);
+                predictedOutcome = confidenceProbability >= 0.5m ? "Yes" : "No";
+            }
 
             // Calculate correctness.
-            var predictedOutcome = confidenceProbability >= 0.5m ? "Yes" : "No";
             var wasCorrect = predictedOutcome.Equals(actualOutcomeNormalized, StringComparison.OrdinalIgnoreCase);
 
             // Brier score calculation.

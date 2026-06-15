@@ -26,6 +26,7 @@ public class PredictionEvaluationWorkerTests : IAsyncLifetime
         services.AddScoped<IPredictionRepository, BinaryPrediction.Infrastructure.Persistence.Repositories.PredictionRepository>();
         services.AddScoped<IPredictionEvaluationService, PredictionEvaluationService>();
         services.AddScoped<IPredictionStatisticsService, PredictionStatisticsService>();
+        services.AddScoped<IWorkerHeartbeatService, DummyHeartbeatService>();
         
         // Mock loggers
         services.AddSingleton(typeof(Microsoft.Extensions.Logging.ILogger<>), typeof(NullLogger<>));
@@ -104,5 +105,13 @@ public class PredictionEvaluationWorkerTests : IAsyncLifetime
         Assert.NotNull(evaluated.EvaluatedAtUtc);
         Assert.True(evaluated.WasCorrect);
         Assert.NotNull(evaluated.BrierScore);
+    }
+
+    private class DummyHeartbeatService : IWorkerHeartbeatService
+    {
+        public Task LogHeartbeatAsync(string workerName, string status = "Healthy", string? errorMessage = null, CancellationToken cancellationToken = default)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

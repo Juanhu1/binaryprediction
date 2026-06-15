@@ -48,11 +48,19 @@ namespace BinaryPrediction.Infrastructure.Services
             foreach (var prediction in predictions)
             {
                 var actualOutcome = prediction.ActualOutcome?.Trim() ?? string.Empty;
-                var confidenceProbability = prediction.ConfidencePercentage / 100m;
                 var predictedOutcome = prediction.PredictedOutcome?.Trim() ?? string.Empty;
-                var predictedYesProbability = predictedOutcome.Equals("Yes", StringComparison.OrdinalIgnoreCase)
-                    ? confidenceProbability
-                    : (1m - confidenceProbability);
+                decimal predictedYesProbability;
+                if (prediction.PromptVersionUsed == "v2")
+                {
+                    predictedYesProbability = prediction.AiProbability / 100m;
+                }
+                else
+                {
+                    var confidenceProbability = prediction.ConfidencePercentage / 100m;
+                    predictedYesProbability = predictedOutcome.Equals("Yes", StringComparison.OrdinalIgnoreCase)
+                        ? confidenceProbability
+                        : (1m - confidenceProbability);
+                }
                 var actualYesValue = actualOutcome.Equals("Yes", StringComparison.OrdinalIgnoreCase) ? 1m : 0m;
                 var correct = predictedOutcome.Equals(actualOutcome, StringComparison.OrdinalIgnoreCase);
                 var error = Math.Abs(predictedYesProbability - actualYesValue);

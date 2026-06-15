@@ -39,54 +39,33 @@ private readonly IEdgeDetectionService _edgeDetectionService;
             return null; // Skip generation
         }
 
-        _logger.LogInformation("Generating prediction for Analysis {AnalysisId}, Market {MarketId}", analysis.Id, market.Id);
+        _logger.LogInformation("Generating prediction for Analysis {AnalysisId}, Market {MarketId} directly from AIAnalysis values.", analysis.Id, market.Id);
 
-        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
         try
         {
-            var predictionDto = await _openAiService.GeneratePredictionAsync(market, analysis, cancellationToken);
-            stopwatch.Stop();
-
-            if (predictionDto == null)
-            {
-                throw new InvalidOperationException("OpenAI API returned null for Prediction generation.");
-            }
-
-            if (predictionDto.ConfidencePercentage < 50m || predictionDto.ConfidencePercentage > 100m)
-            {
-                _logger.LogWarning("Invalid confidence percentage {ConfidencePercentage} returned for market {MarketId}. Must be between 50 and 100. Skipping prediction creation.", predictionDto.ConfidencePercentage, market.Id);
-                return null;
-            }
-
             var prediction = new Prediction
             {
                 MarketId = market.Id,
                 AnalysisId = analysis.Id,
-                PredictedOutcome = predictionDto.PredictedOutcome,
-                ConfidencePercentage = predictionDto.ConfidencePercentage,
-                ReasoningSummary = predictionDto.ReasoningSummary,
-                PromptVersionUsed = "v1",
-                IsActive = true
+                PredictedOutcome = analysis.EstimatedProbability >= 50m ? "Yes" : "No",
+                ConfidencePercentage = analysis.Confidence,
+                ReasoningSummary = analysis.Summary,
+                PromptVersionUsed = "v2",
+                IsActive = true,
+                AiProbability = analysis.EstimatedProbability
             };
 
-            var usageRecord = new AiUsageRecord
-            {
-                Id = Guid.NewGuid(),
-                MarketId = market.Id,
-                OperationType = "Prediction",
-                Model = _openAiSettings.Model,
-                PromptTokens = predictionDto.PromptTokens,
-                CompletionTokens = predictionDto.CompletionTokens,
-                TotalTokens = predictionDto.TotalTokens,
-                EstimatedCostUsd = ((decimal)predictionDto.PromptTokens / 1000000m * 10m) + ((decimal)predictionDto.CompletionTokens / 1000000m * 30m),
-                LatencyMs = stopwatch.ElapsedMilliseconds,
-                IsSuccess = true,
-                CreatedAtUtc = DateTimeOffset.UtcNow
-            };
+            _logger.LogInformation("[PIPELINE_TRACE] PredictionService.CreatePredictionAsync: AnalysisId={AnalysisId}, EventProbability={EventProbability}, ConfidencePercentage={ConfidencePercentage}, PredictedOutcome={PredictedOutcome}, PromptVersionUsed={PromptVersionUsed}",
+                prediction.AnalysisId, prediction.AiProbability, prediction.ConfidencePercentage, prediction.PredictedOutcome, prediction.PromptVersionUsed);
 
             await _predictionRepository.AddAsync(prediction, cancellationToken);
-            _dbContext.Set<AiUsageRecord>().Add(usageRecord);
             await _predictionRepository.SaveChangesAsync(cancellationToken);
+
+            var marketProbPct = market.Probability * 100m;
+            var gap = Math.Abs(prediction.AiProbability - marketProbPct);
+
+            _logger.LogInformation("Prediction Metrics logged: Market Probability = {MarketProbPct}%, AI Event Probability = {AiProbability}%, Predicted Outcome = {PredictedOutcome}, Forecast Confidence = {Confidence}%, Probability Gap = {ProbabilityGap}%",
+                marketProbPct, prediction.AiProbability, prediction.PredictedOutcome, prediction.ConfidencePercentage, gap);
 
             try
             {
@@ -103,27 +82,14 @@ private readonly IEdgeDetectionService _edgeDetectionService;
                 _logger.LogError(ex, "Failed to perform edge detection for prediction {PredictionId}", prediction.Id);
             }
 
-            _logger.LogInformation("Prediction {PredictionId} created and activated for Analysis {AnalysisId}, Market {MarketId} with Outcome '{Outcome}' and Confidence {Confidence}. Cost: ${Cost}, Latency: {LatencyMs}ms", 
-                prediction.Id, analysis.Id, market.Id, prediction.PredictedOutcome, prediction.ConfidencePercentage, usageRecord.EstimatedCostUsd, usageRecord.LatencyMs);
+            _logger.LogInformation("Prediction {PredictionId} created and activated directly from Analysis {AnalysisId}, Market {MarketId} with Outcome '{Outcome}' and Confidence {Confidence}.", 
+                prediction.Id, analysis.Id, market.Id, prediction.PredictedOutcome, prediction.ConfidencePercentage);
 
             return prediction;
         }
         catch (Exception ex)
         {
-            stopwatch.Stop();
-            var usageRecord = new AiUsageRecord
-            {
-                Id = Guid.NewGuid(),
-                MarketId = market.Id,
-                OperationType = "Prediction",
-                Model = _openAiSettings.Model,
-                IsSuccess = false,
-                LatencyMs = stopwatch.ElapsedMilliseconds,
-                ErrorMessage = ex.Message,
-                CreatedAtUtc = DateTimeOffset.UtcNow
-            };
-            _dbContext.Set<AiUsageRecord>().Add(usageRecord);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            _logger.LogError(ex, "Failed to save prediction created from analysis {AnalysisId}", analysis.Id);
             throw;
         }
     }

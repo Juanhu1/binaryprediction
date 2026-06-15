@@ -49,8 +49,37 @@ public class PredictionQualityService : IPredictionQualityService
         double totalError = 0;
         foreach (var p in predictions)
         {
-            double forecast = (double)p.ConfidencePercentage / 100.0;
-            double actual = p.WasCorrect == true ? 1.0 : 0.0;
+            double forecast;
+            if (p.PromptVersionUsed == "v2")
+            {
+                forecast = (double)p.AiProbability / 100.0;
+            }
+            else
+            {
+                if (p.AiProbability > 0)
+                {
+                    forecast = (double)p.AiProbability / 100.0;
+                }
+                else
+                {
+                    forecast = p.PredictedOutcome.Equals("Yes", StringComparison.OrdinalIgnoreCase)
+                        ? (double)p.ConfidencePercentage / 100.0
+                        : (100.0 - (double)p.ConfidencePercentage) / 100.0;
+                }
+            }
+
+            double actual = 0.0;
+            if (!string.IsNullOrWhiteSpace(p.ActualOutcome))
+            {
+                actual = p.ActualOutcome.Equals("Yes", StringComparison.OrdinalIgnoreCase) ? 1.0 : 0.0;
+            }
+            else
+            {
+                bool isCorrect = p.WasCorrect == true;
+                bool predictedYes = p.PredictedOutcome.Equals("Yes", StringComparison.OrdinalIgnoreCase);
+                actual = (predictedYes == isCorrect) ? 1.0 : 0.0;
+            }
+
             totalError += Math.Abs(forecast - actual);
         }
 

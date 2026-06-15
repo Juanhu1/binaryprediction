@@ -46,7 +46,7 @@ public class PredictionBackfillService : IPredictionBackfillService
                 continue;
             }
 
-            var (brier, error, wasCorrect) = _evalService.CalculateMetrics(market.ActualOutcome, pred.ConfidencePercentage);
+            var (brier, error, wasCorrect) = _evalService.CalculateMetricsForPrediction(market.ActualOutcome, pred);
             pred.BrierScore = brier;
             pred.PredictionError = error;
             pred.WasCorrect = wasCorrect;

@@ -28,7 +28,7 @@ public class PredictionEvaluationIntegrationTests
         var predictionRepository = new BinaryPrediction.Infrastructure.Persistence.Repositories.PredictionRepository(_dbContext);
         var logger = new Mock<ILogger<PredictionEvaluationService>>().Object;
 
-        _evaluationService = new PredictionEvaluationService(predictionRepository, logger);
+        _evaluationService = new PredictionEvaluationService(_dbContext, logger);
     }
 
     private async Task<(Prediction, Market)> CreateTestPredictionAsync(string predictedOutcome, decimal confidence)

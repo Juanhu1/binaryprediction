@@ -54,7 +54,7 @@ public class PredictionServiceIntegrationTests
         // Arrange
         var marketId = Guid.NewGuid();
         var market = new Market { Id = marketId, Question = "Test Question", Probability = 50m, EndDate = DateTime.UtcNow.AddDays(1) };
-        var analysis = new AiAnalysis { Id = Guid.NewGuid(), MarketId = marketId, EstimatedProbability = 80m, Confidence = 90m, Edge = 30m, Summary = "Summary" };
+        var analysis = new AiAnalysis { Id = Guid.NewGuid(), MarketId = marketId, EstimatedProbability = 95m, Confidence = 95m, Edge = 30m, Summary = "Strong edge detected." };
 
         _dbContext.Markets.Add(market);
         _dbContext.AiAnalyses.Add(analysis);
@@ -65,7 +65,8 @@ public class PredictionServiceIntegrationTests
             {
                 PredictedOutcome = "Yes",
                 ConfidencePercentage = 95m,
-                ReasoningSummary = "Strong edge detected."
+                ReasoningSummary = "Strong edge detected.",
+                EventProbability = 95m
             });
 
         // Act

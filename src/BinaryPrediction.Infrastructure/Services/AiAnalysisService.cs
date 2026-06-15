@@ -52,7 +52,7 @@ public class AiAnalysisService : IAiAnalysisService
                 analysis.RiskFactorsJson = System.Text.Json.JsonSerializer.Serialize(analysisResult.RiskFactors);
                 
                 analysis.ModelName = _openAiSettings.Model;
-                analysis.PromptVersion = "v1";
+                analysis.PromptVersion = "v2";
 
                 var usageRecord = new AiUsageRecord
                 {
@@ -68,6 +68,9 @@ public class AiAnalysisService : IAiAnalysisService
                     IsSuccess = true,
                     CreatedAtUtc = DateTimeOffset.UtcNow
                 };
+
+                _logger.LogInformation("[PIPELINE_TRACE] AiAnalysisService.ProcessMarketAsync: AnalysisId={AnalysisId}, EstimatedProbability={EstimatedProbability}, Confidence={Confidence}, PromptVersion={PromptVersion}",
+                    analysis.Id, analysis.EstimatedProbability, analysis.Confidence, analysis.PromptVersion);
 
                 _dbContext.Set<AiAnalysis>().Add(analysis);
                 _dbContext.Set<AiUsageRecord>().Add(usageRecord);

@@ -52,7 +52,7 @@ namespace BinaryPrediction.IntegrationTests
             await SeedData(ctx, 80m, "Yes");
 
             var repo = new PredictionResolutionRepository(ctx);
-            var service = new PredictionResolutionService(repo, NullLogger<PredictionResolutionService>.Instance);
+            var service = new PredictionResolutionService(repo, ctx, NullLogger<PredictionResolutionService>.Instance);
 
             var processed = await service.ProcessPendingPredictionsAsync();
             Assert.Equal(1, processed);
@@ -69,7 +69,7 @@ namespace BinaryPrediction.IntegrationTests
             await SeedData(ctx, 80m, "No");
 
             var repo = new PredictionResolutionRepository(ctx);
-            var service = new PredictionResolutionService(repo, NullLogger<PredictionResolutionService>.Instance);
+            var service = new PredictionResolutionService(repo, ctx, NullLogger<PredictionResolutionService>.Instance);
 
             var processed = await service.ProcessPendingPredictionsAsync();
             Assert.Equal(1, processed);
@@ -87,7 +87,7 @@ namespace BinaryPrediction.IntegrationTests
             await SeedData(ctx, 80m, "Yes");
 
             var repo = new PredictionResolutionRepository(ctx);
-            var service = new PredictionResolutionService(repo, NullLogger<PredictionResolutionService>.Instance);
+            var service = new PredictionResolutionService(repo, ctx, NullLogger<PredictionResolutionService>.Instance);
 
             // first run
             var first = await service.ProcessPendingPredictionsAsync();

@@ -31,8 +31,15 @@ public class PredictionEvaluationService : IPredictionEvaluationService
             return;
         }
 
-        var now = DateTimeOffset.UtcNow;
         var normalizedActual = actualOutcome?.Trim() ?? string.Empty;
+        if (!normalizedActual.Equals("Yes", StringComparison.OrdinalIgnoreCase) && 
+            !normalizedActual.Equals("No", StringComparison.OrdinalIgnoreCase))
+        {
+            _logger.LogWarning("Unknown outcome '{Outcome}' for market {MarketId}; skipping evaluation.", actualOutcome, market.Id);
+            return;
+        }
+
+        var now = DateTimeOffset.UtcNow;
         var actualYesValue = normalizedActual.Equals("Yes", StringComparison.OrdinalIgnoreCase) ? 1m : 0m;
 
         var predictions = await _dbContext.Predictions
@@ -56,13 +63,10 @@ public class PredictionEvaluationService : IPredictionEvaluationService
 
     public void EvaluateSinglePrediction(Prediction prediction, string actualOutcome, decimal actualYesValue, DateTimeOffset evaluationTime, Market market)
     {
-        var confidenceProbability = prediction.ConfidencePercentage / 100m;
-        var predictedYesProbability = confidenceProbability >= 0.5m ? confidenceProbability : (1m - confidenceProbability);
-        var predictedOutcome = confidenceProbability >= 0.5m ? "Yes" : "No";
-        var wasCorrect = predictedOutcome.Equals(actualOutcome, StringComparison.OrdinalIgnoreCase);
-        
-        var brierScore = (predictedYesProbability - actualYesValue) * (predictedYesProbability - actualYesValue);
-        var absoluteError = Math.Abs(predictedYesProbability - actualYesValue);
+        var metrics = CalculateMetricsForPrediction(actualOutcome, prediction);
+        var wasCorrect = metrics.WasCorrect;
+        var brierScore = metrics.BrierScore;
+        var absoluteError = metrics.PredictionError;
 
         prediction.BrierScore = brierScore;
         prediction.PredictionError = absoluteError;
@@ -87,7 +91,7 @@ public class PredictionEvaluationService : IPredictionEvaluationService
         prediction.ResolutionSource = "PredictionEvaluationService";
     }
 
-    // Helper to compute metrics used by evaluation and back‑fill
+    // Helper to compute metrics used by evaluation and back‑fill (legacy)
     public (decimal BrierScore, decimal PredictionError, bool WasCorrect) CalculateMetrics(string actualOutcome, decimal confidencePercentage)
     {
         var normalizedActual = actualOutcome?.Trim() ?? string.Empty;
@@ -95,6 +99,44 @@ public class PredictionEvaluationService : IPredictionEvaluationService
         var confidenceProbability = confidencePercentage / 100m;
         var predictedYesProbability = confidenceProbability >= 0.5m ? confidenceProbability : (1m - confidenceProbability);
         var predictedOutcome = confidenceProbability >= 0.5m ? "Yes" : "No";
+        var wasCorrect = predictedOutcome.Equals(normalizedActual, StringComparison.OrdinalIgnoreCase);
+        var brierScore = (predictedYesProbability - actualYesValue) * (predictedYesProbability - actualYesValue);
+        var predictionError = Math.Abs(predictedYesProbability - actualYesValue);
+        return (brierScore, predictionError, wasCorrect);
+    }
+
+    // Overload helper to compute metrics for v1 or v2 predictions
+    public (decimal BrierScore, decimal PredictionError, bool WasCorrect) CalculateMetricsForPrediction(string actualOutcome, Prediction prediction)
+    {
+        var normalizedActual = actualOutcome?.Trim() ?? string.Empty;
+        var actualYesValue = normalizedActual.Equals("Yes", StringComparison.OrdinalIgnoreCase) ? 1m : 0m;
+
+        decimal predictedYesProbability;
+        string predictedOutcome;
+        if (prediction.PromptVersionUsed == "v2")
+        {
+            predictedYesProbability = prediction.AiProbability / 100m;
+            predictedOutcome = prediction.PredictedOutcome;
+        }
+        else
+        {
+            predictedOutcome = prediction.PredictedOutcome?.Trim() ?? string.Empty;
+            var confidenceProbability = prediction.ConfidencePercentage / 100m;
+            if (predictedOutcome.Equals("Yes", StringComparison.OrdinalIgnoreCase))
+            {
+                predictedYesProbability = confidenceProbability;
+            }
+            else if (predictedOutcome.Equals("No", StringComparison.OrdinalIgnoreCase))
+            {
+                predictedYesProbability = 1m - confidenceProbability;
+            }
+            else
+            {
+                predictedYesProbability = confidenceProbability >= 0.5m ? confidenceProbability : (1m - confidenceProbability);
+                predictedOutcome = confidenceProbability >= 0.5m ? "Yes" : "No";
+            }
+        }
+
         var wasCorrect = predictedOutcome.Equals(normalizedActual, StringComparison.OrdinalIgnoreCase);
         var brierScore = (predictedYesProbability - actualYesValue) * (predictedYesProbability - actualYesValue);
         var predictionError = Math.Abs(predictedYesProbability - actualYesValue);

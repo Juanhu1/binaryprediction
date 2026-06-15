@@ -50,9 +50,11 @@ public class EdgeDetectionService : IEdgeDetectionService
             return;
         }
 
-        var aiProb = prediction.PredictedOutcome.Equals("Yes", StringComparison.OrdinalIgnoreCase)
-            ? prediction.ConfidencePercentage
-            : 100m - prediction.ConfidencePercentage;
+        var aiProb = prediction.PromptVersionUsed == "v2"
+            ? prediction.AiProbability
+            : (prediction.PredictedOutcome.Equals("Yes", StringComparison.OrdinalIgnoreCase)
+                ? prediction.ConfidencePercentage
+                : 100m - prediction.ConfidencePercentage);
         var marketProb = prediction.Market?.Probability ?? 0;
         var marketProbPct = marketProb * 100m;
         // Persist AI probability on the Prediction entity for admin UI

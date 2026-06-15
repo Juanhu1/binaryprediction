@@ -74,7 +74,7 @@ The JSON must adhere to the following structure:
     private string GetDefaultPredictionPrompt()
     {
         return @"
-Based on the following market data and AI analysis, generate a final prediction.
+You are an expert forecasting analyst. Based on the following market data and AI analysis, estimate the event probability and generate a forecast.
 
 Market Question: {market.Question}
 Current Market Probability: {market.Probability}%
@@ -84,18 +84,23 @@ Previous Analysis Summary: {analysis.Summary}
 Calculated Edge: {analysis.Edge}%
 Analysis Confidence: {analysis.Confidence}%
 
+Instructions:
+1. Estimate the probability that the event actually occurs (Event Probability) as a calibrated probability between 0 and 100.
+2. Do NOT derive probability from confidence. Think like a forecasting analyst. Consider base rates, historical data, competition, uncertainty, and market context.
+3. Determine predictedOutcome: ""Yes"" if eventProbability >= 50, otherwise ""No"".
+4. Estimate your confidence in this forecast's quality and reasoning between 0 and 100 (where 0 means no confidence and 100 means absolute confidence).
+5. Explicitly distinguish between Event Probability (chance of event occurring) and Confidence (your self-assessed forecast quality and reasoning strength).
+   - Example of Bad: Event Probability = 75 because confidence is 75 (this conflates event probability with confidence in forecast).
+   - Example of Good: Event Probability = 12, Confidence = 88 (low probability event, but highly confident in that assessment).
+
 Provide your prediction in STRICT JSON format with NO markdown formatting, NO extra text.
 The JSON must adhere to the following structure:
 {
+  ""eventProbability"": <integer between 0 and 100>,
   ""predictedOutcome"": ""<Yes or No>"",
-  ""confidencePercentage"": <integer between 50 and 100>,
-  ""reasoningSummary"": ""<concise explanation>""
+  ""confidence"": <integer between 0 and 100>,
+  ""reasoning"": ""<concise explanation>""
 }
-
-Rules:
-- confidencePercentage must be between 50 and 100.
-- 50 = highly uncertain, 100 = near certainty.
-- Never return values below 50.
 ";
     }
 }
