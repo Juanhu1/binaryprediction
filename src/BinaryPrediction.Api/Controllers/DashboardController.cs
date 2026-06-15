@@ -52,7 +52,7 @@ public class DashboardController : ControllerBase
     }
 
     [HttpGet("opportunities")]
-    public async Task<ActionResult<PaginatedResult<OpportunityDto>>> GetOpportunities([FromQuery] DashboardOpportunityQuery query, CancellationToken ct)
+    public async Task<ActionResult<OpportunityQueryResult>> GetOpportunities([FromQuery] DashboardOpportunityQuery query, CancellationToken ct)
     {
         _logger.LogInformation("Dashboard opportunities requested: Page {Page}, Size {Size}", query.Page, query.PageSize);
         var result = await _dashboardService.GetOpportunitiesAsync(query, ct);

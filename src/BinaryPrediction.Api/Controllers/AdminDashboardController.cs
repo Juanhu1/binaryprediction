@@ -89,6 +89,14 @@ namespace BinaryPrediction.Api.Controllers
             return Ok(new { Message = "Opportunities repair completed." });
         }
 
+        // POST api/admin/repair-opportunities-scale
+        [HttpPost("repair-opportunities-scale")]
+        public async Task<ActionResult> RepairOpportunitiesScale()
+        {
+            await _repairService.RepairOpportunitiesScaleAsync();
+            return Ok(new { Message = "Opportunities probability scale repair completed successfully." });
+        }
+
         // POST api/admin/repair-data
         
         

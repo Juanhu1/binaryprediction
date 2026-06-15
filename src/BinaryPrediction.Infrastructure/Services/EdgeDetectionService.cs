@@ -19,17 +19,20 @@ public class EdgeDetectionService : IEdgeDetectionService
 {
     private readonly IPredictionRepository _predictionRepository;
     private readonly IPredictionOpportunityRepository _opportunityRepository;
+    private readonly IOpportunityLifecycleService _lifecycleService;
     private readonly EdgeDetectionOptions _options;
     private readonly ILogger<EdgeDetectionService> _logger;
 
     public EdgeDetectionService(
         IPredictionRepository predictionRepository,
         IPredictionOpportunityRepository opportunityRepository,
+        IOpportunityLifecycleService lifecycleService,
         IOptions<EdgeDetectionOptions> options,
         ILogger<EdgeDetectionService> logger)
     {
         _predictionRepository = predictionRepository;
         _opportunityRepository = opportunityRepository;
+        _lifecycleService = lifecycleService;
         _options = options.Value;
         _logger = logger;
     }
@@ -68,6 +71,17 @@ public class EdgeDetectionService : IEdgeDetectionService
         var existing = await _opportunityRepository.GetByPredictionIdAsync(predictionId, cancellationToken);
         if (existing == null)
         {
+            // Auto-expire older open/active opportunities for the same market when a new one is created
+            var olderOpps = await _opportunityRepository.GetByMarketIdAsync(prediction.MarketId, cancellationToken);
+            foreach (var olderOpp in olderOpps)
+            {
+                if (olderOpp.Status == OpportunityStatus.Open || olderOpp.Status == OpportunityStatus.Active)
+                {
+                    await _lifecycleService.ChangeStatusAsync(olderOpp.Id, OpportunityStatus.Expired, "Expired by newer opportunity creation", cancellationToken);
+                    _logger.LogInformation("Edge detection: Auto-expired older opportunity {OpportunityId} for market {MarketId}", olderOpp.Id, prediction.MarketId);
+                }
+            }
+
             var opp = new PredictionOpportunity
             {
                 PredictionId = predictionId,
@@ -76,6 +90,7 @@ public class EdgeDetectionService : IEdgeDetectionService
                 MarketProbability = marketProbPct,
                 ProbabilityGap = gap,
                 GapDirection = direction,
+                EdgeThresholdPercentage = _options.GapThresholdPercentage,
                 HasEdge = hasEdge,
                 DetectedAtUtc = DateTimeOffset.UtcNow,
                 CreatedAtUtc = DateTimeOffset.UtcNow,
@@ -95,6 +110,7 @@ public class EdgeDetectionService : IEdgeDetectionService
             existing.MarketProbability = marketProbPct;
             existing.ProbabilityGap = gap;
             existing.GapDirection = direction;
+            existing.EdgeThresholdPercentage = _options.GapThresholdPercentage;
             existing.HasEdge = hasEdge;
             existing.DetectedAtUtc = DateTimeOffset.UtcNow;
             existing.LastStatusChangedAtUtc = DateTimeOffset.UtcNow;

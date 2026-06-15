@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryPrediction.Core.Tests", "tests\BinaryPrediction.Core.Tests\BinaryPrediction.Core.Tests.csproj", "{87EF7E5E-EAEA-4CA6-B9BC-D29735C9F52C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryPrediction.Api.Tests", "tests\BinaryPrediction.Api.Tests\BinaryPrediction.Api.Tests.csproj", "{3C6BC7E9-6588-4F19-91A9-6303AB0021E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BinaryPrediction.Infrastructure.Tests", "tests\BinaryPrediction.Infrastructure.Tests\BinaryPrediction.Infrastructure.Tests.csproj", "{07773EFE-FD46-4C43-94ED-E770970C41B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,6 +103,18 @@ Global
 		{3C6BC7E9-6588-4F19-91A9-6303AB0021E8}.Release|x64.Build.0 = Release|Any CPU
 		{3C6BC7E9-6588-4F19-91A9-6303AB0021E8}.Release|x86.ActiveCfg = Release|Any CPU
 		{3C6BC7E9-6588-4F19-91A9-6303AB0021E8}.Release|x86.Build.0 = Release|Any CPU
+		{07773EFE-FD46-4C43-94ED-E770970C41B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07773EFE-FD46-4C43-94ED-E770970C41B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07773EFE-FD46-4C43-94ED-E770970C41B1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{07773EFE-FD46-4C43-94ED-E770970C41B1}.Debug|x64.Build.0 = Debug|Any CPU
+		{07773EFE-FD46-4C43-94ED-E770970C41B1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{07773EFE-FD46-4C43-94ED-E770970C41B1}.Debug|x86.Build.0 = Debug|Any CPU
+		{07773EFE-FD46-4C43-94ED-E770970C41B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07773EFE-FD46-4C43-94ED-E770970C41B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07773EFE-FD46-4C43-94ED-E770970C41B1}.Release|x64.ActiveCfg = Release|Any CPU
+		{07773EFE-FD46-4C43-94ED-E770970C41B1}.Release|x64.Build.0 = Release|Any CPU
+		{07773EFE-FD46-4C43-94ED-E770970C41B1}.Release|x86.ActiveCfg = Release|Any CPU
+		{07773EFE-FD46-4C43-94ED-E770970C41B1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,5 +126,6 @@ Global
 		{42647E2C-8476-47EC-86AE-04D73D95B1B2} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{87EF7E5E-EAEA-4CA6-B9BC-D29735C9F52C} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{3C6BC7E9-6588-4F19-91A9-6303AB0021E8} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{07773EFE-FD46-4C43-94ED-E770970C41B1} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal

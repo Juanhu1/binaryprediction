@@ -81,4 +81,11 @@ public class PredictionOpportunityRepository : IPredictionOpportunityRepository
             .OrderByDescending(o => o.ProbabilityGap)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyList<PredictionOpportunity>> GetByMarketIdAsync(Guid marketId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.PredictionOpportunities
+            .Where(o => o.MarketId == marketId)
+            .ToListAsync(cancellationToken);
     }
+}

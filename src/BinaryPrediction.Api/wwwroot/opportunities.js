@@ -19,6 +19,38 @@ document.addEventListener('DOMContentLoaded', () => {
   let sortBy = '';
   let sortDesc = false;
 
+  const countOpen = document.getElementById('count-open');
+  const countActive = document.getElementById('count-active');
+  const countExpired = document.getElementById('count-expired');
+  const countIgnored = document.getElementById('count-ignored');
+  const countResolved = document.getElementById('count-resolved');
+
+  const updateCardSelection = () => {
+    const currentStatus = statusFilter.value;
+    document.querySelectorAll('#opportunity-counts .card').forEach(card => {
+      if (card.dataset.status === currentStatus) {
+        card.style.border = '2px solid var(--primary-color)';
+        card.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';
+      } else {
+        card.style.border = '1px solid transparent';
+        card.style.backgroundColor = '';
+      }
+    });
+  };
+
+  document.querySelectorAll('#opportunity-counts .card').forEach(card => {
+    card.addEventListener('click', () => {
+      const selectedStatus = card.dataset.status;
+      if (statusFilter.value === selectedStatus) {
+        statusFilter.value = '';
+      } else {
+        statusFilter.value = selectedStatus;
+      }
+      currentPage = 1;
+      load();
+    });
+  });
+
   const load = async () => {
     const params = new URLSearchParams({ page: currentPage, pageSize });
     if (searchInput.value) params.append('search', searchInput.value);
@@ -33,6 +65,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch(`/api/dashboard/opportunities?${params.toString()}`);
       if (!res.ok) throw new Error('Failed to load opportunities');
       const data = await res.json();
+      
+      // Update status counts in the header cards
+      if (countOpen) countOpen.textContent = data.openCount ?? 0;
+      if (countActive) countActive.textContent = data.activeCount ?? 0;
+      if (countExpired) countExpired.textContent = data.expiredCount ?? 0;
+      if (countIgnored) countIgnored.textContent = data.ignoredCount ?? 0;
+      if (countResolved) countResolved.textContent = data.resolvedCount ?? 0;
+
+      updateCardSelection();
       render(data.items);
       renderPagination(data.totalCount);
     } catch (e) {
@@ -49,8 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const formatPercent = v => {
               const num = Number(v);
               if (isNaN(num)) return '';
-              const pct = num > 1 ? num : num * 100;
-              return pct.toFixed(2) + '%';
+              return num.toFixed(2) + '%';
             };
             const marketProb = (o.marketProbability ?? o.MarketProbability ?? 0);
             const aiProb = (o.aiProbability ?? o.AiProbability ?? 0);

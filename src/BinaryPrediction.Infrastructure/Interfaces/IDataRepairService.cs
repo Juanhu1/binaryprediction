@@ -15,5 +15,10 @@ namespace BinaryPrediction.Infrastructure.Interfaces
         /// Deletes all PredictionOpportunity records and recomputes them based on current predictions.
         /// </summary>
         Task RecomputeAllOpportunitiesAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Normalizes existing PredictionOpportunity records to use the correct scale (0-100) and recalculates their gaps.
+        /// </summary>
+        Task RepairOpportunitiesScaleAsync(CancellationToken cancellationToken = default);
     }
 }

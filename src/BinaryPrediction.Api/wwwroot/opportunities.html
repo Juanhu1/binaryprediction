@@ -22,11 +22,36 @@
     <main>
         <section class="panel">
             <h2>Opportunities</h2>
+            <div class="grid" id="opportunity-counts" style="margin-bottom:1.5rem; display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                <div class="card" style="cursor: pointer;" data-status="Open">
+                    <h3>Open</h3>
+                    <p id="count-open">-</p>
+                </div>
+                <div class="card" style="cursor: pointer;" data-status="Active">
+                    <h3>Active</h3>
+                    <p id="count-active">-</p>
+                </div>
+                <div class="card" style="cursor: pointer;" data-status="Expired">
+                    <h3>Expired</h3>
+                    <p id="count-expired">-</p>
+                </div>
+                <div class="card" style="cursor: pointer;" data-status="Ignored">
+                    <h3>Ignored</h3>
+                    <p id="count-ignored">-</p>
+                </div>
+                <div class="card" style="cursor: pointer;" data-status="Resolved">
+                    <h3>Resolved</h3>
+                    <p id="count-resolved">-</p>
+                </div>
+            </div>
             <div class="filter-bar" style="margin-bottom:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
                 <input type="text" id="search-input" placeholder="Search..." style="padding:0.4rem; flex:1; min-width:200px;">
                 <select id="status-filter" style="padding:0.4rem;">
-                    <option value="">All Statuses</option>
+                    <option value="">All Active</option>
+                    <option value="Open">Open</option>
                     <option value="Active">Active</option>
+                    <option value="Expired">Expired</option>
+                    <option value="Ignored">Ignored</option>
                     <option value="Resolved">Resolved</option>
                 </select>
                 <input type="number" id="mingap-input" placeholder="Min Gap %" style="padding:0.4rem; width:120px;"/>

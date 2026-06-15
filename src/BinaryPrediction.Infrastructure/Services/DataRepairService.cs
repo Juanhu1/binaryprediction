@@ -8,6 +8,7 @@ using BinaryPrediction.Infrastructure.Interfaces;
 using BinaryPrediction.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using BinaryPrediction.Core.Enums;
 
 namespace BinaryPrediction.Infrastructure.Services
 {
@@ -110,6 +111,43 @@ namespace BinaryPrediction.Infrastructure.Services
                 }
             }
             _logger.LogInformation("Recomputed opportunities for {Count} predictions.", predictions?.Count() ?? 0);
+        }
+
+        public async Task RepairOpportunitiesScaleAsync(CancellationToken cancellationToken = default)
+        {
+            var opportunities = await _dbContext.PredictionOpportunities.ToListAsync(cancellationToken);
+            int updatedCount = 0;
+            foreach (var o in opportunities)
+            {
+                bool updated = false;
+                if (o.MarketProbability <= 1.0m)
+                {
+                    o.MarketProbability *= 100.0m;
+                    updated = true;
+                }
+                if (o.EdgeThresholdPercentage == 0m)
+                {
+                    o.EdgeThresholdPercentage = 10.0m; // Default threshold percentage
+                    updated = true;
+                }
+                
+                var newGap = Math.Abs(o.AiProbability - o.MarketProbability);
+                var newDirection = o.AiProbability > o.MarketProbability ? GapDirection.AIHigher : GapDirection.AILower;
+                var newHasEdge = newGap >= o.EdgeThresholdPercentage;
+
+                if (o.ProbabilityGap != newGap || o.GapDirection != newDirection || o.HasEdge != newHasEdge || updated)
+                {
+                    o.ProbabilityGap = newGap;
+                    o.GapDirection = newDirection;
+                    o.HasEdge = newHasEdge;
+                    updatedCount++;
+                }
+            }
+            if (updatedCount > 0)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+            _logger.LogInformation("Successfully normalized and recalculated {UpdatedCount} prediction opportunities out of {TotalCount} total opportunities.", updatedCount, opportunities.Count);
         }
     }
 }

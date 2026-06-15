@@ -177,19 +177,53 @@ public class DashboardService : IDashboardService
         };
     }
 
-    public async Task<PaginatedResult<OpportunityDto>> GetOpportunitiesAsync(DashboardOpportunityQuery query, CancellationToken ct = default)
+    public async Task<OpportunityQueryResult> GetOpportunitiesAsync(DashboardOpportunityQuery query, CancellationToken ct = default)
     {
-        var q = _dbContext.PredictionOpportunities.AsNoTracking().Include(o => o.Market).AsQueryable();
+        // 1. Calculate status counts across all opportunities in the database
+        var statusCounts = await _dbContext.PredictionOpportunities.AsNoTracking()
+            .GroupBy(o => o.Status)
+            .Select(g => new { Status = g.Key, Count = g.Count() })
+            .ToListAsync(ct);
+
+        var openCount = statusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Open)?.Count ?? 0;
+        var activeCount = statusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Active)?.Count ?? 0;
+        var expiredCount = statusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Expired)?.Count ?? 0;
+        var ignoredCount = statusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Ignored)?.Count ?? 0;
+        var resolvedCount = statusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Resolved)?.Count ?? 0;
+
+        // 2. Base query representing opportunities matching the status filter
+        IQueryable<PredictionOpportunity> baseQuery = _dbContext.PredictionOpportunities.AsNoTracking();
 
         if (!string.IsNullOrWhiteSpace(query.Status))
         {
             if (Enum.TryParse<OpportunityStatus>(query.Status, true, out var statusEnum))
-                q = q.Where(o => o.Status == statusEnum);
+            {
+                baseQuery = baseQuery.Where(o => o.Status == statusEnum);
+            }
         }
+        else
+        {
+            // By default (All Statuses), show only active ones (Open or Active)
+            baseQuery = baseQuery.Where(o => o.Status == OpportunityStatus.Open || o.Status == OpportunityStatus.Active);
+        }
+
+        // 3. Select only the latest opportunity ID per market from matching items
+        var latestIdsQuery = baseQuery
+            .GroupBy(o => o.MarketId)
+            .Select(g => g.OrderByDescending(o => o.DetectedAtUtc).Select(o => o.Id).FirstOrDefault());
+
+        // 4. Query the full DTOs for the latest opportunity IDs
+        var q = _dbContext.PredictionOpportunities.AsNoTracking()
+            .Include(o => o.Market)
+            .Where(o => latestIdsQuery.Contains(o.Id))
+            .AsQueryable();
+
         if (query.MinGap.HasValue)
             q = q.Where(o => o.ProbabilityGap >= query.MinGap.Value);
         if (query.MaxGap.HasValue)
             q = q.Where(o => o.ProbabilityGap <= query.MaxGap.Value);
+        if (!string.IsNullOrWhiteSpace(query.Search))
+            q = q.Where(o => EF.Functions.ILike(o.Market.Question, $"%{query.Search}%"));
 
         // Sorting
         q = (query.SortBy?.ToLower()) switch
@@ -210,7 +244,7 @@ public class DashboardService : IDashboardService
                 Question = o.Market != null ? o.Market.Question : string.Empty,
                 Category = o.Market != null ? o.Market.Category.ToString() : string.Empty,
                 MarketSlug = o.Market != null ? o.Market.Slug : string.Empty,
-                MarketProbability = o.Market != null ? o.Market.Probability : 0m,
+                MarketProbability = o.MarketProbability,
                 AiProbability = o.AiProbability,
                 ProbabilityGap = o.ProbabilityGap,
                 Direction = o.GapDirection.ToString(),
@@ -221,12 +255,17 @@ public class DashboardService : IDashboardService
             })
             .ToListAsync(ct);
 
-        return new PaginatedResult<OpportunityDto>
+        return new OpportunityQueryResult
         {
             Page = query.Page,
             PageSize = query.PageSize,
             TotalCount = total,
-            Items = items
+            Items = items,
+            OpenCount = openCount,
+            ActiveCount = activeCount,
+            ExpiredCount = expiredCount,
+            IgnoredCount = ignoredCount,
+            ResolvedCount = resolvedCount
         };
     }
 

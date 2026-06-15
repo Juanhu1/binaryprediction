@@ -9,7 +9,7 @@ namespace BinaryPrediction.Core.Interfaces
         Task<DashboardOverviewDto> GetOverviewAsync(CancellationToken ct = default);
         Task<PaginatedResult<MarketDto>> GetMarketsAsync(DashboardMarketQuery query, CancellationToken ct = default);
         Task<PaginatedResult<PredictionDto>> GetPredictionsAsync(DashboardPredictionQuery query, CancellationToken ct = default);
-        Task<PaginatedResult<OpportunityDto>> GetOpportunitiesAsync(DashboardOpportunityQuery query, CancellationToken ct = default);
+        Task<OpportunityQueryResult> GetOpportunitiesAsync(DashboardOpportunityQuery query, CancellationToken ct = default);
         Task<AnalyticsDto> GetAnalyticsAsync(CancellationToken ct = default);
         Task<SystemDto> GetSystemAsync(CancellationToken ct = default);
         Task<PredictionDetailsDto?> GetPredictionDetailsAsync(Guid predictionId, CancellationToken ct = default);

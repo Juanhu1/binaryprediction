@@ -313,3 +313,13 @@ System.ArgumentException: Cannot write DateTimeOffset with Offset=-07:00:00 to P
 2026-06-14 20:32:56.983 -07:00 [INF] Executed endpoint 'BinaryPrediction.Api.Controllers.DashboardController.GetOpportunities (BinaryPrediction.Api)'
 2026-06-14 20:32:56.985 -07:00 [INF] HTTP GET /api/dashboard/opportunities responded 200 in 299.3436 ms
 2026-06-14 20:32:56.990 -07:00 [INF] Request finished HTTP/1.1 GET http://localhost:5001/api/dashboard/opportunities - 200 null application/json; charset=utf-8 370.2483ms
+2026-06-14 20:41:03.049 -07:00 [WRN] Invalid market detected: MarketId="fc85353f-fa9e-4939-9114-14f5c6f18d61", Question=Will Canada win the 2026 FIFA World Cup?, EndDate="2026-07-20T00:00:00.0000000+00:00", ResolvedAtUtc="2026-06-12T06:19:19.4567310+00:00"
+2026-06-14 20:41:11.036 -07:00 [INF] Request starting HTTP/1.1 GET http://localhost:5001/api/dashboard/system - null null
+2026-06-14 20:41:11.323 -07:00 [INF] Executing endpoint 'BinaryPrediction.Api.Controllers.DashboardController.GetSystem (BinaryPrediction.Api)'
+2026-06-14 20:41:11.582 -07:00 [INF] Route matched with {action = "GetSystem", controller = "Dashboard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[BinaryPrediction.Core.DTOs.Dashboard.SystemDto]] GetSystem(System.Threading.CancellationToken) on controller BinaryPrediction.Api.Controllers.DashboardController (BinaryPrediction.Api).
+2026-06-14 20:41:11.606 -07:00 [INF] Dashboard system stats requested
+2026-06-14 20:41:11.806 -07:00 [INF] Executing OkObjectResult, writing value of type 'BinaryPrediction.Core.DTOs.Dashboard.SystemDto'.
+2026-06-14 20:41:11.857 -07:00 [INF] Executed action BinaryPrediction.Api.Controllers.DashboardController.GetSystem (BinaryPrediction.Api) in 271.8567ms
+2026-06-14 20:41:11.867 -07:00 [INF] Executed endpoint 'BinaryPrediction.Api.Controllers.DashboardController.GetSystem (BinaryPrediction.Api)'
+2026-06-14 20:41:11.870 -07:00 [INF] HTTP GET /api/dashboard/system responded 200 in 581.7374 ms
+2026-06-14 20:41:11.876 -07:00 [INF] Request finished HTTP/1.1 GET http://localhost:5001/api/dashboard/system - 200 null application/json; charset=utf-8 850.1257ms

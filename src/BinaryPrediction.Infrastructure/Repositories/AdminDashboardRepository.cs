@@ -122,10 +122,10 @@ namespace BinaryPrediction.Infrastructure.Repositories
                 {
                     PredictionId = o.PredictionId,
                     MarketTitle = o.Prediction.Market.Question,
-                    MarketProbability = o.Prediction.Market.Probability,
-                    AiProbability = o.Prediction.AiProbability,
+                    MarketProbability = o.MarketProbability,
+                    AiProbability = o.AiProbability,
                     ProbabilityGap = o.ProbabilityGap,
-                    GapDirection = o.AiProbability > o.MarketProbability ? "AIHigher" : "AILower",
+                    GapDirection = o.GapDirection.ToString(),
                     HasEdge = o.HasEdge,
                     DetectedAtUtc = o.DetectedAtUtc
                 })

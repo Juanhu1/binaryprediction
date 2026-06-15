@@ -17,6 +17,7 @@ namespace BinaryPrediction.Core.Interfaces
         Task<IReadOnlyList<PredictionOpportunity>> GetActiveAsync(CancellationToken cancellationToken = default);
         Task<IReadOnlyList<PredictionOpportunity>> GetAllAsync(CancellationToken cancellationToken = default);
         Task<IReadOnlyList<PredictionOpportunity>> GetByStatusAsync(OpportunityStatus status, CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<PredictionOpportunity>> GetByMarketIdAsync(Guid marketId, CancellationToken cancellationToken = default);
         Task AddAsync(PredictionOpportunity opportunity, CancellationToken cancellationToken = default);
         Task UpdateAsync(PredictionOpportunity opportunity, CancellationToken cancellationToken = default);
         Task SaveChangesAsync(CancellationToken cancellationToken = default);

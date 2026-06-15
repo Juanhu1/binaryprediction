@@ -45,7 +45,7 @@ public class OpportunityController : ControllerBase
             Category = o.Market?.Category.ToString() ?? string.Empty,
             MarketSlug = o.Market?.Slug ?? string.Empty,
             AiProbability = o.AiProbability,
-            MarketProbability = o.Market?.Probability ?? 0m,
+            MarketProbability = o.MarketProbability,
             ProbabilityGap = o.ProbabilityGap,
             Direction = o.GapDirection.ToString(),
             HasEdge = o.HasEdge,

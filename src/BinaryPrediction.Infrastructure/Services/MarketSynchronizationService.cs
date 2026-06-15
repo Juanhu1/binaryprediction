@@ -10,6 +10,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using BinaryPrediction.Core.Options;
+using BinaryPrediction.Core.Enums;
 
 namespace BinaryPrediction.Infrastructure.Services;
 
@@ -23,7 +26,8 @@ public class MarketSynchronizationService : IMarketSynchronizationService
     private readonly IMarketEligibilityService _eligibilityService;
     private readonly IMarketResolutionDateResolver _dateResolver;
     private readonly ILogger<MarketSynchronizationService> _logger;
-        private readonly BinaryPredictionDbContext _dbContext;
+    private readonly BinaryPredictionDbContext _dbContext;
+    private readonly EdgeDetectionOptions _edgeOptions;
 
     public MarketSynchronizationService(
         IPolymarketClient polymarketClient,
@@ -34,7 +38,8 @@ public class MarketSynchronizationService : IMarketSynchronizationService
         IMarketEligibilityService eligibilityService,
         IMarketResolutionDateResolver dateResolver,
         ILogger<MarketSynchronizationService> logger,
-        BinaryPredictionDbContext dbContext)
+        BinaryPredictionDbContext dbContext,
+        IOptions<EdgeDetectionOptions> edgeOptions)
     {
         _polymarketClient = polymarketClient;
         _marketRepository = marketRepository;
@@ -45,6 +50,7 @@ public class MarketSynchronizationService : IMarketSynchronizationService
         _dateResolver = dateResolver;
         _logger = logger;
         _dbContext = dbContext;
+        _edgeOptions = edgeOptions.Value;
     }
 
     public async Task SynchronizeActiveMarketsAsync(CancellationToken cancellationToken = default)
@@ -146,8 +152,22 @@ public class MarketSynchronizationService : IMarketSynchronizationService
             // market.Probability = probability;
 
             // Propagate updated market probability to any existing opportunities
-            var opps = _dbContext.PredictionOpportunities.Where(o => o.MarketId == market.Id);
-            await opps.ForEachAsync(o => o.MarketProbability = probability, cancellationToken);
+            var opps = await _dbContext.PredictionOpportunities
+                .Where(o => o.MarketId == market.Id)
+                .ToListAsync(cancellationToken);
+
+            foreach (var o in opps)
+            {
+                var marketProbPct = probability * 100m;
+                o.MarketProbability = marketProbPct;
+                o.ProbabilityGap = Math.Abs(o.AiProbability - o.MarketProbability);
+                o.GapDirection = o.AiProbability > o.MarketProbability ? GapDirection.AIHigher : GapDirection.AILower;
+                if (o.EdgeThresholdPercentage == 0m)
+                {
+                    o.EdgeThresholdPercentage = _edgeOptions.GapThresholdPercentage;
+                }
+                o.HasEdge = o.ProbabilityGap >= o.EdgeThresholdPercentage;
+            }
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             // Insert snapshot (already below)
