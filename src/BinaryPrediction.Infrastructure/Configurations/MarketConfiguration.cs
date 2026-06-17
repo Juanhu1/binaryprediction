@@ -34,7 +34,19 @@ public class MarketConfiguration : IEntityTypeConfiguration<Market>
         builder.Property(market => market.ActualOutcome)
             .HasMaxLength(255);
 
-        builder.HasIndex(market => market.Slug)
+        builder.Property(market => market.ExternalMarketId)
+            .HasMaxLength(200);
+
+        builder.Property(market => market.ExternalEventId)
+            .HasMaxLength(200);
+
+        builder.Property(market => market.SourceUrl)
+            .HasMaxLength(500);
+
+        builder.HasIndex(market => new { market.MarketSource, market.Slug })
+            .IsUnique();
+
+        builder.HasIndex(market => new { market.MarketSource, market.ExternalMarketId })
             .IsUnique();
 
         builder.HasIndex(market => new { market.Active, market.Closed });

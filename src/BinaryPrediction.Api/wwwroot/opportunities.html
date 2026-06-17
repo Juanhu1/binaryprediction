@@ -68,6 +68,11 @@
                     <option value="Ignored">Ignored</option>
                     <option value="Resolved">Resolved</option>
                 </select>
+                <select id="source-filter" style="padding:0.4rem;">
+                    <option value="">All Sources</option>
+                    <option value="Polymarket">Polymarket</option>
+                    <option value="Kalshi">Kalshi</option>
+                </select>
                 <input type="number" id="mingap-input" placeholder="Min Gap %" style="padding:0.4rem; width:120px;"/>
                 <input type="number" id="maxgap-input" placeholder="Max Gap %" style="padding:0.4rem; width:120px;"/>
                 <button id="apply-filters" style="padding:0.4rem 0.8rem;">Apply</button>
@@ -78,6 +83,7 @@
                         <tr>
                             <th>Question</th>
                             <th>Category</th>
+                            <th>Source</th>
                             <th>Market Probability</th>
                             <th>AI Probability</th>
                             <th data-sort="confidence">Confidence</th>
@@ -90,7 +96,7 @@
                         </tr>
                     </thead>
                     <tbody id="opportunities-body">
-                        <tr><td colspan="11">Loading...</td></tr>
+                        <tr><td colspan="12">Loading...</td></tr>
                     </tbody>
                 </table>
             </div>

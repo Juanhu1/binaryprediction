@@ -10,5 +10,6 @@ namespace BinaryPrediction.Core.DTOs.Dashboard
         public string? SortBy { get; set; }
         public bool SortDesc { get; set; } = false;
         public string? Search { get; set; }
+        public string? Source { get; set; }
     }
 }

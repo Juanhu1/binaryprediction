@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const pagination = document.getElementById('pagination');
   const searchInput = document.getElementById('search-input');
   const statusFilter = document.getElementById('status-filter');
+  const sourceFilter = document.getElementById('source-filter');
   const minGapInput = document.getElementById('mingap-input');
   const maxGapInput = document.getElementById('maxgap-input');
   const applyBtn = document.getElementById('apply-filters');
@@ -59,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams({ page: currentPage, pageSize });
     if (searchInput.value) params.append('search', searchInput.value);
     if (statusFilter.value) params.append('status', statusFilter.value);
+    if (sourceFilter.value) params.append('source', sourceFilter.value);
     if (minGapInput.value) params.append('minGap', minGapInput.value);
     if (maxGapInput.value) params.append('maxGap', maxGapInput.value);
     if (sortBy) {
@@ -85,13 +87,13 @@ document.addEventListener('DOMContentLoaded', () => {
       render(data.items);
       renderPagination(data.totalCount);
     } catch (e) {
-      tbody.innerHTML = `<tr><td colspan="11" class="error-message">${e.message}</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="12" class="error-message">${e.message}</td></tr>`;
     }
   };
 
     const render = (items) => {
         if (!items.length) {
-            tbody.innerHTML = `<tr><td colspan="11">No opportunities found.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="12">No opportunities found.</td></tr>`;
             return;
         }
         tbody.innerHTML = items.map(o => {
@@ -111,8 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
             else if (direction === 'AILower') directionText = 'AI Lower';
             const question = o.question ?? o.Question ?? '';
             const category = o.category ?? o.Category ?? '';
-            const url = o.polymarketUrl ?? o.PolymarketUrl ?? '#';
-            const detected = (o.detectedAtUtc ?? o.DetectedAtUtc) ? new Date(o.detectedAtUtc ?? o.DetectedAtUtc).toLocaleDateString() : '';
+            const sourceVal = o.marketSource ?? o.MarketSource ?? 1;
+            const sourceText = (sourceVal === 2 || sourceVal === 'Kalshi' || sourceVal === '2') ? 'Kalshi' : 'Polymarket';
+            const sourceBadgeClass = sourceText.toLowerCase() === 'kalshi' ? 'badge-kalshi' : 'badge-polymarket';
+            const sourceBadge = `<span class="badge ${sourceBadgeClass}">${sourceText}</span>`;
+            const url = o.sourceUrl ?? o.SourceUrl ?? o.polymarketUrl ?? o.PolymarketUrl ?? '#';
+            const detected = (o.detectedAtUtc ?? o.DetectedAtUtc) ? new Date(o.detectedAtUtc ?? o.DetectedAtUtc) .toLocaleDateString() : '';
             const endDate = (o.endDate ?? o.EndDate ?? o.market?.endDate ?? o.Market?.endDate ?? null);
             const formattedEndDate = endDate ? new Date(endDate).toLocaleDateString() : '';
             const formattedEdgeScore = Number(edgeScore).toFixed(2);
@@ -120,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr class="opportunity-row" data-id="${o.id ?? o.Id}" data-market-id="${o.marketId ?? o.MarketId}" data-question="${question}" data-category="${category}" data-slug="${o.marketSlug ?? o.MarketSlug}" data-enddate="${formattedEndDate}">
                     <td>${question}</td>
                     <td>${category}</td>
+                    <td>${sourceBadge}</td>
                     <td>${formatPercent(marketProb)}</td>
                     <td>${formatPercent(aiProb)}</td>
                     <td>${formatPercent(confidence)}</td>

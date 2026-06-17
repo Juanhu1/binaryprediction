@@ -35,13 +35,16 @@ public class MarketEligibilityService : IMarketEligibilityService
             return false;
         }
 
-        if (market.Liquidity < _settings.MinimumLiquidity)
+        var minLiquidity = market.MarketSource == BinaryPrediction.Core.Enums.MarketSource.Kalshi ? 0m : _settings.MinimumLiquidity;
+        var minVolume = market.MarketSource == BinaryPrediction.Core.Enums.MarketSource.Kalshi ? 0m : _settings.MinimumVolume;
+
+        if (market.Liquidity < minLiquidity)
         {
             reason = "Liquidity below minimum threshold.";
             return false;
         }
 
-        if (market.Volume < _settings.MinimumVolume)
+        if (market.Volume < minVolume)
         {
             reason = "Volume below minimum threshold.";
             return false;

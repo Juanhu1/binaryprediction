@@ -24,4 +24,7 @@ public class OpportunityDto
     public DateTimeOffset DetectedAtUtc { get; set; }
     public string PolymarketUrl { get; set; } = string.Empty;
     public DateTimeOffset? EndDate { get; set; }
+    public MarketSource MarketSource { get; set; }
+    public string? ExternalMarketId { get; set; }
+    public string? SourceUrl { get; set; }
 }

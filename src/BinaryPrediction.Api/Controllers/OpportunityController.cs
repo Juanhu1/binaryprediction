@@ -52,7 +52,10 @@ public class OpportunityController : ControllerBase
             ConfidencePercentage = o.ConfidencePercentage,
             EdgeScore = o.EdgeScore,
             DetectedAtUtc = o.DetectedAtUtc,
-            EndDate = o.Market?.EndDate
+            EndDate = o.Market?.EndDate,
+            MarketSource = o.Market != null ? o.Market.MarketSource : MarketSource.Polymarket,
+            ExternalMarketId = o.Market?.ExternalMarketId,
+            SourceUrl = o.Market?.SourceUrl
         }).ToList();
         return Ok(dtos);
     }
@@ -112,7 +115,10 @@ public class OpportunityController : ControllerBase
             LastStatusChangedAtUtc = o.LastStatusChangedAtUtc,
             IgnoredAtUtc = o.IgnoredAtUtc,
             ExpiredAtUtc = o.ExpiredAtUtc,
-            ResolvedAtUtc = o.ResolvedAtUtc
+            ResolvedAtUtc = o.ResolvedAtUtc,
+            MarketSource = o.Market != null ? o.Market.MarketSource : MarketSource.Polymarket,
+            ExternalMarketId = o.Market?.ExternalMarketId,
+            SourceUrl = o.Market?.SourceUrl
         }).ToList();
         return Ok(dtos);
     }

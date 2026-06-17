@@ -15,30 +15,54 @@ public class MarketAnalysisQueueService : IMarketAnalysisQueueService
     private readonly ILogger<MarketAnalysisQueueService> _logger;
     private readonly QueueProcessingSettings _settings;
     private readonly AnalysisRefreshSettings _refreshSettings;
+    private readonly AnalysisQueueSettings _queueSettings;
 
     public MarketAnalysisQueueService(
         BinaryPredictionDbContext dbContext,
         ILogger<MarketAnalysisQueueService> logger,
         IOptions<QueueProcessingSettings> options,
-        IOptions<AnalysisRefreshSettings> refreshSettings)
+        IOptions<AnalysisRefreshSettings> refreshSettings,
+        IOptions<AnalysisQueueSettings> queueSettings)
     {
         _dbContext = dbContext;
         _logger = logger;
         _settings = options.Value;
         _refreshSettings = refreshSettings.Value;
+        _queueSettings = queueSettings.Value;
     }
 
     public async Task EnqueueEligibleMarketsAsync(CancellationToken cancellationToken = default)
     {
         var eligibleMarkets = await _dbContext.EligibleMarketsView
-            .Select(m => new { m.Id, m.Category })
+            .Join(_dbContext.Markets,
+                em => em.Id,
+                m => m.Id,
+                (em, m) => new
+                {
+                    em.Id,
+                    em.Category,
+                    em.CreatedAtUtc,
+                    m.MarketSource
+                })
+            .OrderBy(x => x.CreatedAtUtc)
             .ToListAsync(cancellationToken);
 
-        var queuedMarketIds = await _dbContext.MarketAnalysisQueueItems
+        var queuedMarkets = await _dbContext.MarketAnalysisQueueItems
             .Where(q => q.Status == AnalysisQueueStatus.Pending 
                      || q.Status == AnalysisQueueStatus.Processing)
-            .Select(q => q.MarketId)
+            .Join(_dbContext.Markets,
+                q => q.MarketId,
+                m => m.Id,
+                (q, m) => new { q.MarketId, m.MarketSource })
             .ToListAsync(cancellationToken);
+
+        var queuedMarketIds = queuedMarkets.Select(q => q.MarketId).ToHashSet();
+
+        var eligiblePolymarketCount = eligibleMarkets.Count(m => m.MarketSource == MarketSource.Polymarket);
+        var eligibleKalshiCount = eligibleMarkets.Count(m => m.MarketSource == MarketSource.Kalshi);
+
+        var queuedPolymarketCount = queuedMarkets.Count(m => m.MarketSource == MarketSource.Polymarket);
+        var queuedKalshiCount = queuedMarkets.Count(m => m.MarketSource == MarketSource.Kalshi);
 
         var eligibleMarketIds = eligibleMarkets.Select(m => m.Id).ToList();
 
@@ -49,6 +73,14 @@ public class MarketAnalysisQueueService : IMarketAnalysisQueueService
             .ToDictionaryAsync(x => x.MarketId, x => x.LastAnalysisUtc, cancellationToken);
 
         var marketsToEnqueue = new List<Guid>();
+        int skippedPolymarketCount = 0;
+        int skippedKalshiCount = 0;
+        int newlyQueuedPolymarketCount = 0;
+        int newlyQueuedKalshiCount = 0;
+        int cappedPolymarketCount = 0;
+        int cappedKalshiCount = 0;
+
+        int maxToQueue = _queueSettings.MaxMarketsToQueuePerRun;
 
         foreach (var market in eligibleMarkets)
         {
@@ -61,19 +93,49 @@ public class MarketAnalysisQueueService : IMarketAnalysisQueueService
                 if (ageHours < refreshThreshold)
                 {
                     _logger.LogInformation("Skipping analysis for market {MarketId}. Last analysis age: {Hours:F1} hours.", market.Id, ageHours);
+                    if (market.MarketSource == MarketSource.Polymarket)
+                    {
+                        skippedPolymarketCount++;
+                    }
+                    else
+                    {
+                        skippedKalshiCount++;
+                    }
                     continue;
                 }
             }
 
+            if (marketsToEnqueue.Count >= maxToQueue)
+            {
+                if (market.MarketSource == MarketSource.Polymarket)
+                {
+                    cappedPolymarketCount++;
+                }
+                else
+                {
+                    cappedKalshiCount++;
+                }
+                continue;
+            }
+
             marketsToEnqueue.Add(market.Id);
+            if (market.MarketSource == MarketSource.Polymarket)
+            {
+                newlyQueuedPolymarketCount++;
+            }
+            else
+            {
+                newlyQueuedKalshiCount++;
+            }
         }
 
         _logger.LogInformation(
-            "QueueWorker: Eligible={EligibleCount}, ExistingActive={ExistingCount}, ToQueue={ToQueueCount}",
-            eligibleMarkets.Count,
-            queuedMarketIds.Count,
-            marketsToEnqueue.Count);
-            
+            "QueueWorker Status update by source:\n" +
+            "Polymarket: Eligible={PolyEligible}, AlreadyQueued={PolyQueued}, CooldownSkipped={PolySkipped}, NewlyEnqueued={PolyNew}, Capped={PolyCapped}\n" +
+            "Kalshi: Eligible={KalshiEligible}, AlreadyQueued={KalshiQueued}, CooldownSkipped={KalshiSkipped}, NewlyEnqueued={KalshiNew}, Capped={KalshiCapped}",
+            eligiblePolymarketCount, queuedPolymarketCount, skippedPolymarketCount, newlyQueuedPolymarketCount, cappedPolymarketCount,
+            eligibleKalshiCount, queuedKalshiCount, skippedKalshiCount, newlyQueuedKalshiCount, cappedKalshiCount);
+
         if (eligibleMarkets.Any())
         {
             _logger.LogInformation("First few eligible IDs: {Ids}", string.Join(", ", eligibleMarkets.Take(3).Select(e => e.Id)));

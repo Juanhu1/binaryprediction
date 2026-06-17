@@ -1,9 +1,14 @@
 using BinaryPrediction.Core.Entities.Common;
+using BinaryPrediction.Core.Enums;
 
 namespace BinaryPrediction.Core.Entities;
 
 public class Market : BaseEntity
 {
+    public MarketSource MarketSource { get; set; } = MarketSource.Polymarket;
+    public string? ExternalMarketId { get; set; }
+    public string? ExternalEventId { get; set; }
+    public string? SourceUrl { get; set; }
     public string Question { get; set; } = string.Empty;
 
     public string Slug { get; set; } = string.Empty;

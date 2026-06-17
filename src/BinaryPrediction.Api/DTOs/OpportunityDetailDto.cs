@@ -25,4 +25,7 @@ public class OpportunityDetailDto
     public DateTimeOffset? IgnoredAtUtc { get; set; }
     public DateTimeOffset? ExpiredAtUtc { get; set; }
     public DateTimeOffset? ResolvedAtUtc { get; set; }
+    public MarketSource MarketSource { get; set; }
+    public string? ExternalMarketId { get; set; }
+    public string? SourceUrl { get; set; }
 }

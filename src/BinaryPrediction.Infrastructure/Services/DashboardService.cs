@@ -104,7 +104,7 @@ public class DashboardService : IDashboardService
                 Id = m.Id,
                 Question = m.Question,
                 Category = m.Category.ToString(),
-                Source = string.Empty,
+                Source = m.MarketSource.ToString(),
                 CreatedDate = m.CreatedAtUtc,
                 ResolutionDate = m.ResolvedAtUtc,
                 EndDate = m.EndDate,
@@ -179,8 +179,19 @@ public class DashboardService : IDashboardService
 
     public async Task<OpportunityQueryResult> GetOpportunitiesAsync(DashboardOpportunityQuery query, CancellationToken ct = default)
     {
-        // 1. Select the latest opportunity ID per market (overall)
-        var overallLatestIdsQuery = _dbContext.PredictionOpportunities.AsNoTracking()
+        // 1. Filter prediction opportunities by source if specified
+        var baseOpportunityQuery = _dbContext.PredictionOpportunities.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(query.Source) && !query.Source.Equals("All", StringComparison.OrdinalIgnoreCase))
+        {
+            if (Enum.TryParse<MarketSource>(query.Source, true, out var sourceEnum))
+            {
+                baseOpportunityQuery = baseOpportunityQuery.Where(o => o.Market != null && o.Market.MarketSource == sourceEnum);
+            }
+        }
+
+        // Select the latest opportunity ID per market (overall or source-filtered)
+        var overallLatestIdsQuery = baseOpportunityQuery
             .GroupBy(o => o.MarketId)
             .Select(g => g.OrderByDescending(o => o.DetectedAtUtc).Select(o => o.Id).FirstOrDefault());
 
@@ -197,9 +208,21 @@ public class DashboardService : IDashboardService
         var ignoredCount = latestStatusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Ignored)?.Count ?? 0;
         var resolvedCount = latestStatusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Resolved)?.Count ?? 0;
 
-        // 3. Calculate summary metrics
-        var totalOpportunityRecords = await _dbContext.PredictionOpportunities.CountAsync(ct);
-        var uniqueMarketsWithOpportunities = await _dbContext.PredictionOpportunities.Select(o => o.MarketId).Distinct().CountAsync(ct);
+        // 3. Calculate summary metrics (filtered by source if specified)
+        var totalRecordsQuery = _dbContext.PredictionOpportunities.AsNoTracking();
+        var uniqueMarketsQuery = _dbContext.PredictionOpportunities.AsNoTracking();
+
+        if (!string.IsNullOrWhiteSpace(query.Source) && !query.Source.Equals("All", StringComparison.OrdinalIgnoreCase))
+        {
+            if (Enum.TryParse<MarketSource>(query.Source, true, out var sourceEnum))
+            {
+                totalRecordsQuery = totalRecordsQuery.Where(o => o.Market != null && o.Market.MarketSource == sourceEnum);
+                uniqueMarketsQuery = uniqueMarketsQuery.Where(o => o.Market != null && o.Market.MarketSource == sourceEnum);
+            }
+        }
+
+        var totalOpportunityRecords = await totalRecordsQuery.CountAsync(ct);
+        var uniqueMarketsWithOpportunities = await uniqueMarketsQuery.Select(o => o.MarketId).Distinct().CountAsync(ct);
         var currentActiveOpportunities = openCount + activeCount;
 
         // 4. Base query: select only those overall latest opportunities
@@ -259,7 +282,10 @@ public class DashboardService : IDashboardService
                 EdgeScore = o.EdgeScore,
                 DetectedAtUtc = o.DetectedAtUtc,
                 PolymarketUrl = o.Market != null ? $"https://polymarket.com/market/{o.Market.Slug}" : string.Empty,
-                EndDate = o.Market != null ? o.Market.EndDate : null
+                EndDate = o.Market != null ? o.Market.EndDate : null,
+                MarketSource = o.Market != null ? o.Market.MarketSource : MarketSource.Polymarket,
+                ExternalMarketId = o.Market != null ? o.Market.ExternalMarketId : null,
+                SourceUrl = o.Market != null ? (o.Market.SourceUrl ?? string.Empty) : string.Empty
             })
             .ToListAsync(ct);
 

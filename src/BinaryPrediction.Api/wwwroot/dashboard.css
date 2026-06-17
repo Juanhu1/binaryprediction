@@ -224,3 +224,23 @@ tr.pending td { background: rgba(255, 255, 255, 0.05); }
     gap: 0.5rem;
   }
 }
+
+/* Source Badges */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.badge-polymarket {
+  background: rgba(30, 144, 255, 0.2);
+  color: #1e90ff;
+  border: 1px solid rgba(30, 144, 255, 0.4);
+}
+.badge-kalshi {
+  background: rgba(255, 105, 180, 0.2);
+  color: #ff69b4;
+  border: 1px solid rgba(255, 105, 180, 0.4);
+}

@@ -61,6 +61,10 @@ public class MarketCollectorWorker : BackgroundService
             _logger.LogInformation("Starting Polymarket market collection.");
             await synchronizationService.SynchronizeActiveMarketsAsync(cancellationToken);
             _logger.LogInformation("Finished Polymarket market collection.");
+
+            _logger.LogInformation("Starting Kalshi market collection.");
+            await synchronizationService.SynchronizeKalshiMarketsAsync(cancellationToken);
+            _logger.LogInformation("Finished Kalshi market collection.");
             await LogHeartbeatAsync("Healthy");
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)

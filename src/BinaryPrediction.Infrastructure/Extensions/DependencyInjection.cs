@@ -7,6 +7,7 @@ using BinaryPrediction.Infrastructure.Services;
 using BinaryPrediction.Core.Common;
 using BinaryPrediction.Infrastructure.Persistence.Repositories;
 using BinaryPrediction.Infrastructure.External.Polymarket;
+using BinaryPrediction.Infrastructure.External.Kalshi;
 using BinaryPrediction.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -36,14 +37,27 @@ public static class DependencyInjection
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         services.Configure<PolymarketSettings>(configuration.GetSection("Polymarket"));
+        services.Configure<KalshiSettings>(configuration.GetSection("Kalshi"));
         services.Configure<MarketFilteringSettings>(configuration.GetSection("MarketFilteringSettings"));
         services.Configure<QueueProcessingSettings>(configuration.GetSection("QueueProcessing"));
         services.Configure<WorkerSettings>(configuration.GetSection("Workers"));
         services.Configure<AnalysisRefreshSettings>(configuration.GetSection("AnalysisRefreshHours"));
+        services.Configure<AnalysisQueueSettings>(configuration.GetSection("AnalysisQueue"));
         services.AddHttpClient<IPolymarketClient, PolymarketClient>((sp, client) =>
         {
             var settings = sp.GetRequiredService<IOptions<PolymarketSettings>>().Value;
             client.BaseAddress = new Uri(settings.BaseUrl);
+            client.Timeout = TimeSpan.FromSeconds(settings.TimeoutSeconds);
+        });
+        services.AddHttpClient<IKalshiClient, KalshiClient>((sp, client) =>
+        {
+            var settings = sp.GetRequiredService<IOptions<KalshiSettings>>().Value;
+            var baseUrl = settings.BaseUrl;
+            if (!string.IsNullOrEmpty(baseUrl) && !baseUrl.EndsWith("/"))
+            {
+                baseUrl += "/";
+            }
+            client.BaseAddress = new Uri(baseUrl);
             client.Timeout = TimeSpan.FromSeconds(settings.TimeoutSeconds);
         });
         services.AddScoped<IMarketSelectionService, MarketSelectionService>();

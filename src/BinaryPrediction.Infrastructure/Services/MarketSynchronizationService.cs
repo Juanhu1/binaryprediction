@@ -5,6 +5,7 @@ using BinaryPrediction.Infrastructure.Persistence;
 using BinaryPrediction.Core.Interfaces;
 using BinaryPrediction.Infrastructure.External.Polymarket;
 using BinaryPrediction.Infrastructure.External.Polymarket.DTOs;
+using BinaryPrediction.Infrastructure.External.Kalshi;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
@@ -19,6 +20,7 @@ namespace BinaryPrediction.Infrastructure.Services;
 public class MarketSynchronizationService : IMarketSynchronizationService
 {
     private readonly IPolymarketClient _polymarketClient;
+    private readonly IKalshiClient _kalshiClient;
     private readonly IRepository<Market> _marketRepository;
     private readonly IRepository<MarketSnapshot> _snapshotRepository;
     private readonly IMarketQuestionNormalizer _normalizer;
@@ -31,6 +33,7 @@ public class MarketSynchronizationService : IMarketSynchronizationService
 
     public MarketSynchronizationService(
         IPolymarketClient polymarketClient,
+        IKalshiClient kalshiClient,
         IRepository<Market> marketRepository,
         IRepository<MarketSnapshot> snapshotRepository,
         IMarketQuestionNormalizer normalizer,
@@ -42,6 +45,7 @@ public class MarketSynchronizationService : IMarketSynchronizationService
         IOptions<EdgeDetectionOptions> edgeOptions)
     {
         _polymarketClient = polymarketClient;
+        _kalshiClient = kalshiClient;
         _marketRepository = marketRepository;
         _snapshotRepository = snapshotRepository;
         _normalizer = normalizer;
@@ -74,13 +78,20 @@ public class MarketSynchronizationService : IMarketSynchronizationService
             _logger.LogInformation("Market {Question} probability={Probability}", mappedMarket.Question, probability);
 
             var existingMarket = await _marketRepository.FirstOrDefaultAsync(
-                market => market.Slug == mappedMarket.Slug,
+                market => market.MarketSource == MarketSource.Polymarket &&
+                          ((market.ExternalMarketId != null && market.ExternalMarketId == mappedMarket.ExternalMarketId) ||
+                           (market.ExternalMarketId == null && market.Slug == mappedMarket.Slug)),
                 cancellationToken);
 
             var market = existingMarket ?? mappedMarket;
+            if (existingMarket != null)
+            {
+                market.ExternalMarketId = mappedMarket.ExternalMarketId;
+                market.SourceUrl = mappedMarket.SourceUrl;
+            }
             
             // 1. Normalize
-            market.Question = _normalizer.Normalize(mappedMarket.Question);
+            market.Question = Truncate(_normalizer.Normalize(mappedMarket.Question), 500) ?? string.Empty;
             market.Active = mappedMarket.Active;
             market.Closed = mappedMarket.Closed;
             market.Liquidity = mappedMarket.Liquidity;
@@ -213,8 +224,11 @@ public class MarketSynchronizationService : IMarketSynchronizationService
 
         market = new Market
         {
-            Question = source.Question.Trim(),
-            Slug = source.Slug.Trim(),
+            MarketSource = MarketSource.Polymarket,
+            ExternalMarketId = Truncate(source.Id, 200),
+            SourceUrl = Truncate(source.Slug != null ? $"https://polymarket.com/market/{source.Slug}" : null, 500),
+            Question = Truncate(source.Question.Trim(), 500) ?? string.Empty,
+            Slug = Truncate(source.Slug.Trim(), 200) ?? string.Empty,
             Active = source.Active.GetValueOrDefault(),
             Closed = source.Closed.GetValueOrDefault(),
             Liquidity = source.Liquidity.GetValueOrDefault(),
@@ -262,5 +276,199 @@ public class MarketSynchronizationService : IMarketSynchronizationService
         }
 
         return 0;
+    }
+
+    public async Task SynchronizeKalshiMarketsAsync(CancellationToken cancellationToken = default)
+    {
+        _logger.LogInformation("Starting Kalshi market synchronization.");
+        var kalshiMarkets = await _kalshiClient.GetActiveMarketsAsync(cancellationToken);
+        var synchronizedCount = 0;
+        var skippedCount = 0;
+
+        foreach (var kalshiMarket in kalshiMarkets)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+
+            if (!TryMapKalshiMarket(kalshiMarket, out var mappedMarket, out var probability))
+            {
+                skippedCount++;
+                continue;
+            }
+
+            _logger.LogInformation("Kalshi Market {Question} probability={Probability}", mappedMarket.Question, probability);
+
+            var existingMarket = await _marketRepository.FirstOrDefaultAsync(
+                market => market.MarketSource == MarketSource.Kalshi &&
+                          market.ExternalMarketId == mappedMarket.ExternalMarketId,
+                cancellationToken);
+
+            var market = existingMarket ?? mappedMarket;
+
+            if (existingMarket != null)
+            {
+                market.SourceUrl = mappedMarket.SourceUrl;
+                market.ExternalEventId = mappedMarket.ExternalEventId;
+            }
+
+            // 1. Normalize Question
+            market.Question = Truncate(_normalizer.Normalize(mappedMarket.Question), 500) ?? string.Empty;
+            market.Active = mappedMarket.Active;
+            market.Closed = mappedMarket.Closed;
+            market.Liquidity = mappedMarket.Liquidity;
+            market.Volume = mappedMarket.Volume;
+            
+            // 2. Resolve Date
+            market.EndDate = mappedMarket.EndDate;
+
+            // 3. Score & Classify (Pass neutral 5000m liquidity to bypass low-liquidity penalty for Kalshi)
+            var (score, category, immediateRejection) = _scoringService.EvaluateMarketQuality(
+                market.Question, 5000m, market.Volume, Array.Empty<string>());
+            
+            market.QualityScore = score;
+            market.Category = category;
+            
+            var normalizedName = category.ToString().ToLower();
+            var pc = await _dbContext.PredictionCategories
+                .FirstOrDefaultAsync(c => c.Name.ToLower() == normalizedName, cancellationToken);
+            if (pc == null)
+            {
+                pc = new PredictionCategory { Id = Guid.NewGuid(), Name = category.ToString(), CreatedAtUtc = DateTimeOffset.UtcNow };
+                _dbContext.PredictionCategories.Add(pc);
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+            market.PredictionCategoryId = pc.Id;
+            market.LastQualityEvaluationUtc = DateTimeOffset.UtcNow;
+
+            // 3. Eligibility
+            if (immediateRejection != null)
+            {
+                market.EligibleForAnalysis = false;
+                market.RejectionReason = immediateRejection;
+            }
+            else
+            {
+                var isEligible = _eligibilityService.EvaluateEligibility(market, out var reason);
+                market.EligibleForAnalysis = isEligible;
+                market.RejectionReason = reason;
+            }
+
+            _logger.LogInformation("Kalshi Market evaluated: category={Category} score={Score} eligible={Eligible} reason={Reason}", 
+                market.Category, market.QualityScore, market.EligibleForAnalysis, market.RejectionReason);
+
+            market.Probability = probability;
+
+            if (existingMarket is null)
+            {
+                await _marketRepository.AddAsync(market, cancellationToken);
+            }
+            else
+            {
+                await _marketRepository.UpdateAsync(market, cancellationToken);
+            }
+
+            // Propagate updated market probability to any existing opportunities
+            var opps = await _dbContext.PredictionOpportunities
+                .Where(o => o.MarketId == market.Id)
+                .ToListAsync(cancellationToken);
+
+            foreach (var o in opps)
+            {
+                var marketProbPct = probability * 100m;
+                o.MarketProbability = marketProbPct;
+                o.ProbabilityGap = Math.Abs(o.AiProbability - o.MarketProbability);
+                o.GapDirection = o.AiProbability > o.MarketProbability ? GapDirection.AIHigher : GapDirection.AILower;
+                if (o.EdgeThresholdPercentage == 0m)
+                {
+                    o.EdgeThresholdPercentage = _edgeOptions.GapThresholdPercentage;
+                }
+                o.HasEdge = o.ProbabilityGap >= o.EdgeThresholdPercentage;
+            }
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
+            // Insert snapshot
+            await _snapshotRepository.AddAsync(new MarketSnapshot
+            {
+                MarketId = market.Id,
+                Probability = probability,
+                Liquidity = market.Liquidity
+            }, cancellationToken);
+
+            synchronizedCount++;
+        }
+
+        _logger.LogInformation(
+            "Kalshi synchronization completed. Synced {SyncedCount} markets and skipped {SkippedCount}.",
+            synchronizedCount,
+            skippedCount);
+    }
+
+    private bool TryMapKalshiMarket(KalshiMarketDto source, out Market market, out decimal probability)
+    {
+        market = new Market();
+        probability = 0m;
+
+        if (string.IsNullOrWhiteSpace(source.Title) || string.IsNullOrWhiteSpace(source.Ticker))
+        {
+            _logger.LogDebug("Skipping Kalshi market with missing title or ticker. Ticker: {Ticker}", source.Ticker);
+            return false;
+        }
+
+        // Active: status is "open" or "active"
+        var isActive = string.Equals(source.Status, "active", StringComparison.OrdinalIgnoreCase) || 
+                       string.Equals(source.Status, "open", StringComparison.OrdinalIgnoreCase);
+        
+        var isClosed = string.Equals(source.Status, "closed", StringComparison.OrdinalIgnoreCase) || 
+                       string.Equals(source.Status, "settled", StringComparison.OrdinalIgnoreCase);
+
+        // We only ingest active markets
+        if (!isActive || isClosed)
+        {
+            _logger.LogDebug("Skipping inactive or closed Kalshi market {Ticker}.", source.Ticker);
+            return false;
+        }
+
+        // Probability calculation
+        if (source.YesBidDollars.HasValue && source.YesAskDollars.HasValue)
+        {
+            probability = (source.YesBidDollars.Value + source.YesAskDollars.Value) / 2m;
+        }
+        else if (source.LastPriceDollars.HasValue)
+        {
+            probability = source.LastPriceDollars.Value;
+        }
+        else
+        {
+            _logger.LogDebug("Skipping Kalshi market {Ticker} because no usable pricing was found.", source.Ticker);
+            return false;
+        }
+
+        probability = Math.Clamp(probability, 0m, 1m);
+
+        DateTimeOffset? endDate = source.CloseTime ?? source.ExpirationTime ?? source.ExpectedExpirationTime;
+
+        var slug = "kalshi-" + source.Ticker.ToLowerInvariant().Replace("/", "-").Replace(" ", "-");
+
+        market = new Market
+        {
+            MarketSource = MarketSource.Kalshi,
+            ExternalMarketId = Truncate(source.Ticker.Trim(), 200),
+            ExternalEventId = Truncate(source.EventTicker?.Trim(), 200),
+            SourceUrl = Truncate($"https://kalshi.com/markets/{source.Ticker}", 500),
+            Question = Truncate(source.Title.Trim(), 500) ?? string.Empty,
+            Slug = Truncate(slug, 200) ?? string.Empty,
+            Active = true,
+            Closed = false,
+            Liquidity = source.LiquidityDollars.GetValueOrDefault(),
+            Volume = source.VolumeFp.GetValueOrDefault(),
+            EndDate = endDate
+        };
+
+        return true;
+    }
+
+    private static string? Truncate(string? value, int maxLength)
+    {
+        if (value == null) return null;
+        return value.Length <= maxLength ? value : value.Substring(0, maxLength);
     }
 }
