@@ -211,12 +211,43 @@ namespace BinaryPrediction.Infrastructure.Services
 
             foreach (var market in markets)
             {
+                bool marketChanged = false;
+
+                // Fix Kalshi SourceUrl if it is using the old format
+                if (market.MarketSource == MarketSource.Kalshi)
+                {
+                    var eventId = market.ExternalEventId?.Trim();
+                    var urlTicker = !string.IsNullOrEmpty(eventId) ? eventId : market.ExternalMarketId?.Trim();
+                    if (!string.IsNullOrEmpty(urlTicker))
+                    {
+                        var hyphenIndex = urlTicker.IndexOf('-');
+                        if (hyphenIndex > 0)
+                        {
+                            urlTicker = urlTicker.Substring(0, hyphenIndex);
+                        }
+                        var expectedUrl = $"https://kalshi.com/markets/{urlTicker.ToLowerInvariant()}";
+                        if (market.SourceUrl != expectedUrl)
+                        {
+                            market.SourceUrl = expectedUrl;
+                            marketChanged = true;
+                        }
+                    }
+                }
+
                 // Re-evaluate quality score and category under latest rules
                 var (score, category, immediateRejection) = _scoringService.EvaluateMarketQuality(
                     market.Question, market.Liquidity, market.Volume, null, market.MarketSource);
                 
-                market.QualityScore = score;
-                market.Category = category;
+                if (market.QualityScore != score)
+                {
+                    market.QualityScore = score;
+                    marketChanged = true;
+                }
+                if (market.Category != category)
+                {
+                    market.Category = category;
+                    marketChanged = true;
+                }
 
                 // Run actual eligibility evaluation to update in database
                 var isEligible = _eligibilityService.EvaluateEligibility(market, out var reason);
@@ -224,6 +255,11 @@ namespace BinaryPrediction.Infrastructure.Services
                 {
                     market.EligibleForAnalysis = isEligible;
                     market.RejectionReason = reason;
+                    marketChanged = true;
+                }
+
+                if (marketChanged)
+                {
                     updatedCount++;
                 }
 
