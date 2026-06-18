@@ -46,7 +46,7 @@ public class KalshiClient : IKalshiClient
 
         for (var page = 0; page < maxPages; page++)
         {
-            var requestUri = $"markets?limit={pageSize}&status=open";
+            var requestUri = $"markets?limit={pageSize}&status=open&mve_filter=exclude";
             if (!string.IsNullOrEmpty(cursor))
             {
                 requestUri += $"&cursor={Uri.EscapeDataString(cursor)}";

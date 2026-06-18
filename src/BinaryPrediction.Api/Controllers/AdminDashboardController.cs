@@ -117,5 +117,13 @@ namespace BinaryPrediction.Api.Controllers
             await _performanceSnapshotService.RebuildAllSnapshotsAsync();
             return Ok(new { Message = "Analytics snapshots rebuilt successfully." });
         }
+
+        // POST api/admin/rebuild-eligibility
+        [HttpPost("rebuild-eligibility")]
+        public async Task<ActionResult> RebuildEligibility(CancellationToken cancellationToken)
+        {
+            var summary = await _repairService.RebuildMarketEligibilityAsync(cancellationToken);
+            return Ok(new { Message = "Market eligibility rebuild completed.", Summary = summary });
+        }
     }
 }

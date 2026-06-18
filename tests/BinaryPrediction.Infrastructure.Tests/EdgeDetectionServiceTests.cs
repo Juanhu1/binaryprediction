@@ -104,7 +104,7 @@ public class EdgeDetectionServiceTests
         var dashboardService = new DashboardService(_dbContext, new LoggerFactory().CreateLogger<DashboardService>());
 
         // Act 1: default sort (edgescore desc)
-        var queryDefault = new BinaryPrediction.Core.DTOs.Dashboard.DashboardOpportunityQuery { Page = 1, PageSize = 10 };
+        var queryDefault = new BinaryPrediction.Core.DTOs.Dashboard.DashboardOpportunityQuery { Page = 1, PageSize = 10, HideZeroLiquidity = false, HideZeroVolume = false, HideZeroProbability = false };
         var resultDefault = await dashboardService.GetOpportunitiesAsync(queryDefault);
         
         // Assert: order should be Opp3 (2100), Opp2 (1600), Opp1 (600)
@@ -114,7 +114,7 @@ public class EdgeDetectionServiceTests
         Assert.Equal(pred1.Id, resultDefault.Items[2].PredictionId);
 
         // Act 2: sort by confidence desc
-        var queryConfidenceDesc = new BinaryPrediction.Core.DTOs.Dashboard.DashboardOpportunityQuery { SortBy = "confidence", SortDesc = true, Page = 1, PageSize = 10 };
+        var queryConfidenceDesc = new BinaryPrediction.Core.DTOs.Dashboard.DashboardOpportunityQuery { SortBy = "confidence", SortDesc = true, Page = 1, PageSize = 10, HideZeroLiquidity = false, HideZeroVolume = false, HideZeroProbability = false };
         var resultConfidenceDesc = await dashboardService.GetOpportunitiesAsync(queryConfidenceDesc);
 
         // Assert: order should be Opp2 (80), Opp3 (70), Opp1 (60)
@@ -123,7 +123,7 @@ public class EdgeDetectionServiceTests
         Assert.Equal(pred1.Id, resultConfidenceDesc.Items[2].PredictionId);
 
         // Act 3: sort by gap asc
-        var queryGapAsc = new BinaryPrediction.Core.DTOs.Dashboard.DashboardOpportunityQuery { SortBy = "gap", SortDesc = false, Page = 1, PageSize = 10 };
+        var queryGapAsc = new BinaryPrediction.Core.DTOs.Dashboard.DashboardOpportunityQuery { SortBy = "gap", SortDesc = false, Page = 1, PageSize = 10, HideZeroLiquidity = false, HideZeroVolume = false, HideZeroProbability = false };
         var resultGapAsc = await dashboardService.GetOpportunitiesAsync(queryGapAsc);
 
         // Assert: order should be Opp1 (10), Opp2 (20), Opp3 (30)
@@ -169,7 +169,7 @@ public class EdgeDetectionServiceTests
         var dashboardService = new DashboardService(_dbContext, new LoggerFactory().CreateLogger<DashboardService>());
 
         // Act
-        var query = new BinaryPrediction.Core.DTOs.Dashboard.DashboardOpportunityQuery { Page = 1, PageSize = 10 };
+        var query = new BinaryPrediction.Core.DTOs.Dashboard.DashboardOpportunityQuery { Page = 1, PageSize = 10, HideZeroLiquidity = false, HideZeroVolume = false, HideZeroProbability = false };
         var result = await dashboardService.GetOpportunitiesAsync(query);
 
         // Assert

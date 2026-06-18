@@ -9,5 +9,6 @@ public interface IMarketQualityScoringService
         string question, 
         decimal liquidity, 
         decimal volume, 
-        IReadOnlyList<string>? tags);
+        IReadOnlyList<string>? tags,
+        MarketSource source = MarketSource.Polymarket);
 }

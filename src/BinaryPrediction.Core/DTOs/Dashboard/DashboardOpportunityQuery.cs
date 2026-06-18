@@ -11,5 +11,8 @@ namespace BinaryPrediction.Core.DTOs.Dashboard
         public bool SortDesc { get; set; } = false;
         public string? Search { get; set; }
         public string? Source { get; set; }
+        public bool HideZeroLiquidity { get; set; } = true;
+        public bool HideZeroVolume { get; set; } = true;
+        public bool HideZeroProbability { get; set; } = true;
     }
 }

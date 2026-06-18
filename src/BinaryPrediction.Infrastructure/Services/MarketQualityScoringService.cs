@@ -17,7 +17,8 @@ public class MarketQualityScoringService : IMarketQualityScoringService
         string question, 
         decimal liquidity, 
         decimal volume, 
-        IReadOnlyList<string>? tags)
+        IReadOnlyList<string>? tags,
+        MarketSource source = MarketSource.Polymarket)
     {
         var category = _classifier.Classify(question, tags);
         
@@ -29,10 +30,13 @@ public class MarketQualityScoringService : IMarketQualityScoringService
         int score = 50; // Base score
 
         // Liquidity bonuses/penalties
-        if (liquidity > 50000m) score += 20;
-        else if (liquidity > 10000m) score += 10;
-        else if (liquidity < 1000m) score -= 20;
-        else if (liquidity < 100m) score -= 40;
+        if (source == MarketSource.Polymarket)
+        {
+            if (liquidity > 50000m) score += 20;
+            else if (liquidity > 10000m) score += 10;
+            else if (liquidity < 1000m) score -= 20;
+            else if (liquidity < 100m) score -= 40;
+        }
 
         // Volume bonuses
         if (volume > 100000m) score += 20;

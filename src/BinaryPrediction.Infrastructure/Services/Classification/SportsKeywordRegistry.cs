@@ -4,12 +4,16 @@ public static class SportsKeywordRegistry
 {
     public static readonly string[] BaseKeywords =
     {
-        "sports", "win the match", "super bowl", "finals", "champions league", "world cup", "stanley cup"
+        "sports", "win the match", "super bowl", "finals", "champions league", "world cup", "stanley cup",
+        " vs ", "goals", "runs?", "runs scored", "hits + runs + rbis", "rbis", "inning", "strikeouts", "strikeout",
+        "final score", "touchdown", "passing yards", "rushing yards", "receiving yards", "home run", "homerun",
+        "goals scored", "wins by over", "points scored", "rebounds", "assists", "blocks", "steals", "turnovers",
+        "formula 1", "nascar", "grand prix", "tennis", "round of 16", "quarterfinals", "semifinals", "pga tour", "world series"
     };
 
     public static readonly string[] Leagues =
     {
-        "nfl", "nba", "nhl", "mlb", "uefa", "fifa", "premier league", "la liga"
+        "nfl", "nba", "nhl", "mlb", "uefa", "fifa", "premier league", "la liga", "wnba", "ufc", "mma", "pga", "atp", "wta", "f1"
     };
 
     public static readonly string[] NbaTeams =

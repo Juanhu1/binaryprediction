@@ -7,6 +7,7 @@ public class MarketFilteringSettings
     public decimal MinimumLiquidity { get; set; } = 1000m;
     public decimal MinimumVolume { get; set; } = 1000m;
     public decimal MinimumQualityScore { get; set; } = 50m;
+    public decimal KalshiMinimumVolume { get; set; } = 100m;
     public List<MarketCategory> EligibleCategories { get; set; } = new() 
     { 
         MarketCategory.Politics, 

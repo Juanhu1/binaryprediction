@@ -96,6 +96,7 @@ public class MarketSynchronizationService : IMarketSynchronizationService
             market.Closed = mappedMarket.Closed;
             market.Liquidity = mappedMarket.Liquidity;
             market.Volume = mappedMarket.Volume;
+            market.Probability = probability;
             
             // 2. Resolve Date
             var alternativeDate = polymarketMarket.CloseDate ?? polymarketMarket.EventDate ?? polymarketMarket.ResolveDate ?? polymarketMarket.GameDate ?? polymarketMarket.TournamentDate;
@@ -114,7 +115,7 @@ public class MarketSynchronizationService : IMarketSynchronizationService
 
             // 3. Score & Classify
             var (score, category, immediateRejection) = _scoringService.EvaluateMarketQuality(
-                market.Question, market.Liquidity, market.Volume, polymarketMarket.Tags);
+                market.Question, market.Liquidity, market.Volume, polymarketMarket.Tags, MarketSource.Polymarket);
             
             market.QualityScore = score;
             market.Category = category;
@@ -316,13 +317,14 @@ public class MarketSynchronizationService : IMarketSynchronizationService
             market.Closed = mappedMarket.Closed;
             market.Liquidity = mappedMarket.Liquidity;
             market.Volume = mappedMarket.Volume;
+            market.Probability = probability;
             
             // 2. Resolve Date
             market.EndDate = mappedMarket.EndDate;
 
-            // 3. Score & Classify (Pass neutral 5000m liquidity to bypass low-liquidity penalty for Kalshi)
+            // 3. Score & Classify
             var (score, category, immediateRejection) = _scoringService.EvaluateMarketQuality(
-                market.Question, 5000m, market.Volume, Array.Empty<string>());
+                market.Question, market.Liquidity, market.Volume, Array.Empty<string>(), MarketSource.Kalshi);
             
             market.QualityScore = score;
             market.Category = category;

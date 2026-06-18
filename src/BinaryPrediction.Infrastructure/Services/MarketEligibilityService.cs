@@ -34,22 +34,63 @@ public class MarketEligibilityService : IMarketEligibilityService
             reason = "Closed markets are excluded.";
             return false;
         }
-
-        var minLiquidity = market.MarketSource == BinaryPrediction.Core.Enums.MarketSource.Kalshi ? 0m : _settings.MinimumLiquidity;
-        var minVolume = market.MarketSource == BinaryPrediction.Core.Enums.MarketSource.Kalshi ? 0m : _settings.MinimumVolume;
-
-        if (market.Liquidity < minLiquidity)
+        if (market.MarketSource == BinaryPrediction.Core.Enums.MarketSource.Polymarket)
         {
-            reason = "Liquidity below minimum threshold.";
-            return false;
-        }
+            if (market.Probability <= 0m || market.Probability >= 1m)
+            {
+                reason = "Market probability must be greater than 0 and less than 1.";
+                return false;
+            }
 
-        if (market.Volume < minVolume)
+            if (market.Liquidity <= 0m)
+            {
+                reason = "Liquidity below minimum threshold.";
+                return false;
+            }
+
+            if (market.Liquidity < _settings.MinimumLiquidity)
+            {
+                reason = "Liquidity below minimum threshold.";
+                return false;
+            }
+
+            if (market.Volume < _settings.MinimumVolume)
+            {
+                reason = "Volume below minimum threshold.";
+                return false;
+            }
+        }
+        else if (market.MarketSource == BinaryPrediction.Core.Enums.MarketSource.Kalshi)
         {
-            reason = "Volume below minimum threshold.";
-            return false;
-        }
+            if (market.Probability <= 0m || market.Probability >= 1m)
+            {
+                reason = "Market probability must be greater than 0 and less than 1.";
+                return false;
+            }
 
+            if (market.Volume <= 0m)
+            {
+                reason = "Volume below minimum threshold.";
+                return false;
+            }
+
+            if (market.Volume < _settings.KalshiMinimumVolume)
+            {
+                reason = "Volume below minimum threshold.";
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(market.ExternalMarketId))
+            {
+                var extId = market.ExternalMarketId;
+                if (extId.StartsWith("KXMVESPORTSMULTIGAME", StringComparison.OrdinalIgnoreCase) ||
+                    extId.StartsWith("KXMVECROSSCATEGORY", StringComparison.OrdinalIgnoreCase))
+                {
+                    reason = "Exotic parlay/combo market families are excluded.";
+                    return false;
+                }
+            }
+        }
         if (!_settings.EligibleCategories.Contains(market.Category))
         {
             if (market.Category == BinaryPrediction.Core.Enums.MarketCategory.Other)

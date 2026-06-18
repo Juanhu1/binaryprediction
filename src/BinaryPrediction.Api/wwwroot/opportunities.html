@@ -77,6 +77,17 @@
                 <input type="number" id="maxgap-input" placeholder="Max Gap %" style="padding:0.4rem; width:120px;"/>
                 <button id="apply-filters" style="padding:0.4rem 0.8rem;">Apply</button>
             </div>
+            <div class="filter-toggles" style="margin-bottom:1rem; display:flex; gap:1.5rem; flex-wrap:wrap; font-size:0.9rem; align-items:center;">
+                <label style="display:flex; align-items:center; gap:0.3rem; cursor:pointer; user-select:none;">
+                    <input type="checkbox" id="hide-zero-liquidity" checked> Hide Zero Liquidity
+                </label>
+                <label style="display:flex; align-items:center; gap:0.3rem; cursor:pointer; user-select:none;">
+                    <input type="checkbox" id="hide-zero-volume" checked> Hide Zero Volume
+                </label>
+                <label style="display:flex; align-items:center; gap:0.3rem; cursor:pointer; user-select:none;">
+                    <input type="checkbox" id="hide-zero-probability" checked> Hide Zero Probability
+                </label>
+            </div>
             <div class="table-wrapper">
                 <table id="opportunities-table">
                     <thead>

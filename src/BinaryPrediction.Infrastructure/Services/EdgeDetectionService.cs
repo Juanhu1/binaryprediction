@@ -64,10 +64,32 @@ public class EdgeDetectionService : IEdgeDetectionService
         _logger.LogInformation("EDGE TEST: Gap={Gap}, Threshold={Threshold}", gap, _options.GapThresholdPercentage);
         var direction = aiProb > marketProbPct ? GapDirection.AIHigher : GapDirection.AILower;
         _logger.LogInformation("AI={AiProbability} Market={MarketProbabilityPct} Gap={Gap} Threshold={Threshold}", aiProb, marketProbPct, gap, _options.GapThresholdPercentage);
-        var hasEdge = gap >= _options.GapThresholdPercentage;
+        
+        var isPricingValid = true;
+        var market = prediction.Market;
+        if (market != null)
+        {
+            if (market.MarketSource == MarketSource.Polymarket)
+            {
+                if (market.Probability <= 0m || market.Probability >= 1m || market.Liquidity <= 0m || market.Volume <= 0m)
+                {
+                    isPricingValid = false;
+                }
+            }
+            else if (market.MarketSource == MarketSource.Kalshi)
+            {
+                if (market.Probability <= 0m || market.Probability >= 1m || market.Volume <= 0m)
+                {
+                    isPricingValid = false;
+                }
+            }
+        }
+
+        var hasEdge = gap >= _options.GapThresholdPercentage && isPricingValid;
         if (!hasEdge)
         {
-            _logger.LogWarning("EDGE TEST: Opportunity not created. Reason={Reason}", "Gap below threshold");
+            var reason = !isPricingValid ? "Invalid pricing/volume metrics" : "Gap below threshold";
+            _logger.LogWarning("EDGE TEST: Opportunity not created or active. Reason={Reason}", reason);
         }
 
         var existing = await _opportunityRepository.GetByPredictionIdAsync(predictionId, cancellationToken);

@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
+using BinaryPrediction.Core.Common;
 using BinaryPrediction.Core.Entities;
 using BinaryPrediction.Core.Interfaces;
 using BinaryPrediction.Infrastructure.Interfaces;
@@ -22,19 +23,28 @@ namespace BinaryPrediction.Infrastructure.Services
         private readonly IEdgeDetectionService _edgeDetectionService;
         private readonly IPredictionOpportunityRepository _opportunityRepo;
         private readonly IPredictionRepository _predictionRepo;
+        private readonly IMarketEligibilityService _eligibilityService;
+        private readonly IMarketQualityScoringService _scoringService;
+        private readonly MarketFilteringSettings _settings;
 
         public DataRepairService(
             BinaryPredictionDbContext dbContext,
             ILogger<DataRepairService> logger,
             IEdgeDetectionService edgeDetectionService,
             IPredictionOpportunityRepository opportunityRepo,
-            IPredictionRepository predictionRepo)
+            IPredictionRepository predictionRepo,
+            IMarketEligibilityService eligibilityService,
+            IMarketQualityScoringService scoringService,
+            Microsoft.Extensions.Options.IOptions<MarketFilteringSettings> options)
         {
             _dbContext = dbContext;
             _logger = logger;
             _edgeDetectionService = edgeDetectionService;
             _opportunityRepo = opportunityRepo;
             _predictionRepo = predictionRepo;
+            _eligibilityService = eligibilityService;
+            _scoringService = scoringService;
+            _settings = options.Value;
         }
 
         public async Task RepairAsync(CancellationToken cancellationToken = default)
@@ -171,6 +181,198 @@ namespace BinaryPrediction.Infrastructure.Services
                 await _dbContext.SaveChangesAsync(cancellationToken);
             }
             _logger.LogInformation("Successfully normalized and recalculated {UpdatedCount} prediction opportunities out of {TotalCount} total opportunities.", updatedCount, opportunities.Count);
+        }
+
+        public async Task<string> RebuildMarketEligibilityAsync(CancellationToken cancellationToken = default)
+        {
+            var markets = await _dbContext.Markets.ToListAsync(cancellationToken);
+            
+            // Polymarket Stage Counts
+            int polyTotal = 0;
+            int polyActive = 0;
+            int polyProbability = 0;
+            int polyLiquidity = 0;
+            int polyVolume = 0;
+            int polyCategory = 0;
+            int polyQuality = 0;
+            int polyDuration = 0;
+
+            // Kalshi Stage Counts
+            int kalshiTotal = 0;
+            int kalshiActive = 0;
+            int kalshiProbability = 0;
+            int kalshiParlay = 0;
+            int kalshiVolume = 0;
+            int kalshiCategory = 0;
+            int kalshiQuality = 0;
+            int kalshiDuration = 0;
+
+            int updatedCount = 0;
+
+            foreach (var market in markets)
+            {
+                // Re-evaluate quality score and category under latest rules
+                var (score, category, immediateRejection) = _scoringService.EvaluateMarketQuality(
+                    market.Question, market.Liquidity, market.Volume, null, market.MarketSource);
+                
+                market.QualityScore = score;
+                market.Category = category;
+
+                // Run actual eligibility evaluation to update in database
+                var isEligible = _eligibilityService.EvaluateEligibility(market, out var reason);
+                if (market.EligibleForAnalysis != isEligible || market.RejectionReason != reason)
+                {
+                    market.EligibleForAnalysis = isEligible;
+                    market.RejectionReason = reason;
+                    updatedCount++;
+                }
+
+                // Sequential pipeline evaluation for counting
+                if (market.MarketSource == MarketSource.Polymarket)
+                {
+                    polyTotal++;
+
+                    // Stage 1: Active check
+                    if (market.Active && !market.Closed)
+                    {
+                        polyActive++;
+
+                        // Stage 2: Probability check
+                        if (market.Probability > 0m && market.Probability < 1m)
+                        {
+                            polyProbability++;
+
+                            // Stage 3: Liquidity check
+                            if (market.Liquidity > 0m && market.Liquidity >= _settings.MinimumLiquidity)
+                            {
+                                polyLiquidity++;
+
+                                // Stage 4: Volume check
+                                if (market.Volume >= _settings.MinimumVolume)
+                                {
+                                    polyVolume++;
+
+                                    // Stage 5: Category check
+                                    if (_settings.EligibleCategories.Contains(market.Category))
+                                    {
+                                        polyCategory++;
+
+                                        // Stage 6: Quality check
+                                        if (market.QualityScore >= _settings.MinimumQualityScore)
+                                        {
+                                            polyQuality++;
+
+                                            // Stage 7: Duration check
+                                            var effectiveDate = market.EndDate ?? market.EstimatedResolutionDateUtc;
+                                            if (effectiveDate.HasValue)
+                                            {
+                                                var maxDuration = TimeSpan.FromDays(_settings.MaximumMarketDurationDays);
+                                                if (effectiveDate.Value - DateTimeOffset.UtcNow <= maxDuration)
+                                                {
+                                                    polyDuration++;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (market.MarketSource == MarketSource.Kalshi)
+                {
+                    kalshiTotal++;
+
+                    // Stage 1: Active check
+                    if (market.Active && !market.Closed)
+                    {
+                        kalshiActive++;
+
+                        // Stage 2: Probability check
+                        if (market.Probability > 0m && market.Probability < 1m)
+                        {
+                            kalshiProbability++;
+
+                            // Stage 3: Parlay check
+                            var isParlay = false;
+                            if (!string.IsNullOrEmpty(market.ExternalMarketId))
+                            {
+                                var extId = market.ExternalMarketId;
+                                if (extId.StartsWith("KXMVESPORTSMULTIGAME", StringComparison.OrdinalIgnoreCase) ||
+                                    extId.StartsWith("KXMVECROSSCATEGORY", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    isParlay = true;
+                                }
+                            }
+                            if (!isParlay)
+                            {
+                                kalshiParlay++;
+
+                                // Stage 4: Volume check
+                                var minVolume = _settings.KalshiMinimumVolume;
+                                if (market.Volume > 0m && market.Volume >= minVolume)
+                                {
+                                    kalshiVolume++;
+
+                                    // Stage 5: Category check
+                                    if (_settings.EligibleCategories.Contains(market.Category))
+                                    {
+                                        kalshiCategory++;
+
+                                        // Stage 6: Quality check
+                                        if (market.QualityScore >= _settings.MinimumQualityScore)
+                                        {
+                                            kalshiQuality++;
+
+                                            // Stage 7: Duration check
+                                            var effectiveDate = market.EndDate ?? market.EstimatedResolutionDateUtc;
+                                            if (effectiveDate.HasValue)
+                                            {
+                                                var maxDuration = TimeSpan.FromDays(_settings.MaximumMarketDurationDays);
+                                                if (effectiveDate.Value - DateTimeOffset.UtcNow <= maxDuration)
+                                                {
+                                                    kalshiDuration++;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (updatedCount > 0)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+
+            var summary = $@"Sequential Eligibility Pipeline Counts:
+=== Polymarket ===
+Stage 0 (Total): {polyTotal}
+Stage 1 (Active & Open): {polyActive}
+Stage 2 (Probability > 0 and < 1): {polyProbability}
+Stage 3 (Liquidity > 0 and >= {_settings.MinimumLiquidity}): {polyLiquidity}
+Stage 4 (Volume >= {_settings.MinimumVolume}): {polyVolume}
+Stage 5 (Eligible Category): {polyCategory}
+Stage 6 (Quality Score >= {_settings.MinimumQualityScore}): {polyQuality}
+Stage 7 (Duration <= {_settings.MaximumMarketDurationDays} days): {polyDuration} (Final Eligible)
+
+=== Kalshi ===
+Stage 0 (Total): {kalshiTotal}
+Stage 1 (Active & Open): {kalshiActive}
+Stage 2 (Probability > 0 and < 1): {kalshiProbability}
+Stage 3 (Exclude Parlays/Combos): {kalshiParlay}
+Stage 4 (Volume > 0 and >= {_settings.KalshiMinimumVolume}): {kalshiVolume}
+Stage 5 (Eligible Category): {kalshiCategory}
+Stage 6 (Quality Score >= {_settings.MinimumQualityScore}): {kalshiQuality}
+Stage 7 (Duration <= {_settings.MaximumMarketDurationDays} days): {kalshiDuration} (Final Eligible)
+
+Eligibility rebuild updated {updatedCount} market records in database.";
+
+            _logger.LogInformation(summary);
+            return summary;
         }
     }
 }

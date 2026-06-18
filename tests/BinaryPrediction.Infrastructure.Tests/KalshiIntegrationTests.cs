@@ -219,7 +219,7 @@ public class KalshiIntegrationTests : IDisposable
         await _dbContext.SaveChangesAsync();
 
         // Act 1: Get all active opportunities (default is Open or Active)
-        var queryAll = new DashboardOpportunityQuery { Page = 1, PageSize = 10 };
+        var queryAll = new DashboardOpportunityQuery { Page = 1, PageSize = 10, HideZeroLiquidity = false, HideZeroVolume = false, HideZeroProbability = false };
         var resultAll = await _dashboardService.GetOpportunitiesAsync(queryAll);
 
         // Assert 1: Deduplication should return exactly 2 items (1 latest for Polymarket, 1 latest for Kalshi)
@@ -233,7 +233,7 @@ public class KalshiIntegrationTests : IDisposable
         Assert.Equal(kmPred.Id, kmResult.PredictionId); // should be the latest prediction ID for Kalshi
 
         // Act 2: Filter by Polymarket
-        var queryPM = new DashboardOpportunityQuery { Page = 1, PageSize = 10, Source = "Polymarket" };
+        var queryPM = new DashboardOpportunityQuery { Page = 1, PageSize = 10, Source = "Polymarket", HideZeroLiquidity = false, HideZeroVolume = false, HideZeroProbability = false };
         var resultPM = await _dashboardService.GetOpportunitiesAsync(queryPM);
 
         // Assert 2: Only Polymarket
@@ -241,7 +241,7 @@ public class KalshiIntegrationTests : IDisposable
         Assert.Equal(MarketSource.Polymarket, resultPM.Items[0].MarketSource);
 
         // Act 3: Filter by Kalshi
-        var queryKM = new DashboardOpportunityQuery { Page = 1, PageSize = 10, Source = "Kalshi" };
+        var queryKM = new DashboardOpportunityQuery { Page = 1, PageSize = 10, Source = "Kalshi", HideZeroLiquidity = false, HideZeroVolume = false, HideZeroProbability = false };
         var resultKM = await _dashboardService.GetOpportunitiesAsync(queryKM);
 
         // Assert 3: Only Kalshi
@@ -345,6 +345,184 @@ public class KalshiIntegrationTests : IDisposable
             .ToListAsync();
             
         Assert.Equal(5, queuedItems.Count);
+    }
+
+    [Fact]
+    public async Task KalshiEligibilityAndZeroValueFilters_WorkCorrectly()
+    {
+        // 1. Test Eligibility Logic
+        var filteringSettings = new MarketFilteringSettings
+        {
+            MinimumLiquidity = 1000m,
+            MinimumVolume = 1000m,
+            KalshiMinimumVolume = 100m,
+            MinimumQualityScore = 50m,
+            EligibleCategories = new() { MarketCategory.Sports },
+            MaximumMarketDurationDays = 365
+        };
+        var eligibilityService = new MarketEligibilityService(
+            Microsoft.Extensions.Options.Options.Create(filteringSettings),
+            NullLogger<MarketEligibilityService>.Instance);
+
+        // Good Kalshi market
+        var goodKalshi = new Market
+        {
+            MarketSource = MarketSource.Kalshi,
+            ExternalMarketId = "NORMAL_TICKER",
+            Question = "Will England win?",
+            Category = MarketCategory.Sports,
+            Active = true,
+            Closed = false,
+            Probability = 0.5m,
+            Volume = 150m,
+            Liquidity = 0m,
+            QualityScore = 60,
+            EndDate = DateTimeOffset.UtcNow.AddDays(10)
+        };
+        Assert.True(eligibilityService.EvaluateEligibility(goodKalshi, out _));
+
+        // Parlay/combo family exclusion
+        var parlayKalshi = new Market
+        {
+            MarketSource = MarketSource.Kalshi,
+            ExternalMarketId = "KXMVESPORTSMULTIGAMEEXTENDED-S123",
+            Question = "yes Miguel Vargas: 1+, yes Cody Bellinger: 1+",
+            Category = MarketCategory.Sports,
+            Active = true,
+            Closed = false,
+            Probability = 0.5m,
+            Volume = 150m,
+            Liquidity = 0m,
+            QualityScore = 60,
+            EndDate = DateTimeOffset.UtcNow.AddDays(10)
+        };
+        Assert.False(eligibilityService.EvaluateEligibility(parlayKalshi, out var parlayReason));
+        Assert.Equal("Exotic parlay/combo market families are excluded.", parlayReason);
+
+        // Low volume exclusion
+        var lowVolumeKalshi = new Market
+        {
+            MarketSource = MarketSource.Kalshi,
+            ExternalMarketId = "NORMAL_TICKER",
+            Question = "Will England win?",
+            Category = MarketCategory.Sports,
+            Active = true,
+            Closed = false,
+            Probability = 0.5m,
+            Volume = 50m,
+            Liquidity = 0m,
+            QualityScore = 60,
+            EndDate = DateTimeOffset.UtcNow.AddDays(10)
+        };
+        Assert.False(eligibilityService.EvaluateEligibility(lowVolumeKalshi, out var volReason));
+        Assert.Equal("Volume below minimum threshold.", volReason);
+
+        // Zero probability exclusion
+        var zeroProbKalshi = new Market
+        {
+            MarketSource = MarketSource.Kalshi,
+            ExternalMarketId = "NORMAL_TICKER",
+            Question = "Will England win?",
+            Category = MarketCategory.Sports,
+            Active = true,
+            Closed = false,
+            Probability = 0.0m,
+            Volume = 150m,
+            Liquidity = 0m,
+            QualityScore = 60,
+            EndDate = DateTimeOffset.UtcNow.AddDays(10)
+        };
+        Assert.False(eligibilityService.EvaluateEligibility(zeroProbKalshi, out var probReason));
+        Assert.Equal("Market probability must be greater than 0 and less than 1.", probReason);
+
+        // 2. Test Edge Detection Pricing validation
+        // Create prediction and detect opportunity for zero-probability market
+        var zeroMarket = new Market
+        {
+            Id = Guid.NewGuid(),
+            MarketSource = MarketSource.Kalshi,
+            ExternalMarketId = "NORMAL_TICKER",
+            Question = "Will England win?",
+            Category = MarketCategory.Sports,
+            Active = true,
+            Closed = false,
+            Probability = 0.0m,
+            Volume = 150m,
+            Liquidity = 0m,
+            QualityScore = 60,
+            EndDate = DateTimeOffset.UtcNow.AddDays(10)
+        };
+        _dbContext.Markets.Add(zeroMarket);
+        var pred = new Prediction
+        {
+            Id = Guid.NewGuid(),
+            MarketId = zeroMarket.Id,
+            ConfidencePercentage = 90m,
+            AiProbability = 90m,
+            PromptVersionUsed = "v2"
+        };
+        _dbContext.Predictions.Add(pred);
+        await _dbContext.SaveChangesAsync();
+
+        await _edgeService.DetectOpportunityAsync(pred.Id);
+
+        // Opportunity should exist but HasEdge must be false due to invalid pricing
+        var opp = await _dbContext.PredictionOpportunities.FirstOrDefaultAsync(o => o.PredictionId == pred.Id);
+        Assert.NotNull(opp);
+        Assert.False(opp.HasEdge);
+
+        // 3. Test Dashboard Zero-Value Filters
+        var normalMarket = new Market
+        {
+            Id = Guid.NewGuid(),
+            MarketSource = MarketSource.Kalshi,
+            ExternalMarketId = "NORMAL_TICKER_2",
+            Question = "Normal Market?",
+            Category = MarketCategory.Sports,
+            Active = true,
+            Closed = false,
+            Probability = 0.5m,
+            Volume = 200m,
+            Liquidity = 0m,
+            QualityScore = 60,
+            EndDate = DateTimeOffset.UtcNow.AddDays(10)
+        };
+        _dbContext.Markets.Add(normalMarket);
+        var normalPred = new Prediction
+        {
+            Id = Guid.NewGuid(),
+            MarketId = normalMarket.Id,
+            ConfidencePercentage = 90m,
+            AiProbability = 90m,
+            PromptVersionUsed = "v2"
+        };
+        _dbContext.Predictions.Add(normalPred);
+        await _dbContext.SaveChangesAsync();
+
+        // Detect opportunity for normal market
+        await _edgeService.DetectOpportunityAsync(normalPred.Id);
+
+        // Update the opportunity to status Open so it is picked up by default dashboard query
+        var normalOpp = await _dbContext.PredictionOpportunities.FirstOrDefaultAsync(o => o.PredictionId == normalPred.Id);
+        Assert.NotNull(normalOpp);
+        normalOpp.Status = OpportunityStatus.Open;
+        normalOpp.HasEdge = true; // explicitly force edge so dashboard picks it up
+        await _dbContext.SaveChangesAsync();
+
+        // Query with default filters (hide zero liquidity = true, which shouldn't hide Kalshi since Kalshi is allowed, but we hide zero volume/probability)
+        var query = new DashboardOpportunityQuery
+        {
+            Page = 1,
+            PageSize = 10,
+            HideZeroLiquidity = true,
+            HideZeroVolume = true,
+            HideZeroProbability = true
+        };
+        var dashboardRes = await _dashboardService.GetOpportunitiesAsync(query);
+        
+        // Should return only the normal market opportunity, not the zero-probability one
+        Assert.Contains(dashboardRes.Items, i => i.PredictionId == normalPred.Id);
+        Assert.DoesNotContain(dashboardRes.Items, i => i.PredictionId == pred.Id);
     }
 }
 

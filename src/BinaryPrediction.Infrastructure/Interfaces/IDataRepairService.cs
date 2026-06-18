@@ -20,5 +20,10 @@ namespace BinaryPrediction.Infrastructure.Interfaces
         /// Normalizes existing PredictionOpportunity records to use the correct scale (0-100) and recalculates their gaps.
         /// </summary>
         Task RepairOpportunitiesScaleAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Rebuilds eligibility and rejection reasons for all markets in the database, generating sequential stage counts.
+        /// </summary>
+        Task<string> RebuildMarketEligibilityAsync(CancellationToken cancellationToken = default);
     }
 }

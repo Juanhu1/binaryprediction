@@ -190,6 +190,20 @@ public class DashboardService : IDashboardService
             }
         }
 
+        // Apply zero-value filters
+        if (query.HideZeroLiquidity)
+        {
+            baseOpportunityQuery = baseOpportunityQuery.Where(o => o.Market != null && (o.Market.MarketSource == MarketSource.Kalshi || o.Market.Liquidity > 0m));
+        }
+        if (query.HideZeroVolume)
+        {
+            baseOpportunityQuery = baseOpportunityQuery.Where(o => o.Market != null && o.Market.Volume > 0m);
+        }
+        if (query.HideZeroProbability)
+        {
+            baseOpportunityQuery = baseOpportunityQuery.Where(o => o.Market != null && o.Market.Probability > 0m && o.Market.Probability < 1m);
+        }
+
         // Select the latest opportunity ID per market (overall or source-filtered)
         var overallLatestIdsQuery = baseOpportunityQuery
             .GroupBy(o => o.MarketId)
@@ -208,18 +222,9 @@ public class DashboardService : IDashboardService
         var ignoredCount = latestStatusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Ignored)?.Count ?? 0;
         var resolvedCount = latestStatusCounts.FirstOrDefault(x => x.Status == OpportunityStatus.Resolved)?.Count ?? 0;
 
-        // 3. Calculate summary metrics (filtered by source if specified)
-        var totalRecordsQuery = _dbContext.PredictionOpportunities.AsNoTracking();
-        var uniqueMarketsQuery = _dbContext.PredictionOpportunities.AsNoTracking();
-
-        if (!string.IsNullOrWhiteSpace(query.Source) && !query.Source.Equals("All", StringComparison.OrdinalIgnoreCase))
-        {
-            if (Enum.TryParse<MarketSource>(query.Source, true, out var sourceEnum))
-            {
-                totalRecordsQuery = totalRecordsQuery.Where(o => o.Market != null && o.Market.MarketSource == sourceEnum);
-                uniqueMarketsQuery = uniqueMarketsQuery.Where(o => o.Market != null && o.Market.MarketSource == sourceEnum);
-            }
-        }
+        // 3. Calculate summary metrics (filtered by source and zero-value filters)
+        var totalRecordsQuery = baseOpportunityQuery;
+        var uniqueMarketsQuery = baseOpportunityQuery;
 
         var totalOpportunityRecords = await totalRecordsQuery.CountAsync(ct);
         var uniqueMarketsWithOpportunities = await uniqueMarketsQuery.Select(o => o.MarketId).Distinct().CountAsync(ct);

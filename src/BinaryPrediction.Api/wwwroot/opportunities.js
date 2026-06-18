@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const minGapInput = document.getElementById('mingap-input');
   const maxGapInput = document.getElementById('maxgap-input');
   const applyBtn = document.getElementById('apply-filters');
+  const hideZeroLiquidity = document.getElementById('hide-zero-liquidity');
+  const hideZeroVolume = document.getElementById('hide-zero-volume');
+  const hideZeroProbability = document.getElementById('hide-zero-probability');
 
   let currentPage = 1;
   const pageSize = 10;
@@ -63,6 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (sourceFilter.value) params.append('source', sourceFilter.value);
     if (minGapInput.value) params.append('minGap', minGapInput.value);
     if (maxGapInput.value) params.append('maxGap', maxGapInput.value);
+    if (hideZeroLiquidity) params.append('hideZeroLiquidity', hideZeroLiquidity.checked);
+    if (hideZeroVolume) params.append('hideZeroVolume', hideZeroVolume.checked);
+    if (hideZeroProbability) params.append('hideZeroProbability', hideZeroProbability.checked);
     if (sortBy) {
       params.append('sortBy', sortBy);
       params.append('sortDesc', sortDesc);
@@ -205,6 +211,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   applyBtn.addEventListener('click', () => { currentPage = 1; load(); });
+  
+  if (hideZeroLiquidity) hideZeroLiquidity.addEventListener('change', () => { currentPage = 1; load(); });
+  if (hideZeroVolume) hideZeroVolume.addEventListener('change', () => { currentPage = 1; load(); });
+  if (hideZeroProbability) hideZeroProbability.addEventListener('change', () => { currentPage = 1; load(); });
 
   load();
 });
