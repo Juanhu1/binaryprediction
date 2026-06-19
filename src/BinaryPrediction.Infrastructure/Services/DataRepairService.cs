@@ -216,16 +216,11 @@ namespace BinaryPrediction.Infrastructure.Services
                 // Fix Kalshi SourceUrl if it is using the old format
                 if (market.MarketSource == MarketSource.Kalshi)
                 {
+                    var marketTicker = market.ExternalMarketId?.Trim();
                     var eventId = market.ExternalEventId?.Trim();
-                    var urlTicker = !string.IsNullOrEmpty(eventId) ? eventId : market.ExternalMarketId?.Trim();
-                    if (!string.IsNullOrEmpty(urlTicker))
+                    if (!string.IsNullOrEmpty(marketTicker))
                     {
-                        var hyphenIndex = urlTicker.IndexOf('-');
-                        if (hyphenIndex > 0)
-                        {
-                            urlTicker = urlTicker.Substring(0, hyphenIndex);
-                        }
-                        var expectedUrl = $"https://kalshi.com/markets/{urlTicker.ToLowerInvariant()}";
+                        var expectedUrl = GetKalshiSourceUrl(marketTicker, eventId);
                         if (market.SourceUrl != expectedUrl)
                         {
                             market.SourceUrl = expectedUrl;
@@ -409,6 +404,38 @@ Eligibility rebuild updated {updatedCount} market records in database.";
 
             _logger.LogInformation(summary);
             return summary;
+        }
+
+        private static string GetKalshiSourceUrl(string marketTicker, string? eventId)
+        {
+            marketTicker = marketTicker.Trim();
+            eventId = eventId?.Trim();
+
+            string eventTicker;
+            if (!string.IsNullOrEmpty(eventId))
+            {
+                if (eventId.Contains('-'))
+                {
+                    eventTicker = eventId;
+                }
+                else
+                {
+                    eventTicker = marketTicker;
+                }
+            }
+            else
+            {
+                eventTicker = marketTicker;
+            }
+
+            var parts = eventTicker.Split('-');
+            if (parts.Length > 2)
+            {
+                eventTicker = $"{parts[0]}-{parts[1]}";
+            }
+
+            string seriesTicker = parts[0];
+            return $"https://kalshi.com/markets/{seriesTicker.ToLowerInvariant()}/{eventTicker.ToLowerInvariant()}";
         }
     }
 }

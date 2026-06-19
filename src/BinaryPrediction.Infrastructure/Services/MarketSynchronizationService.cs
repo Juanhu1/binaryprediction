@@ -449,20 +449,15 @@ public class MarketSynchronizationService : IMarketSynchronizationService
         DateTimeOffset? endDate = source.CloseTime ?? source.ExpirationTime ?? source.ExpectedExpirationTime;
         var slug = "kalshi-" + source.Ticker.ToLowerInvariant().Replace("/", "-").Replace(" ", "-");
 
+        var marketTicker = source.Ticker.Trim();
         var eventId = source.EventTicker?.Trim();
-        var urlTicker = !string.IsNullOrEmpty(eventId) ? eventId : source.Ticker.Trim();
-        var hyphenIndex = urlTicker.IndexOf('-');
-        if (hyphenIndex > 0)
-        {
-            urlTicker = urlTicker.Substring(0, hyphenIndex);
-        }
-        var sourceUrl = $"https://kalshi.com/markets/{urlTicker.ToLowerInvariant()}";
+        var sourceUrl = GetKalshiSourceUrl(marketTicker, eventId);
 
         market = new Market
         {
             MarketSource = MarketSource.Kalshi,
-            ExternalMarketId = Truncate(source.Ticker.Trim(), 200),
-            ExternalEventId = Truncate(source.EventTicker?.Trim(), 200),
+            ExternalMarketId = Truncate(marketTicker, 200),
+            ExternalEventId = Truncate(eventId, 200),
             SourceUrl = Truncate(sourceUrl, 500),
             Question = Truncate(source.Title.Trim(), 500) ?? string.Empty,
             Slug = Truncate(slug, 200) ?? string.Empty,
@@ -474,6 +469,38 @@ public class MarketSynchronizationService : IMarketSynchronizationService
         };
 
         return true;
+    }
+
+    private static string GetKalshiSourceUrl(string marketTicker, string? eventId)
+    {
+        marketTicker = marketTicker.Trim();
+        eventId = eventId?.Trim();
+
+        string eventTicker;
+        if (!string.IsNullOrEmpty(eventId))
+        {
+            if (eventId.Contains('-'))
+            {
+                eventTicker = eventId;
+            }
+            else
+            {
+                eventTicker = marketTicker;
+            }
+        }
+        else
+        {
+            eventTicker = marketTicker;
+        }
+
+        var parts = eventTicker.Split('-');
+        if (parts.Length > 2)
+        {
+            eventTicker = $"{parts[0]}-{parts[1]}";
+        }
+
+        string seriesTicker = parts[0];
+        return $"https://kalshi.com/markets/{seriesTicker.ToLowerInvariant()}/{eventTicker.ToLowerInvariant()}";
     }
 
     private static string? Truncate(string? value, int maxLength)

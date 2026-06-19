@@ -117,7 +117,7 @@ public class KalshiIntegrationTests : IDisposable
         Assert.NotNull(market);
         Assert.Equal(0.70m, market.Probability); // Midpoint of 0.65 and 0.75 is 0.70
         Assert.Equal("kalshi-test-ticker", market.Slug);
-        Assert.Equal("https://kalshi.com/markets/TEST-TICKER", market.SourceUrl);
+        Assert.Equal("https://kalshi.com/markets/test/test-event", market.SourceUrl);
         Assert.True(market.EligibleForAnalysis);
     }
 
